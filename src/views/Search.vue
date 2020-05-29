@@ -26,20 +26,16 @@
 </template>
 
 <script>
-import GoogleMap from "@/components/GoogleMap"
 import VenueSearch from "@/components/VenueSearch"
 import ArtistSearch from "@/components/ArtistSearch"
-import MusicPlayer from "@/components/MusicPlayer"
 import axios from "axios"
 import Vue from "vue"
 
 export default {
   name: "search",
   components: {
-    GoogleMap,
     VenueSearch,
     ArtistSearch,
-    MusicPlayer
   },
 
   data() {
