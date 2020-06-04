@@ -38,8 +38,4 @@ _____
 _Note: Currently this project is not ready to run in a production environment_
 _____
 
-TODO:
-
-- [ ] Render each setlist out separately, displaying relevant concert date information (date, tour name, supporting artists, sold out, # of songs, etc.)
-  - [ ] Add button to each setlist letting user pick that to search spotify for (eventually change this to checkboxes for creating multiple playlists at a time)
-- [ ] Allow user to double check results of Spotify Track Search, showing all options letting the user pick and choose how to handle duplicate matches
+[TODO](./TODO.md)
