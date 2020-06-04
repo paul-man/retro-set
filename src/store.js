@@ -13,6 +13,7 @@ export default new Vuex.Store({
     id: '',
     name: ''
   },
+  setlists: [],
  },
  getters: {
   selectedArtist: state => {
@@ -20,6 +21,9 @@ export default new Vuex.Store({
   },
   selectedVenue: state => {
     return state.selectedVenue;
+  },
+  setlists: state => {
+    return state.setlists;
   },
  },
  mutations: {
@@ -31,6 +35,9 @@ export default new Vuex.Store({
     state.selectedVenue.id = payload.venueId;
     state.selectedVenue.name = payload.venueName;
   },
+  setSetlists (state, payload) {
+    Vue.set(state, 'setlists', payload);
+  }
  },
  actions: {}
 });
