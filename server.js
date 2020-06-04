@@ -27,12 +27,9 @@ app.get('/api/artist/:artist', function (req, res) {
   let reqObj = {
     artistName: req.params.artist
   };
-
-  // console.log("ReqObj: %j", reqObj);
   
   setlistfmClient.searchArtists(reqObj)
   .then(function(results) {
-    // console.log("Results: %j", results);
     res.json(results.artist);
   })
   .catch(function(error) {
@@ -45,12 +42,9 @@ app.get('/api/venue/:venue', function (req, res) {
   let reqObj = {
     name: req.params.venue
   };
-  
-  // console.log("ReqObj: %j", reqObj);
 
   setlistfmClient.searchVenues(reqObj)
   .then(function(results) {
-    // console.log("Results: " + results.venue.length);
     res.json(results.venue);
   })
   .catch(function(error) {
@@ -60,17 +54,13 @@ app.get('/api/venue/:venue', function (req, res) {
 
 // Search setlists based on venue and artist ids
 app.get('/api/setlist/', function (req, res) {
-  console.log(req.query);
   let reqObj = {
     artistMbid: req.query.artistId,
     venueId: req.query.venueId,
   };
-  
-  console.log("ReqObj: %j", reqObj);
 
   setlistfmClient.searchSetlists(reqObj)
   .then(function(results) {
-    console.log("Results: " + results.setlist);
     res.json(results.setlist);
   })
   .catch(function(error) {
