@@ -44,7 +44,6 @@ import VenueSearch from "@/components/VenueSearch";
 import ArtistSearch from "@/components/ArtistSearch";
 import SetlistView from "@/components/SetlistView";
 import axios from "axios";
-import Vue from "vue";
 
 export default {
   name: "search",
