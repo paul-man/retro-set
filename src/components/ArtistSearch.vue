@@ -3,8 +3,8 @@
     <div>
       <h2>Search for an artist</h2>
       <vue-bootstrap-typeahead
-        :data="artists"
-        v-model="artistName"
+        :data="artistsSearch"
+        v-model="artistNameSearch"
         class="mb-4"
         size="lg"
         :serializer="s => s.name"
@@ -21,14 +21,15 @@
       <br />
     </div>
     <br />
-    <div v-if="selectedArtist">
+    <div v-if="selectedArtist.name">
       <h4>Selected artist</h4>
-      <pre>{{ this.$store.getters.selectedArtist }}</pre>
+      <pre>{{ selectedArtist.name }}</pre>
     </div>
   </div>
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import axios from "axios"
 import _ from "underscore"
 
@@ -36,10 +37,13 @@ export default {
   name: "ArtistSearch",
   data() {
     return {
-      artists: [],
-      artistName: "",
-      selectedArtist: null
+      artistsSearch: [],
+      artistNameSearch: "",
     }
+  },
+
+  computed: {
+    ...mapState(['selectedArtist']),
   },
 
   methods: {
@@ -47,18 +51,16 @@ export default {
       const res = await axios.get("api/artist/" + query)
       let suggestions = await res
       suggestions = suggestions.data
-      this.artists = suggestions
+      this.artistsSearch = suggestions
     },
     setSelectedArtist(artist) {
       this.selectedArtist = artist
-      this.$store.commit("setSelectedArtist", {
-        artistId: artist.mbid,
-        artistName: artist.name
-      })
+      this.$store.commit("setSelectedArtist", artist)
     }
   },
+
   watch: {
-    artistName: _.debounce(function(artist) {
+    artistNameSearch: _.debounce(function(artist) {
       this.searchArtist(artist)
     }, 500)
   }

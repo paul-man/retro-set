@@ -21,14 +21,15 @@
       <br />
     </div>
     <br />
-    <div v-if="selectedVenue">
+    <div v-if="selectedVenue.name">
       <h4>Selected Venue</h4>
-      <pre>{{ this.$store.getters.selectedVenue }}</pre>
+      <pre>{{ selectedVenue.name }}</pre>
     </div>
   </div>
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import axios from "axios"
 import _ from "underscore"
 
@@ -38,8 +39,11 @@ export default {
     return {
       venues: [],
       venueName: "",
-      selectedVenue: null
     }
+  },
+
+  computed: {
+    ...mapState(['selectedVenue']),
   },
 
   methods: {
@@ -51,10 +55,7 @@ export default {
     },
     setSelectedVenue(venue) {
       this.selectedVenue = venue
-      this.$store.commit("setSelectedVenue", {
-        venueId: venue.id,
-        venueName: venue.name
-      })
+      this.$store.commit("setSelectedVenue", venue)
     }
   },
 
