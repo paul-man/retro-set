@@ -1,20 +1,16 @@
+/* eslint-disable no-console */
 'use strict';
 
 const express = require('express');
 const path = require('path');
 let SpotifyWebApi = require('spotify-web-api-node');
 let setlistfmJs = require("setlistfm-js");
-const https = require('https');
+require("dotenv").config();
+
 const app = express();
-require('dotenv').config();
+app.use(express.static(path.resolve(path.join(__dirname, "/dist"))));
 
-let setlistfmClient = new setlistfmJs({
-	key: process.env.SETLISTFM_KEY,
-	format: "json",
-});
-
-app.use(express.static(path.resolve(path.join(__dirname, '/dist'))));
-
+// Healthcheck endpoint
 app.get('/healthcheck/:str', function (req, res) {
   res.json({
     success: true,
@@ -68,29 +64,34 @@ app.get('/api/setlist/', function (req, res) {
   });
 });
 
+// Search track given track name + artists name
 app.get('/api/track/', function (req, res) {
-
-  // Do search using the access token
-  spotifyApi.searchTracks('track:' + req.query.track + ' artist:' + req.query.artist).then(
-    function (data) {
+  // const track = encodeURI(req.query.track);
+  // const artist = encodeURI(req.query.artist);
+  const track = req.query.track;
+  const artist = req.query.artist;
+  spotifyApi.searchTracks("track:" + track + " artist:" + artist).then(
+    function(data) {
       res.send(data.body);
     },
-    function (err) {
-      console.log('Something went wrong!', err);
+    function(err) {
+      console.log("Something went wrong!", err);
     }
   );
-  // res.send(data.body);
 });
 
-var clientId = process.env.SPOTIFY_CLIENT_ID,
-  clientSecret = process.env.SPOTIFY_CLIENT_SECRET;
-
-// Create the api object with the credentials
-var spotifyApi = new SpotifyWebApi({
-  clientId: clientId,
-  clientSecret: clientSecret
+// SetlistFM client
+const setlistfmClient = new setlistfmJs({
+  key: process.env.SETLISTFM_KEY,
+  format: "json",
 });
+// 
 
+// Spotify client
+const spotifyApi = new SpotifyWebApi({
+  clientId: process.env.SPOTIFY_CLIENT_ID,
+  clientSecret: process.env.SPOTIFY_CLIENT_SECRET,
+});
 // Retrieve an access token.
 spotifyApi.clientCredentialsGrant().then(
   function (data) {
@@ -101,6 +102,7 @@ spotifyApi.clientCredentialsGrant().then(
     console.log('Something went wrong when retrieving an access token', err);
   }
 );
+// 
 
 const PORT = process.env.PORT || 8081;
 app.listen(PORT, () => {

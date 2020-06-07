@@ -7,3 +7,11 @@
 - [ ] Improve band/venue/song searching
   - [ ] might have to abandon libraries and make calls "manually"
 - [x] Stop unexpected search for artist/venue after user has chosen from dropdown
+- [ ] Create spotify login (http://jsfiddle.net/JMPerez/62wafrm7/)
+- [ ] Improve song searching
+  - Properly encode song/artist names
+  - Filter out obvious false positives (artist name in track data doesn't match)
+  - Create warning on songs with collisions (do this in new component [[vue-slideout-panel](https://github.com/officert/vue-slideout-panel)])
+    - Warning can be clicks and show scrollable modal(?) with song/album name and album artwork
+      - Each song in list will have button to select
+- [ ] Fix display of setlists pre Spotify search

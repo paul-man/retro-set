@@ -84,7 +84,7 @@ export default {
           html: `<iframe src="${src}" width="250" height="80" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>`,
         });
       }
-      this.$store.commit('setSetlists', this.setlists);
+      this.$store.commit('setSetlists', this.setlists);      
     },
     _processSetlists(setlists) {
       let allSongs = [];
