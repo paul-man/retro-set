@@ -39,6 +39,7 @@ export default {
     return {
       artistsSearch: [],
       artistNameSearch: "",
+      selected: false
     }
   },
 
@@ -54,6 +55,7 @@ export default {
       this.artistsSearch = suggestions
     },
     setSelectedArtist(artist) {
+      this.selected = true
       this.selectedArtist = artist
       this.$store.commit("setSelectedArtist", artist)
     }
@@ -61,6 +63,10 @@ export default {
 
   watch: {
     artistNameSearch: _.debounce(function(artist) {
+      if (this.selected) {
+        this.selected = false
+        return
+      }
       this.searchArtist(artist)
     }, 500)
   }

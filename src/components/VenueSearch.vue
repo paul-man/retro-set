@@ -39,6 +39,7 @@ export default {
     return {
       venues: [],
       venueName: "",
+      selected: false
     }
   },
 
@@ -54,6 +55,7 @@ export default {
       this.venues = suggestions
     },
     setSelectedVenue(venue) {
+      this.selected = true
       this.selectedVenue = venue
       this.$store.commit("setSelectedVenue", venue)
     }
@@ -61,6 +63,10 @@ export default {
 
   watch: {
     venueName: _.debounce(function(venue) {
+      if (this.selected) {
+        this.selected = false
+        return
+      }
       this.searchVenue(venue)
     }, 500)
   }
