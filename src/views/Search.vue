@@ -6,7 +6,14 @@
           <button type="button" class="btn btn-primary" @click="testSetlistSearch">Test</button>
         </div>
       </div>
-      {{readyToSearchSetlists}}
+      <div class="row">
+        <div class="col">
+          <venue-search />
+        </div>
+        <div class="col">
+          <artist-search />
+        </div>
+      </div>
       <div v-if="readyToSearchSetlists">
         <div class="row">
           <div class="col">
@@ -16,14 +23,6 @@
             </p>
             <p>Here are Spotify Previews of each of the song they've played there (this can be very sloooooow...)</p>
           </div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col">
-          <venue-search />
-        </div>
-        <div class="col">
-          <artist-search />
         </div>
       </div>
       <div class="row">
@@ -77,25 +76,10 @@ export default {
         }
       });
       let setlists = await res;
-      setlists = JSON.parse(JSON.stringify(setlists.data));
-      for (let set of setlists) {
-        set.songs = this._processSetlists(set);
-      }
+      setlists = setlists.data;      
 
       this.$store.commit("setSetlists", setlists);
     },
-    _processSetlists(setlist) {
-      let allSongs = [];
-
-      for (let subset of setlist.sets.set) {
-        for (let song of subset.song) {
-          if (allSongs.indexOf(song.name) === -1) {
-            allSongs.push(song.name);
-          }
-        }
-      }
-      return allSongs;
-    }
   },
 
   watch: {
