@@ -13,11 +13,13 @@
     "pm2-node-server": "pm2 start server.js --watch --name node-server"
   },
   "dependencies": {
+    "@vuejs-community/vue-filter-date-format": "^1.3.2",
     "axios": "^0.18.0",
     "bootstrap": "^4.1.3",
     "dotenv": "^8.2.0",
     "express": "^4.16.4",
     "jquery": "^3.3.1",
+    "lodash": "^4.17.15",
     "popper.js": "^1.14.6",
     "setlistfm-js": "^1.2.0",
     "spotify-web-api-node": "^4.0.0",
@@ -35,7 +37,9 @@
     "eslint-plugin-vue": "^5.0.0",
     "node-sass": "^4.10.0",
     "sass-loader": "^7.1.0",
-    "vue-template-compiler": "^2.5.17"
+    "vue-template-compiler": "^2.5.17",
+    "vue2-slideout-panel": "^2.12.0",
+    "webpack-dev-server": "^3.11.0"
   },
   "eslintConfig": {
     "root": true,
