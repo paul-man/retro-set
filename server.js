@@ -108,6 +108,7 @@ app.get("/api/track/", function(req, res) {
     }
   );
 });
+// Flatten Spotify data for track results
 let flattenTrackMatches = (tracks) => {
   let matches = [];
   for (let item of tracks.items) {
@@ -115,6 +116,8 @@ let flattenTrackMatches = (tracks) => {
       songTitle: item.name,
       albumTitle: item.album.name,
       albumImageUrl: item.album.images[0].url,
+      id: item.id,
+      uri: item.uri
     };
     matches.push(newMatch)
   }
