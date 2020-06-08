@@ -3,7 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "vue-dev": "npm run vue-serve",
+    "dev": "npm run vue-dev | npm run node-dev",
+    "vue-dev": "npm run serve-vue",
     "node-dev": "npm run pm2-node-server",
     "serve": "serve -s dist",
     "build": "vue-cli-service build",
