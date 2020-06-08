@@ -1,34 +1,34 @@
 <template>
   <div id="track-select" :key="componentKey">
-    <table class="table">
-      <thead>
+    <table class="table table-striped table-bordered table-sm" id="matches-table">
+      <thead class="thead-dark">
         <tr>
-          <th scope="col">#</th>
-          <th scope="col">Song</th>
-          <th scope="col">Spotify Matches</th>
+          <th scope="col" class="col-sm-1">#</th>
+          <th scope="col" class="col-sm-4">Song</th>
+          <th scope="col" class="col-sm-7">Spotify Matches</th>
         </tr>
       </thead>
       <tbody>
         <tr v-for="(song, songIndex) in set.songs" :key="songIndex">
-          <th scope="row">{{ songIndex + 1 }}</th>
-          <td>{{ song.name }}</td>
-          <td>
+          <th class="col-sm-1" scope="row">{{ songIndex + 1 }}</th>
+          <td class="col-sm-4">{{ song.name }}</td>
+          <td class="col-sm-7">
             <template v-if="!song.matches">
-              <div class="spinner-border text-success" role="status">
+              <div class="spinner-border" style="color: #00e286" role="status">
               </div>
             </template>
             <template v-else>
-              <div class="container songMatchContainer">
-                <div class="row" v-for="(match, matchIndex) in song.matches" :key="matchIndex" >
+              <div class="container matches-wrapper">
+                <div class="row match-div" v-for="(match, matchIndex) in song.matches" :key="matchIndex">
                   <div class="form-check">
-                    <input type="radio" class="form-check-input" :name="'match-' + songIndex" :checked="song.matches.length === 1" :disabled="song.matches.length === 1"/>
+                    <input type="radio" class="form-check-input" :value="match.uri" :name="'match-' + songIndex" :checked="song.matches.length === 1" :disabled="song.matches.length === 1"/>
                   </div>
                   <p style="float: left;">
                     <img :src="match.albumImageUrl" height="64px" width="64px" border="1px" />
                   </p>
                   <p style="text-align: left;">
-                    <span class="bold">Album:</span> {{ match.albumTitle }}<br>
-                    <span class="bold">Title:</span> {{ match.songTitle }}
+                    <span class="bold">Title:</span> {{ match.songTitle }}<br/>
+                    <span class="bold">Album:</span> {{ match.albumTitle }}
                   </p>
                 </div>
               </div>
@@ -37,10 +37,11 @@
         </tr>
       </tbody>
     </table>
-    <pre class="jsonView">{{ set | stringify }}</pre><br>
-    <button type="button" class="btn btn-primary" @click="refreshSetlists">
-      Save changes
-    </button>
+    <!-- <pre class="jsonView">{{ set | stringify }}</pre><br> -->
+    <div class="panel-footer">
+        <button type="button" class="btn btn-warning" @click="closePanel">Cancel</button>
+        <button type="button" class="btn btn-primary" @click="refreshSetlists">Save changes</button>
+    </div>
   </div>
 </template>
 
@@ -83,20 +84,26 @@ export default {
       let spotifyResp = await res;
       return spotifyResp.data;
     },
-    createSongPreviews(set) {
-      set.spotifyPreviews = [];
-      for (let uri of set.trackUriArr) {
-        uri = uri.split(":")[2];
-        let src = `https://open.spotify.com/embed/track/${uri}`;
-        set.spotifyPreviews.push({
-          html: `<iframe src="${src}" width="250" height="80" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>`,
-        });
+    createSongPreviews(uri) {
+      let src = `https://open.spotify.com/embed/track/${uri}`;
+      return {
+        html: `<iframe src="${src}" width="250" height="80" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>`
       }
-      this.$store.commit("setSetlists", this.setlists);
     },
     refreshSetlists() {
+      let selectedSongInputs = document.querySelectorAll('input[name*="match-"]:checked');
+      this.set.spotifyPreviews = [];
+      for (let input of selectedSongInputs) {
+        let uri = input.value.split(":")[2]
+        this.set.spotifyPreviews.push(this.createSongPreviews(uri))
+      }
+      
       this.setlists[this.setIndex] = this.set;
       this.$store.commit("setSetlists", this.setlists);
+      this.$emit("closePanel", {})
+    },
+    closePanel() {
+      this.$emit("closePanel", {})
     },
     forceRerender() {
       this.componentKey += 1;  
@@ -107,7 +114,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .jsonView {
   text-align: left;
 }
@@ -116,7 +123,28 @@ export default {
   padding-top: 22px;
 }
 
-.songMatchContainer img {
+.match-div:not(:last-child) {
+  border-bottom: solid 1px gray;
+}
+.match-div {
+  padding: 5px;
+}
+
+.match-div p {
+  margin: 0;
+}
+
+.matches-wrapper img {
   margin-right: 15px;
+}
+.panel-footer button {
+  margin: 10px;
+}
+
+.panel-footer {
+  margin-bottom: 25px;
+  margin-right: 25px;
+  margin-top: 25px;
+  text-align: right;
 }
 </style>

@@ -1,6 +1,6 @@
 <template>
   <div class="search">
-    <div class="container">
+    <div class="container shadow-lg rounded">
       <div class="row">
         <div class="col">
           <button type="button" class="btn btn-primary" @click="testSetlistSearch">Test</button>
@@ -95,6 +95,11 @@ export default {
 <style lang="scss">
 .search {
   padding-top: 20px;
+}
+
+.search > div.container {
+  padding-top: 20px;
+  background-color: #f1f1f1;
 }
 
 .map-container {
