@@ -32,8 +32,12 @@ _____
 
 1. `git clone https://github.com/paul-man/pit-people.git && cd pit-people`
 1. `npm install`
-1. Run vue dev server - `npm run dev-vue`
-1. Open another terminal and run node dev server - `npm run dev-node`
+1. Run vue dev server - `npm run vue-dev`
+1. Open another terminal and run node dev server - `npm run node-dev`
+
+OR
+
+3. You can run `npm run dev` in a single terminal
 
 _Note: Currently this project is not ready to run in a production environment_
 _____
