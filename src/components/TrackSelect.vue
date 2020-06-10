@@ -18,7 +18,7 @@
               </div>
             </template>
             <template v-else>
-              <div class="container matches-wrapper">
+              <div :class="'container matches-wrapper' + (song.matches.length > 1 ? ' shadow rounded multiple' : '')">
                 <div class="row match-div" v-for="(match, matchIndex) in song.matches" :key="matchIndex">
                   <div class="form-check">
                     <input type="radio" class="form-check-input" :value="match.uri" :name="'match-' + songIndex" :checked="song.matches.length === 1" :disabled="song.matches.length === 1"/>
@@ -40,7 +40,7 @@
     <!-- <pre class="jsonView">{{ set | stringify }}</pre><br> -->
     <div class="panel-footer">
         <button type="button" class="btn btn-warning" @click="closePanel">Cancel</button>
-        <button type="button" class="btn btn-primary" @click="refreshSetlists">Save changes</button>
+        <button type="button" class="btn btn-primary" @click="refreshSetlists" :disabled="allMatchesLoaded">Save changes</button>
     </div>
   </div>
 </template>
@@ -84,18 +84,15 @@ export default {
       let spotifyResp = await res;
       return spotifyResp.data;
     },
-    createSongPreviews(uri) {
-      let src = `https://open.spotify.com/embed/track/${uri}`;
-      return {
-        html: `<iframe src="${src}" width="250" height="80" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>`
-      }
-    },
     refreshSetlists() {
       let selectedSongInputs = document.querySelectorAll('input[name*="match-"]:checked');
       this.set.spotifyPreviews = [];
       for (let input of selectedSongInputs) {
-        let uri = input.value.split(":")[2]
-        this.set.spotifyPreviews.push(this.createSongPreviews(uri))
+        let uri = input.value.split(":")[2];
+        let src = `https://open.spotify.com/embed/track/${uri}`;
+        this.set.spotifyPreviews.push({
+          html: `<iframe src="${src}" width="250" height="80" allowtransparency="true" allow="encrypted-media"></iframe>`
+        });
       }
       
       this.setlists[this.setIndex] = this.set;
@@ -123,9 +120,16 @@ export default {
   padding-top: 22px;
 }
 
-.match-div:not(:last-child) {
-  border-bottom: solid 1px gray;
+// Add border between mutliple song matches
+// .match-div:not(:last-child) {
+//   border-bottom: solid 1px gray;
+// }
+
+.matches-wrapper.multiple {
+  // border: solid 1px rgb(199, 199, 199);
+  border: solid 1px #e9e9e9;
 }
+
 .match-div {
   padding: 5px;
 }

@@ -3,7 +3,9 @@
     <div class="container shadow-lg rounded">
       <div class="row">
         <div class="col">
-          <button type="button" class="btn btn-primary" @click="testSetlistSearch">Test</button>
+          <button type="button" class="btn btn-secondary" id="test-btn" @click="testSetlistSearch">
+            <img src="@/assets/zap.svg" class="icon-svg"/>
+          </button>
         </div>
       </div>
       <div class="row">
@@ -17,11 +19,9 @@
       <div v-if="readyToSearchSetlists">
         <div class="row">
           <div class="col">
-            <p>
-              {{this.$store.getters.selectedArtist.name}} has played at {{this.$store.getters.selectedVenue.name}}
-              {{this.$store.getters.setlists.length}} time(s)
-            </p>
-            <p>Here are Spotify Previews of each of the song they've played there (this can be very sloooooow...)</p>
+            <h3>
+              <a :href="selectedArtist.url" target="_blank">{{selectedArtist.name}}</a> has played at <a :href="selectedVenue.url" target="_blank">{{selectedVenue.name}}</a> {{setlists.length}} time{{ setlists.length > 1 ? "s" : "" }}
+            </h3>
           </div>
         </div>
       </div>
@@ -69,16 +69,14 @@ export default {
       this.$store.commit("setSelectedVenue", this.testdata.VENUE);
     },
     async getSetlists() {
-      const res = await axios.get("api/setlist/", {
+      let setlists = await axios.get("api/setlist/", {
         params: {
           artistId: this.selectedArtist.mbid,
           venueId: this.selectedVenue.id
         }
       });
-      let setlists = await res;
-      setlists = setlists.data;      
 
-      this.$store.commit("setSetlists", setlists);
+      this.$store.commit("setSetlists", setlists.data);
     },
   },
 
@@ -100,9 +98,16 @@ export default {
 .search > div.container {
   padding-top: 20px;
   background-color: #f1f1f1;
+  border: solid 1px lightgray;
 }
 
 .map-container {
   padding-top: 20px;
+}
+
+#test-btn {
+  position: absolute;
+  right: 5px;
+  top: -15px;
 }
 </style>

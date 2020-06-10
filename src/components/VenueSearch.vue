@@ -1,9 +1,14 @@
 <template>
   <div>
     <div>
-      <h2>Search for a venue</h2>
+      <span class="text-w-svg">
+        <h2>Venue</h2>
+        <img 
+          src="@/assets/search.svg" 
+          class="icon-svg"/>
+      </span>
       <vue-bootstrap-typeahead
-        :data="venues"
+        :data="venueSearchSuggestions"
         v-model="venueName"
         class="mb-4"
         size="lg"
@@ -18,13 +23,14 @@
           </div>
         </template>
       </vue-bootstrap-typeahead>
-      <br />
+      <br>
     </div>
-    <br />
-    <div v-if="selectedVenue.name">
+    <br>
+    <!-- Debugging purposes -->
+    <!-- <div v-if="selectedVenue.name">
       <h4>Selected Venue</h4>
       <pre>{{ selectedVenue.name }}</pre>
-    </div>
+    </div> -->
   </div>
 </template>
 
@@ -37,9 +43,9 @@ export default {
   name: "VenueSearch",
   data() {
     return {
-      venues: [],
+      venueSearchSuggestions: [],
       venueName: "",
-      selected: false
+      hasSelectedVenue: false
     }
   },
 
@@ -49,22 +55,19 @@ export default {
 
   methods: {
     async searchVenue(query) {
-      const res = await axios.get("api/venue/" + query)
-      let suggestions = await res
-      suggestions = suggestions.data
-      this.venues = suggestions
+      let suggestions = await axios.get("api/venue/" + query)
+      this.venueSearchSuggestions = suggestions.data
     },
     setSelectedVenue(venue) {
-      this.selected = true
-      this.selectedVenue = venue
+      this.hasSelectedVenue = true
       this.$store.commit("setSelectedVenue", venue)
     }
   },
 
   watch: {
     venueName: _.debounce(function(venue) {
-      if (this.selected) {
-        this.selected = false
+      if (this.hasSelectedVenue) { // skip search after clicking on venue in dropdown
+        this.hasSelectedVenue = false
         return
       }
       this.searchVenue(venue)
@@ -72,3 +75,7 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+
+</style>

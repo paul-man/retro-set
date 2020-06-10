@@ -3,18 +3,17 @@
     <div class="container">
       <div class="row">
         <div class="col-6 col-md-4" v-for="(set, index) in setlists" :key="index">
+          <p class="setData">
+            Event date: {{ set.eventDate | prettyDate }}<br>
+            Songs played: {{ set.songs.length }}<br>
+            <a :href="set.url" target="_blank">More setlist Data</a>
+          </p>
+          <template v-if="set.tourName">{{ set.tourName }}</template>
           <button
             type="button"
             class="btn btn-primary"
             @click="openTrackSelctPanel(setlists, index)">
-            Search Songs</button><br />
-          <p class="setData">
-            Event date: {{ set.eventDate | prettyDate }}<br>
-            Songs played: {{ set.songs.length }}
-          </p>
-          <br />
-          <template v-if="set.tourName">{{ set.tourName }}</template>
-          
+            Search Songs</button><br><br>
           <template v-if="set.spotifyPreviews">
             <div class="container">
               <div v-for="preview in set.spotifyPreviews" v-bind:key="preview" class="row">

@@ -27,6 +27,10 @@ app.get("/api/artist/:artist", function(req, res) {
   setlistfmClient
     .searchArtists(reqObj)
     .then(function(results) {
+      let artists = results.artist;
+      for (let artist of artists) {
+        delete artists.sortName;
+      }
       res.json(results.artist);
     })
     .catch(function(error) {
@@ -86,7 +90,7 @@ let flattenSetlists = (setlists) => {
         });
       }
     }
-    newSetlistArr.push(newSetlist)
+    newSetlistArr.push(newSetlist);
   }
   return newSetlistArr;
 };
@@ -99,7 +103,7 @@ app.get("/api/track/", function(req, res) {
   const artist = req.query.artist;
   spotifyApi.searchTracks("track:" + track + " artist:" + artist).then(
     function(data) {
-      let tracks = flattenTrackMatches(data.body.tracks)
+      let tracks = flattenTrackMatches(data.body.tracks);
 
       res.send(tracks);
     },
@@ -119,10 +123,10 @@ let flattenTrackMatches = (tracks) => {
       id: item.id,
       uri: item.uri
     };
-    matches.push(newMatch)
+    matches.push(newMatch);
   }
-  return matches
-}
+  return matches;
+};
 
 // SetlistFM client
 const setlistfmClient = new setlistfmJs({
@@ -140,7 +144,7 @@ const spotifyApi = new SpotifyWebApi({
 spotifyApi.clientCredentialsGrant().then(
   function(data) {
     // Save the access token so that it's used in future calls
-    spotifyApi.setAccessToken(data.body["access_token"]);
+    spotifyApi.setAccessToken(data.body.access_token);
   },
   function(err) {
     console.log("Something went wrong when retrieving an access token", err);

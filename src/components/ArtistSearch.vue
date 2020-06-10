@@ -1,9 +1,12 @@
 <template>
   <div>
     <div>
-      <h2>Search for an artist</h2>
+      <span class="text-w-svg">
+        <h2>Artist</h2>
+        <img src="@/assets/search.svg" class="icon-svg"/>
+      </span>
       <vue-bootstrap-typeahead
-        :data="artistsSearch"
+        :data="artistSearchSuggestions"
         v-model="artistNameSearch"
         class="mb-4"
         size="lg"
@@ -18,13 +21,14 @@
           </div>
         </template>
       </vue-bootstrap-typeahead>
-      <br />
+      <br>
     </div>
-    <br />
-    <div v-if="selectedArtist.name">
+    <br>
+    <!-- Debugging purposes -->
+    <!-- <div v-if="selectedArtist.name">
       <h4>Selected artist</h4>
       <pre>{{ selectedArtist.name }}</pre>
-    </div>
+    </div> -->
   </div>
 </template>
 
@@ -37,9 +41,9 @@ export default {
   name: "ArtistSearch",
   data() {
     return {
-      artistsSearch: [],
+      artistSearchSuggestions: [],
       artistNameSearch: "",
-      selected: false
+      hasSelectedArtist: false
     }
   },
 
@@ -49,22 +53,19 @@ export default {
 
   methods: {
     async searchArtist(query) {
-      const res = await axios.get("api/artist/" + query)
-      let suggestions = await res
-      suggestions = suggestions.data
-      this.artistsSearch = suggestions
+      let suggestions = await axios.get("api/artist/" + query)
+      this.artistSearchSuggestions = suggestions.data
     },
     setSelectedArtist(artist) {
-      this.selected = true
-      this.selectedArtist = artist
+      this.hasSelectedArtist = true
       this.$store.commit("setSelectedArtist", artist)
     }
   },
 
   watch: {
     artistNameSearch: _.debounce(function(artist) {
-      if (this.selected) {
-        this.selected = false
+      if (this.hasSelectedArtist) {  // skip search after clicking on venue in dropdown
+        this.hasSelectedArtist = false
         return
       }
       this.searchArtist(artist)

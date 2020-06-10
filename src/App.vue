@@ -45,4 +45,19 @@ html, body {
 .bold {
   font-weight: bold;
 }
+
+.text-w-svg h2 {
+  display: inline;
+}
+
+.text-w-svg img {
+  display: inline;
+  margin-top: -5px;
+  margin-left: 5px;
+}
+
+.icon-svg {
+  height: 20px;
+  width: 20px;
+}
 </style>
