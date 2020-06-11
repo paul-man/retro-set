@@ -6,7 +6,7 @@ const path = require("path");
 let SpotifyWebApi = require("spotify-web-api-node");
 let setlistfmJs = require("setlistfm-js");
 require("dotenv").config();
-
+let user_code = "";
 const app = express();
 app.use(express.static(path.resolve(path.join(__dirname, "/dist"))));
 
@@ -29,7 +29,7 @@ app.get("/api/artist/:artist", function(req, res) {
     .then(function(results) {
       let artists = results.artist;
       for (let artist of artists) {
-        delete artists.sortName;
+        delete artist.sortName;
       }
       res.json(results.artist);
     })
@@ -128,6 +128,61 @@ let flattenTrackMatches = (tracks) => {
   return matches;
 };
 
+// Search track given track name + artists name
+app.get("/api/spotify/login/", function(req, res) {
+ var html = spotifyApi.createAuthorizeURL(scopes);
+//  console.log(html);
+ res.send(html + "&show_dialog=true");  
+});
+let scopes = ['user-read-email', 'playlist-modify-private'];
+let user = {};
+// Search track given track name + artists name
+app.get("/api/spotify/callback/", async function(req, res) {
+ const { code } = req.query;
+  // console.log(code)
+  try {
+    var data = await spotifyApi.authorizationCodeGrant(code)
+    const { access_token, refresh_token } = data.body;
+    spotifyApi.setAccessToken(access_token);
+    spotifyApi.setRefreshToken(refresh_token);
+
+    spotifyApi.getMe().then(data => {
+      user = data.body;
+    });
+    res.redirect('http://localhost:8080/search');
+  } catch(err) {
+    res.redirect('/#/error/invalid token');
+  }
+});
+
+app.get("/api/spotify/create_playlist/", async function(req, res) {
+  spotifyApi.createPlaylist(user.id, req.query.playlistName, {
+    public: false
+  }).then(data => {
+    console.log(data);
+    let playlist = data.body;
+    spotifyApi.addTracksToPlaylist(playlist.id, req.query.songs)
+      .then(data => {
+        console.log(data)
+      })
+      .catch(err => {
+        console.log(err)
+      })
+  }).catch(err => {
+    console.log(err);
+  });
+});
+
+
+// addTracksToPlaylist;
+/*
+redirect uris:
+http://localhost:8081/api/spotify/callback 
+http://localhost:8080/search 
+*/
+
+
+
 // SetlistFM client
 const setlistfmClient = new setlistfmJs({
   key: process.env.SETLISTFM_KEY,
@@ -139,6 +194,7 @@ const setlistfmClient = new setlistfmJs({
 const spotifyApi = new SpotifyWebApi({
   clientId: process.env.SPOTIFY_CLIENT_ID,
   clientSecret: process.env.SPOTIFY_CLIENT_SECRET,
+  redirectUri: process.env.SPOTIFY_CALLBACK_URL,
 });
 // Retrieve an access token.
 spotifyApi.clientCredentialsGrant().then(

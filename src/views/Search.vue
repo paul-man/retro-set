@@ -1,11 +1,18 @@
 <template>
   <div class="search">
     <div class="container shadow-lg rounded">
-      <div class="row">
+      <div class="row container">
         <div class="col">
-          <button type="button" class="btn btn-secondary" id="test-btn" @click="testSetlistSearch">
-            <img src="@/assets/zap.svg" class="icon-svg"/>
-          </button>
+          <div class="float-left">
+            <button type="button" class="btn" id="spotify-login-btn" title="Login to Spotify" @click="loginSpotify">
+              <img src="@/assets/spotify_icon.png" class="icon-img"/>
+            </button>
+          </div>
+          <div class="float-right">
+            <button type="button" class="btn btn-secondary" id="test-btn" @click="testSetlistSearch">
+              <img src="@/assets/zap.svg" class="icon-svg"/>
+            </button>
+          </div>
         </div>
       </div>
       <div class="row">
@@ -64,7 +71,11 @@ export default {
   },
 
   methods: {
-    testSetlistSearch() {
+    async testSetlistSearch() {
+      
+      // let res = await axios.get("api/spotify/create_playlist");
+      // console.log(res);
+
       this.$store.commit("setSelectedArtist", this.testdata.ARTIST);
       this.$store.commit("setSelectedVenue", this.testdata.VENUE);
     },
@@ -78,6 +89,13 @@ export default {
 
       this.$store.commit("setSetlists", setlists.data);
     },
+    async loginSpotify() {
+      let res = await axios.get("api/spotify/login/");
+      
+      // debugger
+      window.open(res.data)
+      console.log(res);
+    }
   },
 
   watch: {
@@ -101,13 +119,8 @@ export default {
   border: solid 1px lightgray;
 }
 
-.map-container {
-  padding-top: 20px;
-}
-
-#test-btn {
-  position: absolute;
-  right: 5px;
-  top: -15px;
+.icon-img {
+  height: 40px;
+  width: 40px;
 }
 </style>

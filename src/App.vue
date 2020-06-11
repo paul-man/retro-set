@@ -56,7 +56,7 @@ html, body {
   margin-left: 5px;
 }
 
-.icon-svg {
+.icon-svg, .icon-img {
   height: 20px;
   width: 20px;
 }

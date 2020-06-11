@@ -12,7 +12,7 @@
           <button
             type="button"
             class="btn btn-primary"
-            @click="openTrackSelctPanel(setlists, index)">
+            @click="openTrackSelctPanel(set, index)">
             Search Songs</button><br><br>
           <template v-if="set.spotifyPreviews">
             <div class="container">
@@ -35,6 +35,7 @@
 
 <script>
 import { mapState } from "vuex";
+import axios from "axios";
 
 export default {
   name: "SetlistView",
@@ -50,16 +51,29 @@ export default {
   },
 
   methods: {
-    openTrackSelctPanel(setlists, index) {
+    openTrackSelctPanel(set, index) {
       /* eslint-disable-next-line no-unused-vars */
       const trackSelctPanel = this.$showPanel({
         component : 'track-select',
         cssClass: 'tracklistPanel',
         props: {
-          setlists: setlists,
-          setIndex: index
+          set: set
         }
       })
+      trackSelctPanel.promise
+        .then(set => {
+          this.setlists[index] = set;
+          this.$store.commit('setSetlists', this.setlists);
+          this.createPlaylist(set)
+        })
+    },
+    async createPlaylist(set) {
+      let res = axios.get('api/spotify/create_playlist/', {
+        params: {
+          songs: set.spotifyUris,
+          playlistName: set.playlistName
+        }
+      });
     }
   },
 

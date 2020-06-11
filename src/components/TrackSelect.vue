@@ -1,5 +1,6 @@
 <template>
   <div id="track-select" :key="componentKey">
+    <input v-model="playlistName" placeholder="Playlist Name">
     <table class="table table-striped table-bordered table-sm" id="matches-table">
       <thead class="thead-dark">
         <tr>
@@ -40,7 +41,7 @@
     <!-- <pre class="jsonView">{{ set | stringify }}</pre><br> -->
     <div class="panel-footer">
         <button type="button" class="btn btn-warning" @click="closePanel">Cancel</button>
-        <button type="button" class="btn btn-primary" @click="refreshSetlists" :disabled="allMatchesLoaded">Save changes</button>
+        <button type="button" class="btn btn-primary" @click="refreshSetlists">Save changes</button>
     </div>
   </div>
 </template>
@@ -51,11 +52,11 @@ import axios from "axios";
 
 export default {
   name: "track-select",
-  props: ["setlists", "setIndex"],
+  props: ["set"],
   data() {
     return {
-      set: {},
-      componentKey: 0
+      componentKey: 0,
+      playlistName: '',
     };
   },
 
@@ -64,7 +65,6 @@ export default {
   },
 
   async mounted() {
-    this.set = this.setlists[this.setIndex];
     for (let song of this.set.songs) {
       let matches = await this.trackSearch(song);
       song.matches = matches
@@ -87,17 +87,13 @@ export default {
     refreshSetlists() {
       let selectedSongInputs = document.querySelectorAll('input[name*="match-"]:checked');
       this.set.spotifyPreviews = [];
+      this.set.spotifyUris = [];
       for (let input of selectedSongInputs) {
-        let uri = input.value.split(":")[2];
-        let src = `https://open.spotify.com/embed/track/${uri}`;
-        this.set.spotifyPreviews.push({
-          html: `<iframe src="${src}" width="250" height="80" allowtransparency="true" allow="encrypted-media"></iframe>`
-        });
+        this.set.spotifyUris.push(input.value);
       }
-      
-      this.setlists[this.setIndex] = this.set;
-      this.$store.commit("setSetlists", this.setlists);
-      this.$emit("closePanel", {})
+      debugger
+      this.set.playlistName = this.playlistName;
+      this.$emit("closePanel", this.set)
     },
     closePanel() {
       this.$emit("closePanel", {})
