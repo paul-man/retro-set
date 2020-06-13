@@ -1,0 +1,10 @@
+spotify login plan of action:
+- before each route load check is state has user.token
+- if yes:
+  - go ahead and load, displaying username
+- if no:
+  - redirect them to something like '/spotify-login/
+  - have a spotify login button
+  - clicking that redirects them to the normal spotify login page (calls our spotify auth route)
+  - once the click agree/login it calls the node callback
+  - we redirect them to the auth page passing the user.token and save it in the state

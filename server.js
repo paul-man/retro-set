@@ -6,10 +6,10 @@ const path = require("path");
 let SpotifyWebApi = require("spotify-web-api-node");
 let setlistfmJs = require("setlistfm-js");
 require("dotenv").config();
+let moment = require("moment");
 let user_code = "";
 const app = express();
 app.use(express.static(path.resolve(path.join(__dirname, "/dist"))));
-
 // Healthcheck endpoint
 app.get("/healthcheck/:str", function(req, res) {
   res.json({
@@ -80,7 +80,7 @@ let flattenSetlists = (setlists) => {
       songs: [],
       id: setlist.id,
       url: setlist.url,
-      eventDate: setlist.eventDate
+      eventDate: moment(setlist.eventDate, "DD-MM-YYYY").format("MMM D, YYYY"),
     };
     
     for (let subset of setlist.sets.set) {
@@ -156,6 +156,7 @@ app.get("/api/spotify/callback/", async function(req, res) {
 });
 
 app.get("/api/spotify/create_playlist/", async function(req, res) {
+  console.log('CREATING NEW PLAYLIST')
   spotifyApi.createPlaylist(user.id, req.query.playlistName, {
     public: false
   }).then(data => {

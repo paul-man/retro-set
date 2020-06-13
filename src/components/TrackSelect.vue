@@ -1,6 +1,11 @@
 <template>
   <div id="track-select" :key="componentKey">
-    <input v-model="playlistName" placeholder="Playlist Name">
+    <div class="form-group row">
+      <label for="playlistNameField" class="col-sm-2 col-form-label bold">Playlist Name</label>
+      <div class="col-sm-5">
+        <input v-model="playlistName" type="text" class="form-control" id="playlistNameField" :placeholder="defaultPlaylistName">
+      </div>
+    </div>
     <table class="table table-striped table-bordered table-sm" id="matches-table">
       <thead class="thead-dark">
         <tr>
@@ -61,7 +66,10 @@ export default {
   },
 
   computed: {
-    ...mapState(["selectedArtist"]),
+    ...mapState(["selectedArtist", "selectedVenue"]),
+    defaultPlaylistName() {
+      return this.selectedArtist.name + ' - ' + this.selectedVenue.name + ' (' + this.set.eventDate + ')';
+    }
   },
 
   async mounted() {
@@ -91,7 +99,8 @@ export default {
       for (let input of selectedSongInputs) {
         this.set.spotifyUris.push(input.value);
       }
-      debugger
+      
+      if (this.playlistName === '') this.playlistName = this.defaultPlaylistName;
       this.set.playlistName = this.playlistName;
       this.$emit("closePanel", this.set)
     },
@@ -114,6 +123,13 @@ export default {
 
 .form-check {
   padding-top: 22px;
+}
+
+.form-group.row {
+  // margin-top: 1em;
+  padding-top: 1em;
+  padding-bottom: 1em;
+  background-color: #e9e9e9
 }
 
 // Add border between mutliple song matches
