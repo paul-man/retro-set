@@ -47,7 +47,7 @@ export default {
   },
 
   computed: {
-    ...mapState(["setlists", "selectedArtist"]),
+    ...mapState(["setlists", "selectedArtist", "user"]),
   },
 
   methods: {
@@ -70,6 +70,7 @@ export default {
     async createPlaylist(set) {
       let res = axios.get('api/spotify/create_playlist/', {
         params: {
+          user: this.user.id,
           songs: set.spotifyUris,
           playlistName: set.playlistName
         }

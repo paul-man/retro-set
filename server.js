@@ -7,7 +7,7 @@ let SpotifyWebApi = require("spotify-web-api-node");
 let setlistfmJs = require("setlistfm-js");
 require("dotenv").config();
 let moment = require("moment");
-let user_code = "";
+let user_data = "";
 const app = express();
 app.use(express.static(path.resolve(path.join(__dirname, "/dist"))));
 // Healthcheck endpoint
@@ -128,28 +128,37 @@ let flattenTrackMatches = (tracks) => {
   return matches;
 };
 
+let scopes = ["user-read-email", "playlist-modify-private"];
+let user = {};
+
 // Search track given track name + artists name
 app.get("/api/spotify/login/", function(req, res) {
- var html = spotifyApi.createAuthorizeURL(scopes);
-//  console.log(html);
- res.send(html + "&show_dialog=true");  
+ var spotifyAuthUrl = spotifyApi.createAuthorizeURL(scopes);
+//  res.redirect(spotifyAuthUrl);
+//  var html = spotifyApi.createAuthorizeURL(scopes);
+//  //  console.log(html);
+ res.send(spotifyAuthUrl);  
 });
-let scopes = ['user-read-email', 'playlist-modify-private'];
-let user = {};
+
 // Search track given track name + artists name
 app.get("/api/spotify/callback/", async function(req, res) {
  const { code } = req.query;
-  // console.log(code)
+ user.token = code;
+ 
   try {
     var data = await spotifyApi.authorizationCodeGrant(code)
     const { access_token, refresh_token } = data.body;
     spotifyApi.setAccessToken(access_token);
     spotifyApi.setRefreshToken(refresh_token);
 
-    spotifyApi.getMe().then(data => {
-      user = data.body;
-    });
-    res.redirect('http://localhost:8080/search');
+    let userRes = await spotifyApi.getMe();
+    user.data = userRes.body;
+    console.log(user.data)
+    user.data = {
+      id: userRes.body.id,
+      imgUrl: userRes.body.images[0].url,
+    };
+    res.redirect(`http://localhost:8080/?user=${JSON.stringify(user.data)}`);
   } catch(err) {
     res.redirect('/#/error/invalid token');
   }
@@ -157,7 +166,9 @@ app.get("/api/spotify/callback/", async function(req, res) {
 
 app.get("/api/spotify/create_playlist/", async function(req, res) {
   console.log('CREATING NEW PLAYLIST')
-  spotifyApi.createPlaylist(user.id, req.query.playlistName, {
+  console.log(user.id)
+  console.log(user.data.id);
+  spotifyApi.createPlaylist(user.data.id, req.query.playlistName, {
     public: false
   }).then(data => {
     console.log(data);

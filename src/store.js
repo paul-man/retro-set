@@ -3,8 +3,9 @@ import Vuex from "vuex";
 
 Vue.use(Vuex);
 
-export default new Vuex.Store({
+const store = new Vuex.Store({
   state: {
+    user: {},
     selectedArtist: {},
     selectedVenue: {},
     setlists: [],
@@ -51,6 +52,9 @@ export default new Vuex.Store({
     testdata: (state) => {
       return state.testdata;
     },
+    isUserLoaded: (state) => {
+      return Object.keys(state.user).length !== 0;
+    },
   },
   mutations: {
     setSelectedArtist(state, payload) {
@@ -62,6 +66,11 @@ export default new Vuex.Store({
     setSetlists(state, payload) {
       Vue.set(state, "setlists", JSON.parse(JSON.stringify(payload)));
     },
+    setUserID(state, payload) {
+      Vue.set(state, "user", JSON.parse(JSON.stringify(payload)));
+    },
   },
   actions: {},
 });
+
+export default store;

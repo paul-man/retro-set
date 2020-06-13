@@ -4,9 +4,10 @@
       <div class="row container">
         <div class="col">
           <div class="float-left">
-            <button type="button" class="btn" id="spotify-login-btn" title="Login to Spotify" @click="loginSpotify">
-              <img src="@/assets/spotify_icon.png" class="icon-img"/>
-            </button>
+            <div class="text-center">
+              <img :src="user.imgUrl" class="icon-img float-left" id="spotify-user-img"/>
+              <span class="float-right bold"><a id="spotify-user-link" :href="'https://open.spotify.com/user/'+user.id">{{user.id}}</a></span>
+            </div>
           </div>
           <div class="float-right">
             <button type="button" class="btn btn-secondary" id="test-btn" @click="testSetlistSearch">
@@ -56,13 +57,19 @@ export default {
     SetlistView
   },
 
+  mounted() {
+    let query = Object.assign({}, this.$route.query);
+    delete query.user;
+    this.$router.replace({ query });
+  },
+
   data() {
     return {
     };
   },
 
   computed: {
-    ...mapState(['selectedVenue', 'selectedArtist', 'setlists', 'testdata']),
+    ...mapState(['selectedVenue', 'selectedArtist', 'setlists', 'testdata', 'user']),
     readyToSearchSetlists() {
       return (
         this.$store.getters.selectedVenue.id !== undefined && this.$store.getters.selectedArtist.mbid !== undefined
@@ -119,8 +126,20 @@ export default {
   border: solid 1px lightgray;
 }
 
-.icon-img {
-  height: 40px;
-  width: 40px;
+#spotify-user-img {
+  height:40px;
+  width:40px;
+  border-radius: 50%;
+  margin-right:1em;
+}
+
+.text-center {
+  vertical-align: middle;
+  height:40px;
+  line-height: 40px;
+}
+
+#spotify-user-link {
+  color: #00b66d;
 }
 </style>
