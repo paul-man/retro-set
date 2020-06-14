@@ -83,7 +83,7 @@ export default {
   methods: {
     async trackSearch(song) {
       song.matches = [];
-      const res = await axios.get("api/track/", {
+      const res = await axios.get("api/spotify/track/", {
         params: {
           track: song.name,
           artist: this.selectedArtist.name,

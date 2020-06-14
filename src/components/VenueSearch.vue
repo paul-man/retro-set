@@ -55,7 +55,7 @@ export default {
 
   methods: {
     async searchVenue(query) {
-      let suggestions = await axios.get("api/venue/" + query)
+      let suggestions = await axios.get("api/setlists/venue/" + query)
       this.venueSearchSuggestions = suggestions.data
     },
     setSelectedVenue(venue) {

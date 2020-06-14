@@ -53,7 +53,7 @@ export default {
 
   methods: {
     async searchArtist(query) {
-      let suggestions = await axios.get("api/artist/" + query)
+      let suggestions = await axios.get("api/setlists/artist/" + query)
       this.artistSearchSuggestions = suggestions.data
     },
     setSelectedArtist(artist) {

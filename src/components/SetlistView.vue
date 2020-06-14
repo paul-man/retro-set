@@ -68,7 +68,7 @@ export default {
         })
     },
     async createPlaylist(set) {
-      let res = axios.get('api/spotify/create_playlist/', {
+      let res = axios.put('api/spotify/create_playlist/', {
         params: {
           user: this.user.id,
           songs: set.spotifyUris,

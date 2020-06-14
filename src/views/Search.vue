@@ -79,15 +79,12 @@ export default {
 
   methods: {
     async testSetlistSearch() {
-      
-      // let res = await axios.get("api/spotify/create_playlist");
-      // console.log(res);
-
       this.$store.commit("setSelectedArtist", this.testdata.ARTIST);
       this.$store.commit("setSelectedVenue", this.testdata.VENUE);
+      // let res = await axios.get("api/spotify/create_playlist");
     },
     async getSetlists() {
-      let setlists = await axios.get("api/setlist/", {
+      let setlists = await axios.get("api/setlists/setlist/", {
         params: {
           artistId: this.selectedArtist.mbid,
           venueId: this.selectedVenue.id
@@ -96,13 +93,6 @@ export default {
 
       this.$store.commit("setSetlists", setlists.data);
     },
-    async loginSpotify() {
-      let res = await axios.get("api/spotify/login/");
-      
-      // debugger
-      window.open(res.data)
-      console.log(res);
-    }
   },
 
   watch: {
