@@ -3,8 +3,9 @@ const express = require("express"),
 let SpotifyWebApi = require("spotify-web-api-node");
 require("dotenv").config();
 
-let scopes = ["user-read-email", "playlist-modify-private"];
+const scopes = ["user-read-email", "playlist-modify-private"];
 let user = {};
+const loginRedirectURL = process.env.LOGIN_REDIRECT_URL;
 
 // Search track given track name + artists name
 router.get("/login/", function(req, res) {
@@ -33,7 +34,7 @@ router.get("/callback/", async function(req, res) {
       imgUrl: userRes.body.images[0].url,
     };
     res.redirect(
-      `https://${req.headers.host}/?user=${JSON.stringify(user.data)}`
+      `${loginRedirectURL}/?user=${JSON.stringify(user.data)}`
     );
   } catch (err) {
     res.redirect('/spotify-error');
