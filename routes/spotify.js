@@ -32,7 +32,9 @@ router.get("/callback/", async function(req, res) {
       id: userRes.body.id,
       imgUrl: userRes.body.images[0].url,
     };
-    res.redirect(`http://localhost:8080/?user=${JSON.stringify(user.data)}`);
+    res.redirect(
+      `https://${req.headers.host}/?user=${JSON.stringify(user.data)}`
+    );
   } catch (err) {
     res.redirect('/spotify-error');
   }
