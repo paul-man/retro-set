@@ -6,12 +6,14 @@
     "dev": "npm run vue-dev | npm run node-dev",
     "vue-dev": "npm run serve-vue",
     "node-dev": "npm run pm2-node-server",
-    "serve": "serve -s dist",
+    "serve": "npm run serve-vue | npm run serve-node",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
     "serve-vue": "vue-cli-service serve",
     "serve-node": "node server.js",
-    "pm2-node-server": "pm2 start server.js --watch --name node-server"
+    "pm2-node-server": "pm2 start server.js --watch --name node-server",
+    "postinstall": "npm run build",
+    "start": "node server.js"
   },
   "dependencies": {
     "@vuejs-community/vue-filter-date-format": "^1.3.2",

@@ -3,7 +3,7 @@
 
 const express = require("express"),
   app = express(),
-  PORT = 8081,
+  PORT = process.env.PORT || 8080,
   path = require("path");
 
 app.use(express.static(path.resolve(path.join(__dirname, "/dist"))));
