@@ -15,7 +15,6 @@ export default {
 
 <style lang="scss">
   @import '@/scss/base.scss';
-  @import '@/scss/settings.scss';
 
 html, body {
   margin: 0;
