@@ -66,7 +66,7 @@ const store = new Vuex.Store({
     setSetlists(state, payload) {
       Vue.set(state, "setlists", JSON.parse(JSON.stringify(payload)));
     },
-    setUserID(state, payload) {
+    setUser(state, payload) {
       Vue.set(state, "user", JSON.parse(JSON.stringify(payload)));
     },
   },

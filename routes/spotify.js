@@ -8,7 +8,11 @@ let user = {};
 
 // Search track given track name + artists name
 router.get("/login/", function(req, res) {
-  var spotifyAuthUrl = spotifyApi.createAuthorizeURL(scopes);
+  let spotifyAuthUrl = spotifyApi.createAuthorizeURL(scopes);
+  if (req.query.newUser) {
+    remove_user()
+    spotifyAuthUrl += "&show_dialog=true";
+  }
   res.send(spotifyAuthUrl);
 });
 
@@ -34,6 +38,15 @@ router.get("/callback/", async function(req, res) {
   }
 });
 
+// Return user data
+router.get("/user/", function(req, res) {
+  if (user.data) {
+    res.send(user.data)
+  } else {
+    res.send(null)
+  }
+});
+
 // Search track given track name + artists name
 router.get("/track/", function(req, res) {
   const track = req.query.track;
@@ -46,32 +59,31 @@ router.get("/track/", function(req, res) {
     },
     function(err) {
       console.log("Something went wrong!", err);
-    res.redirect("/spotify-error");
+      res.redirect("http://localhost:8080/spotify-error");
     }
   );
 });
 
-router.put("/create_playlist/", async function(req, res) {
-  spotifyApi
-    .createPlaylist(user.data.id, req.query.playlistName, {
+router.get("/create_playlist/", async function(req, res) {
+  spotifyApi.createPlaylist(user.data.id, req.query.playlistName, {
       public: false,
-    }, )
-    .then((data) => {
-      let playlist = data.body;
-      spotifyApi
-        .addTracksToPlaylist(playlist.id, req.query.songs)
-        .then((data) => {
-          console.log(data);
-        })
-        .catch((err) => {
-          console.log(data);
-          res.redirect('/spotify-error')
-        });
-    })
-    .catch((err) => {
-      console.log(err);
-      res.redirect("/spotify-error");
-    });
+  }, )
+  .then((data) => {
+    let playlist = data.body;
+    spotifyApi.addTracksToPlaylist(playlist.id, req.query.songs)
+      .then((data) => {
+        data.id = playlist.id
+        res.send(data)
+      })
+      .catch((err) => {
+        console.log(err);
+        res.redirect('http://localhost:8080/spotify-error')
+      });
+  })
+  .catch((err) => {
+    console.log(err);
+    res.redirect("http://localhost:8080/spotify-error");
+  });
 });
 
 /* HELPERS ***************************************************************** */
@@ -90,6 +102,14 @@ let flattenTrackMatches = (tracks) => {
     matches.push(newMatch);
   }
   return matches;
+};
+
+
+// Return user data
+let remove_user= () => {
+  user = {};
+  spotifyApi.setAccessToken("");
+  spotifyApi.setRefreshToken("");
 };
 
 /* SPOTIFY API SETUP ******************************************************* */

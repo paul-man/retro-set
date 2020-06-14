@@ -33,8 +33,6 @@ export default {
   methods: {
     async loginSpotify() {
       let res = await axios.get("api/spotify/login/");
-      
-      // debugger
       window.location = res.data
     }
   },

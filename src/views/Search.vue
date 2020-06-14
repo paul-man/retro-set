@@ -3,10 +3,13 @@
     <div class="container shadow-lg rounded">
       <div class="row container">
         <div class="col">
-          <div class="float-left">
+          <div class="float-left" id="spotify-user-data">
             <div class="text-center">
-              <img :src="user.imgUrl" class="icon-img float-left" id="spotify-user-img"/>
-              <span class="float-right bold"><a id="spotify-user-link" :href="'https://open.spotify.com/user/'+user.id">{{user.id}}</a></span>
+              <img :src="user.imgUrl" class="icon-img float-left" id="spotify-user-img" alt="Spotify user image"/>
+              <span class="float-right bold"><a id="spotify-user-link" :href="'https://open.spotify.com/user/'+user.id" title="Spotify profile">{{user.id}}</a></span>
+            </div>
+            <div>
+              <a class="bold float-left" @click="logout" title="Switch spotify account">Not you?</a>
             </div>
           </div>
           <div class="float-right">
@@ -93,11 +96,16 @@ export default {
 
       this.$store.commit("setSetlists", setlists.data);
     },
+    async logout() {
+      this.$store.commit("setUser", {})
+      let res = await axios.get("api/spotify/login/", { params: { newUser: true } });
+      window.location = res.data
+    }
   },
 
   watch: {
-    readyToSearchSetlists: function(val) {
-      if (val) {
+    readyToSearchSetlists: function(ready) {
+      if (ready) {
         this.getSetlists();
       }
     }
@@ -131,5 +139,11 @@ export default {
 
 #spotify-user-link {
   color: #00b66d;
+}
+
+#spotify-user-data a {
+  margin-top: 0.5em;
+  cursor: pointer;
+  text-decoration: underline;
 }
 </style>

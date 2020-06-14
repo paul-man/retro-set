@@ -1,29 +1,45 @@
-import Vue from 'vue'
-import Router from 'vue-router'
-import Search from './views/Search.vue'
-import PageNotFound from './views/PageNotFound.vue'
-import SpotifyLogin from './views/SpotifyLogin.vue'
-import store from './store.js'
+import Vue from "vue";
+import Router from "vue-router";
+import Search from "./views/Search.vue";
+import PageNotFound from "./views/PageNotFound.vue";
+import SpotifyLogin from "./views/SpotifyLogin.vue";
+import SpotifyError from "./views/SpotifyError.vue";
+import SetlistfmError from "./views/SetlistfmError.vue";
+import store from "./store.js";
+import axios from 'axios';
 
-Vue.use(Router)
+Vue.use(Router);
 
 const ifUserLoaded = (to, from, next) => {
   if (to.query.user) {
-    store.commit("setUserID", JSON.parse(to.query.user));
+    store.commit("setUser", JSON.parse(to.query.user));
   }
   if (store.getters.isUserLoaded) {
-    next()
-    return
+    next();
+    return;
   }
-  next('/spotify-login')
+  next("/spotify-login");
+};
+
+async function ifUserNotLoaded(to, from, next) {
+  await loadUser()
+  if (!store.getters.isUserLoaded) {
+    next();
+    return;
+  }
+  next("/");
 }
 
-const ifUserNotLoaded = (to, from, next) => {
-  if (!store.getters.isUserLoaded) {
-    next()
+async function loadUser(){
+  if (store.getters.isUserLoaded) {
     return
   }
-  next('/')
+  let res = await axios.get("api/spotify/user");
+  if (res.data) {
+    store.commit("setUser", res.data);
+  } else {
+    store.commit("setUser", {});
+  }
 }
 
 const router = new Router({
@@ -39,6 +55,18 @@ const router = new Router({
       path: "/spotify-login",
       name: "spotify-login",
       component: SpotifyLogin,
+      beforeEnter: ifUserNotLoaded,
+    },
+    {
+      path: "/spotify-error",
+      name: "spotify-error",
+      component: SpotifyError,
+      beforeEnter: ifUserNotLoaded,
+    },
+    {
+      path: "/setlistfm-error",
+      name: "setlistfm-error",
+      component: SetlistfmError,
       beforeEnter: ifUserNotLoaded,
     },
     {

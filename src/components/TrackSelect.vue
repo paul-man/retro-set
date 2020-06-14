@@ -94,7 +94,6 @@ export default {
     },
     refreshSetlists() {
       let selectedSongInputs = document.querySelectorAll('input[name*="match-"]:checked');
-      this.set.spotifyPreviews = [];
       this.set.spotifyUris = [];
       for (let input of selectedSongInputs) {
         this.set.spotifyUris.push(input.value);

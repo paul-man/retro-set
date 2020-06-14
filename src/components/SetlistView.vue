@@ -64,17 +64,20 @@ export default {
         .then(set => {
           this.setlists[index] = set;
           this.$store.commit('setSetlists', this.setlists);
-          this.createPlaylist(set)
+          this.createPlaylist(set, index)
         })
     },
-    async createPlaylist(set) {
-      let res = axios.put('api/spotify/create_playlist/', {
+    async createPlaylist(set, index) {
+      let res = await axios.get('api/spotify/create_playlist/', {
         params: {
           user: this.user.id,
           songs: set.spotifyUris,
           playlistName: set.playlistName
         }
       });
+      set.spotifyPreviews = [ { html: `<iframe src="https://open.spotify.com/embed/playlist/${res.data.id}" width="300" height="380" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>` } ]
+      this.setlists[index] = set;
+      this.$store.commit('setSetlists', this.setlists);
     }
   },
 
