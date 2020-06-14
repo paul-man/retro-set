@@ -50,7 +50,7 @@ import { mapState } from 'vuex'
 import VenueSearch from "@/components/VenueSearch";
 import ArtistSearch from "@/components/ArtistSearch";
 import SetlistView from "@/components/SetlistView";
-import axios from "axios";
+import { get } from 'axios'
 
 export default {
   name: "search",
@@ -84,10 +84,10 @@ export default {
     async testSetlistSearch() {
       this.$store.commit("setSelectedArtist", this.testdata.ARTIST);
       this.$store.commit("setSelectedVenue", this.testdata.VENUE);
-      // let res = await axios.get("api/spotify/create_playlist");
+      // let res = await get("api/spotify/create_playlist");
     },
     async getSetlists() {
-      let setlists = await axios.get("api/setlists/setlist/", {
+      let setlists = await get("api/setlists/setlist/", {
         params: {
           artistId: this.selectedArtist.mbid,
           venueId: this.selectedVenue.id
@@ -98,7 +98,7 @@ export default {
     },
     async logout() {
       this.$store.commit("setUser", {})
-      let res = await axios.get("api/spotify/login/", { params: { newUser: true } });
+      let res = await get("api/spotify/login/", { params: { newUser: true } });
       window.location = res.data
     }
   },

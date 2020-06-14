@@ -4,7 +4,7 @@
       <div class="row">
         <div class="col-6 col-md-4" v-for="(set, index) in setlists" :key="index">
           <p class="setData">
-            Event date: {{ set.eventDate | prettyDate }}<br>
+            Event date: {{ set.eventDate }}<br>
             Songs played: {{ set.songs.length }}<br>
             <a :href="set.url" target="_blank">More setlist Data</a>
           </p>
@@ -35,7 +35,7 @@
 
 <script>
 import { mapState } from "vuex";
-import axios from "axios";
+import { get } from 'axios'
 
 export default {
   name: "SetlistView",
@@ -68,7 +68,7 @@ export default {
         })
     },
     async createPlaylist(set, index) {
-      let res = await axios.get('api/spotify/create_playlist/', {
+      let res = await get('api/spotify/create_playlist/', {
         params: {
           user: this.user.id,
           songs: set.spotifyUris,

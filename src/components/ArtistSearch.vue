@@ -34,8 +34,8 @@
 
 <script>
 import { mapState } from 'vuex'
-import axios from "axios"
-import _ from "underscore"
+import { get } from 'axios'
+import { debounce } from 'underscore'
 
 export default {
   name: "ArtistSearch",
@@ -53,7 +53,7 @@ export default {
 
   methods: {
     async searchArtist(query) {
-      let suggestions = await axios.get("api/setlists/artist/" + query)
+      let suggestions = await get("api/setlists/artist/" + query)
       this.artistSearchSuggestions = suggestions.data
     },
     setSelectedArtist(artist) {
@@ -63,7 +63,7 @@ export default {
   },
 
   watch: {
-    artistNameSearch: _.debounce(function(artist) {
+    artistNameSearch: debounce(function(artist) {
       if (this.hasSelectedArtist) {  // skip search after clicking on venue in dropdown
         this.hasSelectedArtist = false
         return

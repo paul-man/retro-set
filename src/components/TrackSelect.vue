@@ -53,7 +53,7 @@
 
 <script>
 import { mapState } from "vuex";
-import axios from "axios";
+import { get } from 'axios'
 
 export default {
   name: "track-select",
@@ -83,7 +83,7 @@ export default {
   methods: {
     async trackSearch(song) {
       song.matches = [];
-      const res = await axios.get("api/spotify/track/", {
+      const res = await get("api/spotify/track/", {
         params: {
           track: song.name,
           artist: this.selectedArtist.name,

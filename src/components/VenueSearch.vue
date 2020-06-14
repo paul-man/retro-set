@@ -36,8 +36,8 @@
 
 <script>
 import { mapState } from 'vuex'
-import axios from "axios"
-import _ from "underscore"
+import { get } from 'axios'
+import { debounce } from 'underscore'
 
 export default {
   name: "VenueSearch",
@@ -55,7 +55,7 @@ export default {
 
   methods: {
     async searchVenue(query) {
-      let suggestions = await axios.get("api/setlists/venue/" + query)
+      let suggestions = await get("api/setlists/venue/" + query)
       this.venueSearchSuggestions = suggestions.data
     },
     setSelectedVenue(venue) {
@@ -65,7 +65,7 @@ export default {
   },
 
   watch: {
-    venueName: _.debounce(function(venue) {
+    venueName: debounce(function(venue) {
       if (this.hasSelectedVenue) { // skip search after clicking on venue in dropdown
         this.hasSelectedVenue = false
         return

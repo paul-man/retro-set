@@ -11,7 +11,7 @@
 
 <script>
 // import { mapState } from "vuex";
-import axios from "axios";
+import { get } from 'axios'
 
 export default {
   name: "spotify-login",
@@ -32,7 +32,7 @@ export default {
 
   methods: {
     async loginSpotify() {
-      let res = await axios.get("api/spotify/login/");
+      let res = await get("api/spotify/login/");
       window.location = res.data
     }
   },

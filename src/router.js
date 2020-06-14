@@ -6,7 +6,7 @@ import SpotifyLogin from "./views/SpotifyLogin.vue";
 import SpotifyError from "./views/SpotifyError.vue";
 import SetlistfmError from "./views/SetlistfmError.vue";
 import store from "./store.js";
-import axios from 'axios';
+import { get } from 'axios';
 
 Vue.use(Router);
 
@@ -34,7 +34,7 @@ async function loadUser(){
   if (store.getters.isUserLoaded) {
     return
   }
-  let res = await axios.get("api/spotify/user");
+  let res = await get("api/spotify/user");
   if (res.data) {
     store.commit("setUser", res.data);
   } else {
