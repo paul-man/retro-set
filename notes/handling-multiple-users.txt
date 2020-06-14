@@ -1,0 +1,7 @@
+- node needs a datastore for users
+- client checks vuex for stored userdata
+- if none we ask them to log in
+- once they log in we add an entry to the data store with the retrieved user.id and store their access token
+  - https://github.com/thelinmichael/spotify-web-api-node/issues/259
+- possible check to see if spotify login adds any cookies to their browser and try to access that
+- the next time a user logs in we will check the data store for an existing access token and call refresh if need browser

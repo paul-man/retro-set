@@ -1,3 +1,4 @@
+Done!
 spotify login plan of action:
 - before each route load check is state has user.token
 - if yes:

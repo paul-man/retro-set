@@ -1,0 +1,5 @@
+- mobile experience is spotty
+  - looks fine on galaxy but bad on lg
+- web production it looks like some bootstrap css is missing
+- add 2 redirect uris, 1 for prod and 1 for dev
+  - detect env and redirect to correct uri
