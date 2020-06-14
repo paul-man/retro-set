@@ -1,7 +1,8 @@
 const express = require("express"),
   router = express.Router();
 let setlistfmJs = require("setlistfm-js"),
-    moment = require("moment");
+  parse = require("date-fns/parse"),
+  format = require("date-fns/format");
 require("dotenv").config();
 
 // Search Artists based on name
@@ -58,7 +59,7 @@ router.get("/setlist/", function(req, res) {
     })
     .catch(function(error) {
       console.log("Something went wrong!", error);
-      res.redirect('http://localhost:8080/setlistfm-error')
+      res.redirect("http://localhost:8080/setlistfm-error");
     });
 });
 
@@ -72,7 +73,10 @@ let flattenSetlists = (setlists) => {
       songs: [],
       id: setlist.id,
       url: setlist.url,
-      eventDate: moment(setlist.eventDate, "DD-MM-YYYY").format("MMM D, YYYY"),
+      eventDate: format(
+        parse(setlist.eventDate, "dd-MM-yyyy", new Date()),
+        "MMM do, yyyy"
+      ),
     };
 
     for (let subset of setlist.sets.set) {
