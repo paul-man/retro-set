@@ -4,11 +4,15 @@
 const express = require("express"),
   app = express(),
   PORT = process.env.PORT || 8080,
-  path = require("path");
+  { resolve } = require("path"),
+  configureAPI = require('./configure');
 
-app.use(express.static(path.resolve(path.join(__dirname, "/dist"))));
+// API
+configureAPI(app);
 
-app.use(require("./routes"));
+// UI
+const publicPath = resolve(__dirname, '../../dist');
+app.use(express.static(publicPath));
 
 app.listen(PORT, () => {
   console.log(`App listening on port ${PORT}`);

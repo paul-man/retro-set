@@ -3,3 +3,5 @@
 - web production it looks like some bootstrap css is missing
 - add 2 redirect uris, 1 for prod and 1 for dev
   - detect env and redirect to correct uri
+- Created better node/vue dev server, no more separate terminals
+  - https://dennisreimann.de/articles/vue-cli-serve-express.html

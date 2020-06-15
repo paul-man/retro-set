@@ -3,17 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "npm run vue-dev | npm run node-dev",
-    "vue-dev": "npm run serve-vue",
-    "node-dev": "npm run pm2-node-server",
-    "serve": "npm run serve-vue | npm run serve-node",
+    "dev": "nodemon --exec \"vue-cli-service serve\"",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "serve-vue": "vue-cli-service serve",
-    "serve-node": "node server.js",
     "pm2-node-server": "pm2 start server.js --watch --name node-server",
     "postinstall": "npm run build",
-    "start": "node server.js"
+    "start": "node src/server/server.js"
   },
   "dependencies": {
     "axios": "^0.18.0",
