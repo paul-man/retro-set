@@ -41,10 +41,13 @@ router.get("/callback/", async function(req, res) {
     };
     mongoUtil.setUserData(user);
     res.redirect(
-      `${loginRedirectURL}/?user=${JSON.stringify(user)}`
+      `${loginRedirectURL}/?user=${JSON.stringify({
+        id: user.id,
+        imgUrl: user.imgUrl
+      })}`
     );
   } catch (err) {
-    res.redirect('/spotify-error');
+    res.redirect(`${loginRedirectURL}/spotify-error`);
   }
 });
 
@@ -69,23 +72,18 @@ router.get("/track/", function(req, res) {
     },
     function(err) {
       console.log("Something went wrong!", err);
-      res.redirect("http://localhost:8080/spotify-error");
+      res.redirect(`${loginRedirectURL}/spotify-error`);
     }
   );
 });
 
-router.get("/create_playlist/:userid", async function(req, res) {
+router.get("/create_playlist/", async function(req, res) {
   // qeuery mongo for req.params.userid
-  let user = mongoUtil.getUserData(req.params.userid);
-  let accesstoken = req.params.userid;
-  if (accesstoken === '') {
-    res.sendStatus(401)
-  } else {
-    spotifyApi.setAccessToken(user.accessToken);
-    spotifyApi.setRefreshToken(user.refreshToken);
-  }
+  let user = await mongoUtil.getUserData(req.query.user);
+  spotifyApi.setAccessToken(user.accessToken);
+  spotifyApi.setRefreshToken(user.refreshToken);
 
-  spotifyApi.createPlaylist(user.data.id, req.query.playlistName, {
+  spotifyApi.createPlaylist(user.id, req.query.playlistName, {
       public: false,
   }, )
   .then((data) => {
@@ -97,12 +95,12 @@ router.get("/create_playlist/:userid", async function(req, res) {
       })
       .catch((err) => {
         console.log(err);
-        res.redirect('http://localhost:8080/spotify-error')
+        res.redirect(`${loginRedirectURL}/spotify-error`);
       });
   })
   .catch((err) => {
     console.log(err);
-    res.redirect("http://localhost:8080/spotify-error");
+    res.redirect(`${loginRedirectURL}/spotify-error`);
   });
 });
 
