@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <h1>Pit People</h1>
+    <h1>RetroSet</h1>
     <router-view/>
   </div>
 </template>
@@ -18,17 +18,16 @@ export default {
 
 html, body {
   margin: 0;
-  height: 100%;
-    
+  min-height:100vh;
   background-color: #00e286;
+  background-size: cover;
 }
 
 #app {
-  background-color: rgba(0,226,134,1);
-  
-  background: rgb(255,255,255);
   background: linear-gradient(180deg, rgba(255,255,255,1) 3%, rgba(0,226,134,1) 45%); 
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  
+  font-family: 'Roboto', sans-serif;
+  // font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
@@ -58,5 +57,10 @@ html, body {
 .icon-svg, .icon-img {
   height: 20px;
   width: 20px;
+  margin-left: 0.5em !important;
+}
+
+.icon-svg {
+  margin-bottom: 0.5em;
 }
 </style>
