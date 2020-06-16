@@ -22,24 +22,12 @@ const ifUserLoaded = (to, from, next) => {
 };
 
 async function ifUserNotLoaded(to, from, next) {
-  await loadUser()
+  // await loadUser()
   if (!store.getters.isUserLoaded) {
     next();
     return;
   }
   next("/");
-}
-
-async function loadUser(){
-  if (store.getters.isUserLoaded) {
-    return
-  }
-  let res = await get("api/spotify/user");
-  if (res.data) {
-    store.commit("setUser", res.data);
-  } else {
-    store.commit("setUser", {});
-  }
 }
 
 const router = new Router({
@@ -75,5 +63,17 @@ const router = new Router({
     },
   ],
 });
+
+// async function loadUser(){
+//   if (store.getters.isUserLoaded) {
+//     return
+//   }
+//   let res = await get("api/spotify/user");
+//   if (res.data) {
+//     store.commit("setUser", res.data);
+//   } else {
+//     store.commit("setUser", {});
+//   }
+// }
 
 export default router;
