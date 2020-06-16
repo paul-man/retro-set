@@ -12,7 +12,7 @@
               <a class="bold float-left" @click="logout" title="Switch spotify account">Not you?</a>
             </div>
           </div>
-          <div class="float-right">
+          <div v-if="isDev" class="float-right">
             <button type="button" class="btn btn-secondary" id="test-btn" @click="testSetlistSearch">
               <img src="@/assets/zap.svg" class="icon-svg"/>
             </button>
@@ -77,6 +77,9 @@ export default {
       return (
         this.$store.getters.selectedVenue.id !== undefined && this.$store.getters.selectedArtist.mbid !== undefined
       );
+    },
+    isDev() {
+      return process.env.NODE_ENV === 'development'
     }
   },
 
