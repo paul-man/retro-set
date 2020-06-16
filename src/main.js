@@ -3,6 +3,8 @@ import App from './App.vue'
 import router from './router'
 import store from "./store"
 import "./filters"
+import 'bootstrap';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import VueBootstrapTypeahead from 'vue-bootstrap-typeahead'
 import VueSlideoutPanel from 'vue2-slideout-panel'
 
