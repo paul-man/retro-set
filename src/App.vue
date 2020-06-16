@@ -14,8 +14,8 @@ export default {
 </script>
 
 <style lang="scss">
-  @import '@/scss/base.scss';
-
+   @import '@/scss/base.scss';
+  @import '@/scss/settings.scss';
 html, body {
   margin: 0;
   min-height:100vh;

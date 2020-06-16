@@ -5,6 +5,8 @@ html {
 }
 
 body {
+  color: $primary-font-color;
+  font-family: $primary-font;
   font-size: 1.6rem;
   -moz-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -30,6 +32,8 @@ body {
   -webkit-tap-highlight-color: transparent;
 
   ::selection {
+    background: $primary-font-color;
+    color: $white;
     text-shadow: none;
   }
 }
