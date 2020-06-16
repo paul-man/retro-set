@@ -1,6 +1,9 @@
 const express = require("express"),
   router = express.Router();
 let SpotifyWebApi = require("spotify-web-api-node");
+let mongoUtil = require('../mongoUtil');
+// let {getUserData, setUserData} = mongoUtil;
+
 require("dotenv").config();
 
 const scopes = ["user-read-email", "playlist-modify-private"];
@@ -24,17 +27,21 @@ router.get("/callback/", async function(req, res) {
 
   try {
     var data = await spotifyApi.authorizationCodeGrant(code);
-    const { access_token, refresh_token } = data.body;
-    spotifyApi.setAccessToken(access_token);
-    spotifyApi.setRefreshToken(refresh_token);
+    const accessToken = data.body.access_token,
+      refreshToken = data.body.refresh_token;
+    spotifyApi.setAccessToken(accessToken);
+    spotifyApi.setRefreshToken(refreshToken);
 
     let userRes = await spotifyApi.getMe();
-    user.data = {
+    let user = {
       id: userRes.body.id,
       imgUrl: userRes.body.images[0].url,
+      accessToken: accessToken,
+      refreshToken: refreshToken
     };
+    mongoUtil.setUserData(user);
     res.redirect(
-      `${loginRedirectURL}/?user=${JSON.stringify(user.data)}`
+      `${loginRedirectURL}/?user=${JSON.stringify(user)}`
     );
   } catch (err) {
     res.redirect('/spotify-error');
@@ -42,11 +49,11 @@ router.get("/callback/", async function(req, res) {
 });
 
 // Return user data
-router.get("/user/", function(req, res) {
-  if (user.data) {
-    res.send(user.data)
-  } else {
+router.get("/user/:userID", function(req, res) {
+  if (!req.params.userID) {
     res.send(null)
+  } else {
+    res.send(mongoUtil.getUserData(req.params.userID))
   }
 });
 
@@ -67,7 +74,17 @@ router.get("/track/", function(req, res) {
   );
 });
 
-router.get("/create_playlist/", async function(req, res) {
+router.get("/create_playlist/:userid", async function(req, res) {
+  // qeuery mongo for req.params.userid
+  let user = mongoUtil.getUserData(req.params.userid);
+  let accesstoken = req.params.userid;
+  if (accesstoken === '') {
+    res.sendStatus(401)
+  } else {
+    spotifyApi.setAccessToken(user.accessToken);
+    spotifyApi.setRefreshToken(user.refreshToken);
+  }
+
   spotifyApi.createPlaylist(user.data.id, req.query.playlistName, {
       public: false,
   }, )
@@ -111,9 +128,24 @@ let flattenTrackMatches = (tracks) => {
 // Return user data
 let remove_user= () => {
   user = {};
-  spotifyApi.setAccessToken("");
-  spotifyApi.setRefreshToken("");
+  spotifyApi.resetAccessToken();
+  spotifyApi.resetRefreshToken();
 };
+
+let refreshAccessToken = () => {
+  // set user's refresh token
+  spotifyApi.refreshAccessToken().then(
+    function(data) {
+      console.log('The access token has been refreshed!');
+  
+      // Save the access token so that it's used in future calls
+      spotifyApi.setAccessToken(data.body['access_token']);
+    },
+    function(err) {
+      console.log('Could not refresh access token', err);
+    }
+  );
+}
 
 /* SPOTIFY API SETUP ******************************************************* */
 
