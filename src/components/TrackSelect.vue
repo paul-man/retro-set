@@ -8,17 +8,17 @@
     </div>
     <table class="table table-striped table-bordered table-sm" id="matches-table">
       <thead class="thead-dark">
-        <tr>
-          <th scope="col" class="col-sm-1">#</th>
-          <th scope="col" class="col-sm-4">Song</th>
-          <th scope="col" class="col-sm-7">Spotify Matches</th>
+        <tr class="row">
+          <th class="col-sm-1">#</th>
+          <th class="col-sm-4">Song</th>
+          <th class="col-sm-7">Spotify Matches</th>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(song, songIndex) in set.songs" :key="songIndex">
-          <th class="col-sm-1" scope="row">{{ songIndex + 1 }}</th>
+        <tr v-for="(song, songIndex) in set.songs" :key="songIndex" class="row">
+          <th class="col-sm-1">{{ songIndex + 1 }}</th>
           <td class="col-sm-4">{{ song.name }}</td>
-          <td class="col-sm-7">
+          <td class="col-sm-7" style="padding-left: 1em;">
             <template v-if="!song.matches">
               <div class="spinner-border" style="color: #00e286" role="status">
               </div>
@@ -32,7 +32,7 @@
                   <p style="float: left;">
                     <img :src="match.albumImageUrl" height="64px" width="64px" border="1px" />
                   </p>
-                  <p style="text-align: left;">
+                  <p style="text-align: left;word-wrap: break-word;">
                     <span class="bold">Title:</span> {{ match.songTitle }}<br/>
                     <span class="bold">Album:</span> {{ match.albumTitle }}
                   </p>
@@ -143,6 +143,7 @@ export default {
 
 .match-div {
   padding: 5px;
+  overflow-x: scroll;
 }
 
 .match-div p {
