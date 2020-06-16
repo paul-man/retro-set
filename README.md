@@ -1,4 +1,4 @@
-# Pit People
+# RetroSet
 
 Find setlists from passed concerts and turn them into spotify playlists!
 

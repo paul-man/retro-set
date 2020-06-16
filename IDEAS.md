@@ -1,4 +1,4 @@
-# Pit People
+# RetroSet
 
 This repository is for a social concert app idea.
 
