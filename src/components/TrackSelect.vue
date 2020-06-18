@@ -3,7 +3,7 @@
     <div class="form-group row">
       <label for="playlistNameField" class="col-sm-2 col-form-label bold">Playlist Name</label>
       <div class="col-sm-5">
-        <input v-model="playlistName" type="text" class="form-control" id="playlistNameField" :placeholder="defaultPlaylistName">
+        <input v-model="set.playlistName" type="text" class="form-control" id="playlistNameField" :placeholder="defaultPlaylistName">
       </div>
     </div>
     <table class="table table-striped table-bordered table-sm" id="matches-table">
@@ -17,25 +17,27 @@
       <tbody>
         <tr v-for="(song, songIndex) in set.songs" :key="songIndex" class="row">
           <th class="col-sm-1">{{ songIndex + 1 }}</th>
-          <td class="col-sm-4">{{ song.name }}</td>
+          <td class="col-sm-4" style="color: #008d55; font-size:16px;">{{ song.name }}</td>
           <td class="col-sm-7" style="padding-left: 1em;">
             <template v-if="!song.matches">
-              <div class="spinner-border" style="color: #00e286" role="status">
+              <div>
+                <b-spinner label="Loading..."></b-spinner>
               </div>
             </template>
             <template v-else>
               <div :class="'container matches-wrapper' + (song.matches.length > 1 ? ' shadow rounded multiple' : '')">
                 <div class="row match-div" v-for="(match, matchIndex) in song.matches" :key="matchIndex">
-                  <div class="form-check">
-                    <input type="radio" class="form-check-input" :value="match.uri" :name="'match-' + songIndex" :checked="song.matches.length === 1" :disabled="song.matches.length === 1"/>
-                  </div>
+                  {{ setDefaultMatch(song, match.uri, matchIndex) }}
+                  <b-form-radio variant="primary" v-model="song.selectedUri" :value="match.uri" :name="'match-' + songIndex"/>
                   <p style="float: left;">
                     <img :src="match.albumImageUrl" height="64px" width="64px" border="1px" />
                   </p>
-                  <p style="text-align: left;word-wrap: break-word;">
-                    <span class="bold">Title:</span> {{ match.songTitle }}<br/>
-                    <span class="bold">Album:</span> {{ match.albumTitle }}
-                  </p>
+                  <div class="float-right" style="text-align:left;">
+                    <p>
+                      <span class="bold">Title:</span> {{ match.songTitle }}<br/>
+                      <span class="bold">Album:</span> {{ match.albumTitle }}
+                    </p>
+                  </div>
                 </div>
               </div>
             </template>
@@ -45,8 +47,8 @@
     </table>
     <!-- <pre class="jsonView">{{ set | stringify }}</pre><br> -->
     <div class="panel-footer">
-        <button type="button" class="btn btn-warning" @click="closePanel">Cancel</button>
-        <button type="button" class="btn btn-primary" @click="refreshSetlists">Save changes</button>
+      <b-button variant="warning" @click="closePanel">Cancel</b-button>
+      <b-button variant="primary" @click="refreshSetlists">Save changes</b-button>
     </div>
   </div>
 </template>
@@ -73,6 +75,7 @@ export default {
   },
 
   async mounted() {
+    this.set.playlistName = '';
     for (let song of this.set.songs) {
       let matches = await this.trackSearch(song);
       song.matches = matches
@@ -92,19 +95,22 @@ export default {
       let spotifyResp = await res;
       return spotifyResp.data;
     },
+    setDefaultMatch(song, uri, index) {
+      if (index === 0) {
+        song.selectedUri = uri;
+      }
+    },
     refreshSetlists() {
-      let selectedSongInputs = document.querySelectorAll('input[name*="match-"]:checked');
       this.set.spotifyUris = [];
-      for (let input of selectedSongInputs) {
-        this.set.spotifyUris.push(input.value);
+      for (let song of this.set.songs) {
+        this.set.spotifyUris.push(song.selectedUri);
       }
       
-      if (this.playlistName === '') this.playlistName = this.defaultPlaylistName;
-      this.set.playlistName = this.playlistName;
+      if (this.set.playlistName === '') this.set.playlistName = this.defaultPlaylistName;
       this.$emit("closePanel", this.set)
     },
     closePanel() {
-      this.$emit("closePanel", {})
+      this.$emit("closePanel", null)
     },
     forceRerender() {
       this.componentKey += 1;  
@@ -125,25 +131,21 @@ export default {
 }
 
 .form-group.row {
-  // margin-top: 1em;
   padding-top: 1em;
   padding-bottom: 1em;
   background-color: #e9e9e9
 }
 
-// Add border between mutliple song matches
-// .match-div:not(:last-child) {
-//   border-bottom: solid 1px gray;
-// }
+.spinner-border {
+color: #00e286;
+}
 
 .matches-wrapper.multiple {
-  // border: solid 1px rgb(199, 199, 199);
   border: solid 1px #e9e9e9;
 }
 
 .match-div {
   padding: 5px;
-  overflow-x: scroll;
 }
 
 .match-div p {

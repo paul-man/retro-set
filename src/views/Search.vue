@@ -3,19 +3,10 @@
     <div class="container shadow-lg rounded">
       <div class="row container">
         <div class="col">
-          <div class="float-left" id="spotify-user-data">
-            <div class="text-center">
-              <img :src="user.imgUrl" class="icon-img float-left" id="spotify-user-img" alt="Spotify user image"/>
-              <span class="float-right bold"><a id="spotify-user-link" :href="'https://open.spotify.com/user/'+user.id" title="Spotify profile">{{user.id}}</a></span>
-            </div>
-            <div>
-              <a class="bold float-left" @click="logout" title="Switch spotify account">Not you?</a>
-            </div>
-          </div>
           <div v-if="isDev" class="float-right">
-            <button type="button" class="btn btn-secondary" id="test-btn" @click="testSetlistSearch">
+            <b-button variant="secondary" @click="testSetlistSearch" id="test-btn">
               <img src="@/assets/zap.svg" class="icon-svg"/>
-            </button>
+            </b-button>
           </div>
         </div>
       </div>
@@ -98,17 +89,22 @@ export default {
       });
 
       this.$store.commit("setSetlists", setlists.data);
-    },
-    async logout() {
-      this.$store.commit("setUser", {})
-      let res = await get("api/spotify/login/", { params: { newUser: true } });
-      window.location = res.data
     }
   },
 
   watch: {
     readyToSearchSetlists: function(ready) {
       if (ready) {
+        this.getSetlists();
+      }
+    },
+    selectedArtist: function() {
+      if (this.selectedVenue.id !== undefined) {
+        this.getSetlists();
+      }
+    },
+    selectedVenue: function() {
+      if (this.selectedArtist.mbid !== undefined) {
         this.getSetlists();
       }
     }
@@ -123,6 +119,7 @@ export default {
 
 .search > div.container {
   padding-top: 20px;
+  padding-bottom: 20px;
   background-color: #f1f1f1;
   border: solid 1px lightgray;
 }

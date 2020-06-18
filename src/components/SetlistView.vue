@@ -2,18 +2,14 @@
   <div>
     <div class="container">
       <div class="row">
-        <div class="col-6 col-md-4" v-for="(set, index) in setlists" :key="index">
+        <div class="col-6 col-md-4 setlist-container" v-for="(set, index) in setlists" :key="index">
           <p class="setData">
             Event date: {{ set.eventDate }}<br>
             Songs played: {{ set.songs.length }}<br>
             <a :href="set.url" target="_blank">More setlist Data</a>
           </p>
           <template v-if="set.tourName">{{ set.tourName }}</template>
-          <button
-            type="button"
-            class="btn btn-primary"
-            @click="openTrackSelctPanel(set, index)">
-            Search Songs</button><br><br>
+          <b-button variant="primary" @click="openTrackSelctPanel(set, index)">Search Songs</b-button><br><br>
           <template v-if="set.spotifyPreviews">
             <div class="container">
               <div v-for="preview in set.spotifyPreviews" v-bind:key="preview" class="row">
@@ -22,9 +18,11 @@
             </div>
           </template>
           <template v-else-if="set.songs">
-            <ul class="songlist">
-              <li v-for="(song, index) in set.songs" :key="index">#{{index+1}}: {{ song.name }}</li>
-            </ul>
+            <b-list-group class="songlist">
+              <b-list-group-item v-for="(song, index) in set.songs" :key="index">
+                {{ song.name }}
+              </b-list-group-item>
+            </b-list-group>
           </template>
         </div>
       </div>
@@ -62,9 +60,11 @@ export default {
       })
       trackSelctPanel.promise
         .then(set => {
-          this.setlists[index] = set;
-          this.$store.commit('setSetlists', this.setlists);
-          this.createPlaylist(set, index)
+          if (set) {
+            this.setlists[index] = set;
+            this.$store.commit('setSetlists', this.setlists);
+            this.createPlaylist(set, index)
+          }
         })
     },
     async createPlaylist(set, index) {
@@ -86,6 +86,12 @@ export default {
 </script>
 
 <style scoped>
+
+ /* Add border between mutliple setlists */
+.setlist-container {
+  border: solid 1px lightgray;
+  border-radius: 2px;
+}
 .songlist {
   list-style-type: none;
   text-align: left;
