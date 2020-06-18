@@ -91,6 +91,7 @@ export default {
 .setlist-container {
   border: solid 1px lightgray;
   border-radius: 2px;
+  padding-bottom: 15px;
 }
 .songlist {
   list-style-type: none;

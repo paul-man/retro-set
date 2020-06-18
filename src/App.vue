@@ -4,6 +4,7 @@
     <div class="app-wrap">
       <router-view />
     </div>
+    <footer> <small>&copy; Copyright {{currentYear}}, RetroSet</small> </footer>
   </div>
 </template>
 
@@ -14,6 +15,11 @@ export default {
   components: {
     Navbar
   },
+  computed: {
+    currentYear() {
+      return new Date().getFullYear();
+    }
+  }
 };
 </script>
 
@@ -24,7 +30,7 @@ html,
 body {
   margin: 0;
   min-height: 100vh;
-  background-color: #00e286;
+  background-color: #00e286 !important;
   background-size: cover;
 }
 
@@ -76,5 +82,9 @@ body {
 
 .icon-svg {
   margin-bottom: 0.5em;
+}
+
+footer {
+  padding-bottom: 10px;
 }
 </style>
