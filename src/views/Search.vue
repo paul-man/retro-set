@@ -3,17 +3,17 @@
     <div class="container shadow-lg rounded">
       <div class="row container">
         <div class="col">
-          <!-- <div v-if="isDev" class="float-right"> -->
+          <div v-if="isDev" class="float-right">
             <b-button variant="secondary" @click="testSetlistSearch" id="test-btn">
               <img src="@/assets/zap.svg" class="icon-svg"/>
             </b-button>
-          <!-- </div> -->
+          </div>
         </div>
       </div>
       <b-container class="bv-example-row">
         <b-row>
-          <b-col lg="6"><venue-search /></b-col>
           <b-col lg="6"><artist-search /></b-col>
+          <b-col lg="6"><venue-search /></b-col>
         </b-row>
       </b-container>
       <div v-if="readyToSearchSetlists">
