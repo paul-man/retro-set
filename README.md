@@ -1,6 +1,6 @@
 # RetroSet
 
-Find setlists from passed concerts and turn them into spotify playlists!
+Find setlists from past concerts and turn them into spotify playlists!
 
 _____
 
@@ -26,18 +26,17 @@ _____
     SETLISTFM_KEY={}
     SPOTIFY_CLIENT_ID={}
     SPOTIFY_CLIENT_SECRET={}
+    SPOTIFY_CALLBACK_URL=http://localhost:8080/api/spotify/callback
+    LOGIN_REDIRECT_URL=http://localhost:8080
+    MONGODB_URI=mongodb://mongodb0.example.com:27017
+    DATABASE_NAME=user
     ````
 
 #### To run
 
-1. `git clone https://github.com/paul-man/pit-people.git && cd pit-people`
+1. `git clone https://github.com/paul-man/retro-set.git && cd retro-set`
 1. `npm install`
-1. Run vue dev server - `npm run vue-dev`
-1. Open another terminal and run node dev server - `npm run node-dev`
-
-OR
-
-3. You can run `npm run dev` in a single terminal
+1. Run dev server - `npm run dev`
 
 _Note: Currently this project is not ready to run in a production environment_
 _____
