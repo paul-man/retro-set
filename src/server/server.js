@@ -1,12 +1,14 @@
 /* eslint-disable no-console */
 "use strict";
 
+import * as Sentry from '@sentry/node';
+Sentry.init({ dsn: 'https://3f6a94636953494c9d12ab520e693cbc@o409962.ingest.sentry.io/5283409' });
+
 const express = require("express"),
   app = express(),
   PORT = process.env.PORT || 8080,
   { resolve } = require("path"),
   configureAPI = require('./configure');
-
 // API
 configureAPI(app);
 
