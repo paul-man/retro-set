@@ -68,7 +68,7 @@ export default {
       );
     },
     isDev() {
-      return process.env.ENV === 'development'
+      return process.env.NODE_ENV.trim() == 'development'
     }
   },
 
