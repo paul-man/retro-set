@@ -1,7 +1,6 @@
-require("dotenv").config();
 let { MongoClient } = require("mongodb");
 const mongoURI = process.env.MONGODB_URI;
-
+const db_name = process.env.DATABASE_NAME || 'users';
 let _db, spotifyCollection;
 
 let mongoUtil = {
@@ -10,7 +9,7 @@ let mongoUtil = {
       mongoURI,
       { useNewUrlParser: true, useUnifiedTopology: true },
       function(err, client) {
-        _db = client.db("users");
+        _db = client.db(db_name);
         spotifyCollection = _db.collection("spotifyData");
         return callback(err);
       }

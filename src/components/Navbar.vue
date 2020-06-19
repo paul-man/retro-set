@@ -8,7 +8,7 @@
         height="30"
         width="30"
       />
-      RetroSet
+      RetroSet {{(isDev ? ': Dev' : '')}}
     </b-navbar-brand>
     <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
     <b-collapse id="nav-collapse" is-nav>
@@ -37,9 +37,16 @@ import { mapState } from 'vuex'
 import { get } from 'axios'
 export default {
   name: "Navbar",
+  data() {
+    return {
+    };
+  },
   components: {},
   computed: {
     ...mapState(['user']),
+    isDev() {
+      return process.env.NODE_ENV === 'development'
+    }
   },
   methods: {
     async logout() {

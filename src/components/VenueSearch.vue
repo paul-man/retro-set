@@ -19,7 +19,7 @@
         <template slot="suggestion" slot-scope="{ data, htmlText }">
           <div class="d-flex align-items-center">
             <span class="ml-4" v-html="htmlText"></span>
-            <span style="padding-left:20px;">({{ data.city.name }}, {{ data.city.country.code }})</span>
+            <span class="float-right" style="padding-left:20px;">({{ data.city.name }}, {{ data.city.country.code }})</span>
           </div>
         </template>
       </vue-bootstrap-typeahead>

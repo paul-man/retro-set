@@ -1,3 +1,4 @@
+require("dotenv-flow").config();
 const api = require('./api')
 let mongoUtil = require('./mongoUtil');
 

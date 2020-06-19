@@ -5,3 +5,6 @@
   - detect env and redirect to correct uri
 - Created better node/vue dev server, no more separate terminals
   - https://dennisreimann.de/articles/vue-cli-serve-express.html
+- Some song titles don't match what is stored in Spotify (e.g. The Archers Bows Have Broken => Archers)
+  - Add Spotify search?
+  - what about foreign letters and special characters?

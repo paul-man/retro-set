@@ -2,7 +2,7 @@
   <div>
     <div class="container">
       <div class="row">
-        <div class="col-6 col-md-4 setlist-container" v-for="(set, index) in setlists" :key="index">
+        <div class="col-sm-5 col-md-6 setlist-container" v-for="(set, index) in setlists" :key="index">
           <p class="setData">
             Event date: {{ set.eventDate }}<br>
             Songs played: {{ set.songs.length }}<br>
@@ -13,7 +13,7 @@
           <template v-if="set.spotifyPreviews">
             <div class="container">
               <div v-for="preview in set.spotifyPreviews" v-bind:key="preview" class="row">
-                <div v-html="preview.html"></div>
+                <div class="spotify-widget-container" v-html="preview.html"></div>
               </div>
             </div>
           </template>
@@ -105,5 +105,9 @@ export default {
 .setData {
   font-weight: bold;
   padding-top: 15px;
+}
+
+.spotify-widget-container {
+  width: 100%;
 }
 </style>

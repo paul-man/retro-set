@@ -3,21 +3,19 @@
     <div class="container shadow-lg rounded">
       <div class="row container">
         <div class="col">
-          <div v-if="isDev" class="float-right">
+          <!-- <div v-if="isDev" class="float-right"> -->
             <b-button variant="secondary" @click="testSetlistSearch" id="test-btn">
               <img src="@/assets/zap.svg" class="icon-svg"/>
             </b-button>
-          </div>
+          <!-- </div> -->
         </div>
       </div>
-      <div class="row">
-        <div class="col">
-          <venue-search />
-        </div>
-        <div class="col">
-          <artist-search />
-        </div>
-      </div>
+      <b-container class="bv-example-row">
+        <b-row>
+          <b-col lg="6"><venue-search /></b-col>
+          <b-col lg="6"><artist-search /></b-col>
+        </b-row>
+      </b-container>
       <div v-if="readyToSearchSetlists">
         <div class="row">
           <div class="col">
@@ -70,7 +68,7 @@ export default {
       );
     },
     isDev() {
-      return process.env.NODE_ENV === 'development'
+      return process.env.ENV === 'development'
     }
   },
 

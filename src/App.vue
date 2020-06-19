@@ -4,7 +4,7 @@
     <div class="app-wrap">
       <router-view />
     </div>
-    <footer> <small>&copy; Copyright {{currentYear}}, RetroSet</small> </footer>
+    <footer> <small>Copyright &copy; {{currentYear}}, RetroSet. All Rights Reserved</small> </footer>
   </div>
 </template>
 
@@ -86,5 +86,7 @@ body {
 
 footer {
   padding-bottom: 10px;
+  bottom: 0%;
+  width: 100%;
 }
 </style>

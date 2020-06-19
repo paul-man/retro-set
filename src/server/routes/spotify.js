@@ -2,9 +2,6 @@ const express = require("express"),
   router = express.Router();
 let SpotifyWebApi = require("spotify-web-api-node");
 let mongoUtil = require('../mongoUtil');
-// let {getUserData, setUserData} = mongoUtil;
-
-require("dotenv").config();
 
 const scopes = ["user-read-email", "playlist-modify-private"];
 let user = {};
@@ -78,7 +75,6 @@ router.get("/track/", function(req, res) {
 });
 
 router.get("/create_playlist/", async function(req, res) {
-  // qeuery mongo for req.params.userid
   let user = await mongoUtil.getUserData(req.query.user);
   spotifyApi.setAccessToken(user.accessToken);
   spotifyApi.setRefreshToken(user.refreshToken);

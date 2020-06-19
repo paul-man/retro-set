@@ -25,21 +25,29 @@
               </div>
             </template>
             <template v-else>
-              <div :class="'container matches-wrapper' + (song.matches.length > 1 ? ' shadow rounded multiple' : '')">
-                <div class="row match-div" v-for="(match, matchIndex) in song.matches" :key="matchIndex">
-                  {{ setDefaultMatch(song, match.uri, matchIndex) }}
-                  <b-form-radio variant="primary" v-model="song.selectedUri" :value="match.uri" :name="'match-' + songIndex"/>
-                  <p style="float: left;">
-                    <img :src="match.albumImageUrl" height="64px" width="64px" border="1px" />
-                  </p>
-                  <div class="float-right" style="text-align:left;">
-                    <p>
-                      <span class="bold">Title:</span> {{ match.songTitle }}<br/>
-                      <span class="bold">Album:</span> {{ match.albumTitle }}
+              <template v-if="song.matches.length === 0">
+                <div class="no-match-warn">
+                  <p>There were no matches found for "{{song.name}}" by {{selectedArtist.name}}, sorry :/</p>
+                  <p>Currently, you'll have to add the song yourself (at position {{songIndex+1}}), but in the future you'll be able to browse the artist's Spotify discogrophy right here!</p>
+                </div>
+              </template>
+              <template v-else>
+                <div :class="'container matches-wrapper' + (song.matches.length > 1 ? ' shadow rounded multiple' : '')">
+                  <div class="row match-div" v-for="(match, matchIndex) in song.matches" :key="matchIndex">
+                    {{ setDefaultMatch(song, match.uri, matchIndex) }}
+                    <b-form-radio variant="primary" v-model="song.selectedUri" :value="match.uri" :name="'match-' + songIndex"/>
+                    <p style="float: left;">
+                      <img :src="match.albumImageUrl" height="64px" width="64px" border="1px" />
                     </p>
+                    <div class="float-right" style="text-align:left;">
+                      <p>
+                        <span class="bold">Title:</span> {{ match.songTitle }}<br/>
+                        <span class="bold">Album:</span> {{ match.albumTitle }}
+                      </p>
+                    </div>
                   </div>
                 </div>
-              </div>
+              </template>
             </template>
           </td>
         </tr>
@@ -103,7 +111,9 @@ export default {
     refreshSetlists() {
       this.set.spotifyUris = [];
       for (let song of this.set.songs) {
-        this.set.spotifyUris.push(song.selectedUri);
+        if (song.selectedUri) {
+          this.set.spotifyUris.push(song.selectedUri);
+        }
       }
       
       if (this.set.playlistName === '') this.set.playlistName = this.defaultPlaylistName;
@@ -164,5 +174,9 @@ color: #00e286;
   margin-right: 25px;
   margin-top: 25px;
   text-align: right;
+}
+
+.no-match-warn {
+  background-color: #ff9a5f8a;
 }
 </style>

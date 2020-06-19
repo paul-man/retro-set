@@ -3,10 +3,10 @@ import Router from "vue-router";
 import Search from "./views/Search.vue";
 import PageNotFound from "./views/PageNotFound.vue";
 import SpotifyLogin from "./views/SpotifyLogin.vue";
+import About from "./views/About.vue";
 import SpotifyError from "./views/SpotifyError.vue";
 import SetlistfmError from "./views/SetlistfmError.vue";
 import store from "./store.js";
-import { get } from 'axios';
 
 Vue.use(Router);
 
@@ -22,7 +22,6 @@ const ifUserLoaded = (to, from, next) => {
 };
 
 async function ifUserNotLoaded(to, from, next) {
-  // await loadUser()
   if (!store.getters.isUserLoaded) {
     next();
     return;
@@ -43,6 +42,12 @@ const router = new Router({
       path: "/spotify-login",
       name: "spotify-login",
       component: SpotifyLogin,
+      beforeEnter: ifUserNotLoaded,
+    },
+    {
+      path: "/about",
+      name: "about",
+      component: About,
       beforeEnter: ifUserNotLoaded,
     },
     {
