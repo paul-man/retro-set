@@ -104,6 +104,9 @@ router.get("/create_playlist/", async function(req, res) {
 let flattenTrackMatches = (tracks) => {
   let matches = [];
   for (let item of tracks.items) {
+    if (item.album.images.length === 0) {
+      item.album.images.push({url: ""});
+    }
     let newMatch = {
       songTitle: item.name,
       albumTitle: item.album.name,

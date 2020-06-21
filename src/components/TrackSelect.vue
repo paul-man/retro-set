@@ -78,8 +78,14 @@
                     :name="'match-' + songIndex"
                   />
                   <p style="float: left;">
-                    <img
+                    <img v-if="match.albumImageUrl !== ''"
                       :src="match.albumImageUrl"
+                      height="64px"
+                      width="64px"
+                      border="1px"
+                    />
+                    <img v-else
+                      src="@/assets/no-album-art.png"
                       height="64px"
                       width="64px"
                       border="1px"

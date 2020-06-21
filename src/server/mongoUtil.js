@@ -2,7 +2,8 @@ let { MongoClient } = require("mongodb");
 const mongoURI = process.env.MONGODB_URI;
 const db_name = process.env.DATABASE_NAME || 'users';
 let _db, spotifyCollection;
-
+console.log(db_name)
+console.log(mongoURI)
 let mongoUtil = {
   connectToServer: function(callback) {
     MongoClient.connect(
