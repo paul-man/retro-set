@@ -54,7 +54,6 @@ const router = new Router({
       path: "/spotify-error",
       name: "spotify-error",
       component: SpotifyError,
-      beforeEnter: ifUserNotLoaded,
     },
     {
       path: "/setlistfm-error",

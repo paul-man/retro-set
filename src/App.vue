@@ -55,7 +55,7 @@ body {
 }
 
 .tracklistPanel {
-  width: 65% !important;
+  width: 80% !important;
   z-index: 9999 !important;
 }
 

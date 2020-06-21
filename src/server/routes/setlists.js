@@ -21,7 +21,7 @@ router.get("/artist/:artist", function(req, res) {
     })
     .catch(function(error) {
       console.log("Something went wrong!", error);
-      res.redirect("http://localhost:8080/setlistfm-error");
+      res.redirect("/setlistfm-error");
     });
 });
 
@@ -38,7 +38,7 @@ router.get("/venue/:venue", function(req, res) {
     })
     .catch(function(error) {
       console.log("Something went wrong!", error);
-      res.redirect("http://localhost:8080/setlistfm-error");
+      res.redirect("/setlistfm-error");
     });
 });
 
@@ -58,7 +58,7 @@ router.get("/setlist/", function(req, res) {
     })
     .catch(function(error) {
       console.log("Something went wrong!", error);
-      res.redirect("http://localhost:8080/setlistfm-error");
+      res.redirect("/setlistfm-error");
     });
 });
 

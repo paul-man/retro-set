@@ -45,7 +45,7 @@ export default {
   computed: {
     ...mapState(['user']),
     isDev() {
-      return process.env.NODE_ENV === 'development'
+      return process.env.NODE_ENV.trim() === 'development'
     }
   },
   methods: {

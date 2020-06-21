@@ -54,6 +54,7 @@ export default {
       const trackSelctPanel = this.$showPanel({
         component : 'track-select',
         cssClass: 'tracklistPanel',
+        disableBgClick: true,
         props: {
           set: set
         }

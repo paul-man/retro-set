@@ -9,6 +9,15 @@ const store = new Vuex.Store({
     selectedArtist: {},
     selectedVenue: {},
     setlists: [],
+    respCodes: {
+      "512": "Unable to create playlist",
+      "513": "Unable to add song(s) to playlist",
+      "514": "Unable to authenticate with Spotify",
+      "515": "Something went wrong with SetlistFM",
+      "516": "Something went wrong with Spotify",
+      "517": "Unable to retrieve Spotify user data",
+      "518": "Having trouble searching Spotify for tracks. Try refreshing the page and logging back in"
+    },
     testdata: {
       ARTIST: {
         mbid: "9311e2bc-bb3f-44cf-90d8-b1fe6912b60b",
@@ -54,6 +63,9 @@ const store = new Vuex.Store({
     },
     isUserLoaded: (state) => {
       return Object.keys(state.user).length !== 0;
+    },
+    respCodes: (state) => {
+      return state.respCodes;
     },
   },
   mutations: {

@@ -1,11 +1,8 @@
 const express = require("express"),
-  router = express.Router();
-let SpotifyWebApi = require("spotify-web-api-node");
-let mongoUtil = require('../mongoUtil');
-
-const scopes = ["user-read-email", "playlist-modify-private"];
-let user = {};
-const loginRedirectURL = process.env.LOGIN_REDIRECT_URL;
+  router = express.Router(),
+  scopes = ["user-read-email", "playlist-modify-private"];
+let SpotifyWebApi = require("spotify-web-api-node"),
+  mongoUtil = require('../mongoUtil');
 
 // Search track given track name + artists name
 router.get("/login/", function(req, res) {
@@ -20,31 +17,30 @@ router.get("/login/", function(req, res) {
 // Search track given track name + artists name
 router.get("/callback/", async function(req, res) {
   const { code } = req.query;
-  user.token = code;
 
   try {
     var data = await spotifyApi.authorizationCodeGrant(code);
     const accessToken = data.body.access_token,
-      refreshToken = data.body.refresh_token;
+          refreshToken = data.body.refresh_token;
     spotifyApi.setAccessToken(accessToken);
     spotifyApi.setRefreshToken(refreshToken);
 
-    let userRes = await spotifyApi.getMe();
+    let spotifyUserData = await spotifyApi.getMe();
     let user = {
-      id: userRes.body.id,
-      imgUrl: userRes.body.images[0].url,
+      id: spotifyUserData.body.id,
+      imgUrl: spotifyUserData.body.images[0].url,
       accessToken: accessToken,
       refreshToken: refreshToken
     };
     mongoUtil.setUserData(user);
     res.redirect(
-      `${loginRedirectURL}/?user=${JSON.stringify({
+      `/?user=${JSON.stringify({
         id: user.id,
         imgUrl: user.imgUrl
       })}`
     );
   } catch (err) {
-    res.redirect(`${loginRedirectURL}/spotify-error`);
+    res.redirect(`/spotify-error?status=517`);
   }
 });
 
@@ -64,12 +60,14 @@ router.get("/track/", function(req, res) {
   spotifyApi.searchTracks("track:" + track + " artist:" + artist).then(
     function(data) {
       let tracks = flattenTrackMatches(data.body.tracks);
-
       res.send(tracks);
     },
     function(err) {
-      console.log("Something went wrong!", err);
-      res.redirect(`${loginRedirectURL}/spotify-error`);
+      res.send({
+        error: true,
+        status: 518,
+        errorMsg: err
+      });
     }
   );
 });
@@ -91,12 +89,12 @@ router.get("/create_playlist/", async function(req, res) {
       })
       .catch((err) => {
         console.log(err);
-        res.redirect(`${loginRedirectURL}/spotify-error`);
+        res.redirect(`/spotify-error`);
       });
   })
   .catch((err) => {
     console.log(err);
-    res.redirect(`${loginRedirectURL}/spotify-error`);
+    res.redirect(`/spotify-error`);
   });
 });
 
@@ -121,7 +119,6 @@ let flattenTrackMatches = (tracks) => {
 
 // Return user data
 let remove_user= () => {
-  user = {};
   spotifyApi.resetAccessToken();
   spotifyApi.resetRefreshToken();
 };

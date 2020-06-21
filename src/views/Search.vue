@@ -35,7 +35,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState } from 'vuex';
 import VenueSearch from "@/components/VenueSearch";
 import ArtistSearch from "@/components/ArtistSearch";
 import SetlistView from "@/components/SetlistView";
