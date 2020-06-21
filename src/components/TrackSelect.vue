@@ -85,7 +85,7 @@
                       border="1px"
                     />
                   </p>
-                  <div class="float-right" style="text-align:left;">
+                  <div class="float-right match-desc" style="text-align:left;">
                     <p>
                       <span class="bold">Title:</span> {{ match.songTitle
                       }}<br />
@@ -206,6 +206,16 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.match-desc {
+  overflow-x: auto; 
+  white-space: nowrap;
+  display: inline-block;
+}
+.match-desc > p {
+  display: inline-block; 
+  float: none; 
+}
+
 div.row, tr.row {
   margin-right: 0;
   margin-left: 0;
@@ -229,30 +239,17 @@ div.row, tr.row {
   color: #00e286;
 }
 
-.match-col {
-  // padding-left: 1em;
+.matches-wrapper {
+  padding-left: 0;
 }
 
 .matches-wrapper.multiple {
   border: solid 1px #e9e9e9;
-  // width: 100%;
-}
-
-td > .multiple {
-  // padding: 0;
 }
 
 .match-div {
   padding-left: 0.5em;
   padding-top: 0.2em;
-}
-
-.match-div p {
-  // margin: 0;
-}
-
-.playlist-input-row {
-  // width: 100%;
 }
 
 .matches-wrapper img {
