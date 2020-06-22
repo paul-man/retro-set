@@ -1,8 +1,10 @@
+/* eslint-disable no-console */
 const express = require("express"),
   router = express.Router(),
-  scopes = ["user-read-email", "playlist-modify-private"];
+  scopes = ["user-read-email", "playlist-modify-private", "playlist-modify-public"];
 let SpotifyWebApi = require("spotify-web-api-node"),
   mongoUtil = require('../mongoUtil');
+const { RewriteFrames } = require("@sentry/integrations");
 
 // Search track given track name + artists name
 router.get("/login/", function(req, res) {
@@ -77,8 +79,9 @@ router.get("/create_playlist/", async function(req, res) {
   spotifyApi.setAccessToken(user.accessToken);
   spotifyApi.setRefreshToken(user.refreshToken);
 
-  spotifyApi.createPlaylist(user.id, req.query.playlistName, {
-      public: false,
+  spotifyApi.createPlaylist(user.id, req.query.name, {
+      public: req.query.visibility === "public",
+      description: req.query.description || ''
   }, )
   .then((data) => {
     let playlist = data.body;
@@ -89,12 +92,18 @@ router.get("/create_playlist/", async function(req, res) {
       })
       .catch((err) => {
         console.log(err);
-        res.redirect(`/spotify-error`);
+        res.send({
+          error: true,
+          status: 513,
+          errorMsg: err});
       });
   })
   .catch((err) => {
     console.log(err);
-    res.redirect(`/spotify-error`);
+    res.send({
+      error: true,
+      status: 512,
+      errorMsg: err});
   });
 });
 

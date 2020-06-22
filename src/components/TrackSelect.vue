@@ -1,24 +1,41 @@
 <template>
   <div id="track-select" :key="componentKey">
-    <b-container>
-      <h4>
-        Check things over, make sure we got things right
-      </h4>
-    </b-container>
-    <div class="form-group row playlist-input-row">
-      <label for="playlistNameField" class="col-sm-2 col-form-label bold"
-        >Playlist Name</label
+    <b-container id="playlist-form">
+      <b-form-group
+        label-cols-sm="4"
+        label-cols-lg="2"
+        label="Playlist Name"
+        label-for="playlist-name"
+        maxLength="100"
       >
-      <div class="col-sm-5">
-        <input
+        <b-form-input 
           v-model="set.playlistName"
-          type="text"
-          class="form-control"
-          id="playlistNameField"
           :placeholder="defaultPlaylistName"
-        />
-      </div>
-    </div>
+          id="playlist-name"></b-form-input>
+      </b-form-group>
+      <b-form-group
+        label-cols-sm="4"
+        label-cols-lg="2"
+        label="Playlist Description"
+        label-for="playlist-description"
+        maxLength="300"
+      >
+        <b-form-textarea
+          id="playlist-description"
+          v-model="set.playlistDescription"
+          placeholder="Add a description for your playlist"
+          rows="3"
+          max-rows="6"
+        ></b-form-textarea>
+      </b-form-group>
+      <b-form-group 
+        label-cols-sm="4"
+        label-cols-lg="2"
+        label="Playlist Visibility">
+        <b-form-radio v-model="set.playlistVisibility" name="playlist-visibility" value="private" checked><b-icon icon="lock"></b-icon> Private</b-form-radio>
+        <b-form-radio v-model="set.playlistVisibility" name="playlist-visibility" value="public"><b-icon icon="unlock"></b-icon> Public</b-form-radio>
+      </b-form-group>
+    </b-container>
     <table
       class="table table-striped table-bordered table-sm"
       id="matches-table"
@@ -109,7 +126,7 @@
     <div class="panel-footer">
       <b-button variant="warning" @click="closePanel">Cancel</b-button>
       <b-button variant="primary" @click="refreshSetlists"
-        >Save changes</b-button
+        >Create Playlist</b-button
       >
     </div>
   </div>
@@ -125,7 +142,6 @@ export default {
   data() {
     return {
       componentKey: 0,
-      playlistName: "",
       trackSearchError: false,
       trackSearchErrorCode: null,
     };
@@ -147,12 +163,14 @@ export default {
 
   async mounted() {
     this.set.playlistName = "";
+    this.set.playlistVisibility = "private";
+    this.set.playlistDescription = "";
     for (let song of this.set.songs) {
       let matches = await this.trackSearch(song);
       song.matches = matches;
     }
     if (this.trackSearchError) {
-      this.makeToast(this.respCodes[this.trackSearchErrorCode]);
+      this.makeErrorToast(this.respCodes[this.trackSearchErrorCode]);
     }
     this.forceRerender();
   },
@@ -291,5 +309,10 @@ th {
 
 tr:nth-child(even) {
   background-color: #dddddd;
+}
+
+#playlist-form {
+  text-align: left;
+  padding-top: 1em;
 }
 </style>

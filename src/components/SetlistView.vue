@@ -73,9 +73,18 @@ export default {
         params: {
           user: this.user.id,
           songs: set.spotifyUris,
-          playlistName: set.playlistName
+          name: set.playlistName,
+          description: set.playlistDescription,
+          visibility: set.playlistVisibility
         }
       });
+      // if (res.data.error) {
+      //   this.trackSearchError = true;
+      //   this.trackSearchErrorCode = spotifyResp.data.status;
+      //   return {
+      //     warning: "Unable to retrieve resutls",
+      //   };
+      // }
       set.spotifyPreviews = [ { html: `<iframe src="https://open.spotify.com/embed/playlist/${res.data.id}" width="300" height="380" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>` } ]
       this.setlists[index] = set;
       this.$store.commit('setSetlists', this.setlists);
