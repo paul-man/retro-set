@@ -8,9 +8,11 @@ module.exports = app => {
   app.use(history())
   
   mongoUtil.connectToServer( function(err) {
-    if (err) { console.log(err); }
+    if (err) {
+      console.log(err);
+    }
     else {
-      console.log('MONGO CONNECTED');
+      console.log('\nMONGO CONNECTED');
       return;
     }
   });

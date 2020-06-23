@@ -2,17 +2,18 @@ let { MongoClient } = require("mongodb");
 const mongoURI = process.env.MONGODB_URI;
 const db_name = process.env.DATABASE_NAME || 'users';
 let _db, spotifyCollection;
-console.log(db_name)
-console.log(mongoURI)
+
 let mongoUtil = {
   connectToServer: function(callback) {
     MongoClient.connect(
       mongoURI,
       { useNewUrlParser: true, useUnifiedTopology: true },
       function(err, client) {
+        if (err) {
+          return callback(err);
+        }
         _db = client.db(db_name);
         spotifyCollection = _db.collection("spotifyData");
-        return callback(err);
       }
     );
   },
@@ -27,7 +28,6 @@ let mongoUtil = {
   },
 
   setUserData: async function(userData) {
-    // console.log(`MONGO: setting user data (${JSON.stringify(userData)})`);
     let result = await spotifyCollection.findOne({
       id: userData.id,
     });
