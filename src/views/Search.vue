@@ -16,20 +16,36 @@
           <b-col lg="6"><venue-search /></b-col>
         </b-row>
       </b-container>
-      <div v-if="readyToSearchSetlists">
-        <div class="row">
-          <div class="col">
-            <h3>
-              <a :href="selectedArtist.url" target="_blank">{{selectedArtist.name}}</a> has played at <a :href="selectedVenue.url" target="_blank">{{selectedVenue.name}}</a> {{setlists.length}} time{{ setlists.length > 1 ? "s" : "" }}
-            </h3>
+      <b-container>
+        <b-container v-if="readyToSearchSetlists">
+          <b-row>
+            <b-col>
+              <h3>
+                Select a <u>setlist</u>, confirm the songs, and create a playlist
+              </h3>
+              <h3>
+                <a :href="selectedArtist.url" target="_blank">{{selectedArtist.name}}</a> has played at <a :href="selectedVenue.url" target="_blank">{{selectedVenue.name}}</a> {{setlists.length}} time{{ setlists.length > 1 ? "s" : "" }}
+              </h3>
+            </b-col>
+          </b-row>
+        </b-container>
+        <b-container v-else>
+          <b-row>
+            <b-col>
+              <h3>
+                Begin by searching for an <u>artist</u> and <u>venue</u>
+              </h3>
+            </b-col>
+          </b-row>
+        </b-container>
+        <b-container>
+          <div class="row">
+            <div class="col">
+              <setlist-view />
+            </div>
           </div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col">
-          <setlist-view />
-        </div>
-      </div>
+        </b-container>
+      </b-container>
     </div>
   </div>
 </template>
@@ -115,6 +131,7 @@ export default {
 <style lang="scss">
 .search {
   padding-top: 20px;
+  // min-height: 50vh;
 }
 
 .search > div.container {
@@ -122,6 +139,7 @@ export default {
   padding-bottom: 20px;
   background-color: #f1f1f1;
   border: solid 1px lightgray;
+  min-height: 50vh;
 }
 
 #spotify-user-img {
