@@ -7,8 +7,6 @@ import "./mixins"
 import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
 import VueBootstrapTypeahead from 'vue-bootstrap-typeahead'
 import VueSlideoutPanel from 'vue2-slideout-panel'
-import 'bootstrap/dist/css/bootstrap.css'
-import 'bootstrap-vue/dist/bootstrap-vue.css'
 
 // TODO: Conditionally import these if (process.env.NODE_ENV.trim() === 'production')
 import * as Sentry from '@sentry/browser';
