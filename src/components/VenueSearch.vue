@@ -26,11 +26,6 @@
       <br>
     </div>
     <br>
-    <!-- Debugging purposes -->
-    <!-- <div v-if="selectedVenue.name">
-      <h4>Selected Venue</h4>
-      <pre>{{ selectedVenue.name }}</pre>
-    </div> -->
   </div>
 </template>
 
@@ -56,6 +51,9 @@ export default {
   methods: {
     async searchVenue(query) {
       let suggestions = await get("api/setlists/venue/" + query)
+      if (suggestions.error) {
+        this.makeErrorToast('Having issues search for venues, please try again')
+      }
       this.venueSearchSuggestions = suggestions.data
     },
     setSelectedVenue(venue) {
@@ -66,7 +64,8 @@ export default {
 
   watch: {
     venueName: debounce(function(venue) {
-      if (this.hasSelectedVenue) { // skip search after clicking on venue in dropdown
+      if (this.hasSelectedVenue) {
+        // skip search after clicking on venue in dropdown
         this.hasSelectedVenue = false
         return
       }

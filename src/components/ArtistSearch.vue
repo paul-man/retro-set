@@ -24,11 +24,6 @@
       <br>
     </div>
     <br>
-    <!-- Debugging purposes -->
-    <!-- <div v-if="selectedArtist.name">
-      <h4>Selected artist</h4>
-      <pre>{{ selectedArtist.name }}</pre>
-    </div> -->
   </div>
 </template>
 
@@ -54,6 +49,9 @@ export default {
   methods: {
     async searchArtist(query) {
       let suggestions = await get("api/setlists/artist/" + query)
+      if (suggestions.error) {
+        this.makeErrorToast("Having issues search for artists, please try again");
+      }
       this.artistSearchSuggestions = suggestions.data
     },
     setSelectedArtist(artist) {
@@ -64,7 +62,8 @@ export default {
 
   watch: {
     artistNameSearch: debounce(function(artist) {
-      if (this.hasSelectedArtist) {  // skip search after clicking on venue in dropdown
+      if (this.hasSelectedArtist) {
+        // skip search after clicking on venue in dropdown
         this.hasSelectedArtist = false
         return
       }

@@ -76,7 +76,6 @@ export default {
     async testSetlistSearch() {
       this.$store.commit("setSelectedArtist", this.testdata.ARTIST);
       this.$store.commit("setSelectedVenue", this.testdata.VENUE);
-      // let res = await get("api/spotify/create_playlist");
     },
     async getSetlists() {
       let setlists = await get("api/setlists/setlist/", {
@@ -85,7 +84,10 @@ export default {
           venueId: this.selectedVenue.id
         }
       });
-
+      if (setlists.error) {
+        this.makeErrorToast('Having trouble finding those setlists, please try searching again')
+        return
+      }
       this.$store.commit("setSetlists", setlists.data);
     }
   },

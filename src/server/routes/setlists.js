@@ -21,7 +21,11 @@ router.get("/artist/:artist", function(req, res) {
     })
     .catch(function(error) {
       console.log("Something went wrong!", error);
-      res.redirect("/setlistfm-error");
+      res.send({
+        error: true,
+        status: 519,
+        msg: error
+      });
     });
 });
 
@@ -38,7 +42,11 @@ router.get("/venue/:venue", function(req, res) {
     })
     .catch(function(error) {
       console.log("Something went wrong!", error);
-      res.redirect("/setlistfm-error");
+      res.redirect({
+        error: true,
+        status: 520,
+        msg: error
+      });
     });
 });
 
@@ -58,7 +66,11 @@ router.get("/setlist/", function(req, res) {
     })
     .catch(function(error) {
       console.log("Something went wrong!", error);
-      res.redirect("/setlistfm-error");
+      res.redirect({
+        error: true,
+        status: 521,
+        msg: error
+      });
     });
 });
 
