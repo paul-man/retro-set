@@ -4,13 +4,13 @@
       <img
         src="@/assets/icon.png"
         id="retroset-icon"
-        height="150"
-        width="150"
+        height="175"
+        width="175"
       />
     </div>
     <div class="container">
       <h1>RETROSET</h1>
-      <p>Search Setlist.fm data for a concert date and turn it into a playlist!</p>
+      <p>Take a concert and turn it into a Spotiy playlist!</p>
     </div>
     <div class="container">
       <b-button
@@ -26,7 +26,6 @@
 </template>
 
 <script>
-// import { mapState } from "vuex";
 import { get } from "axios";
 
 export default {
@@ -43,6 +42,9 @@ export default {
   methods: {
     async loginSpotify() {
       let res = await get("api/spotify/login/");
+      if (res.error) {
+        this.makeErrorToast('Unable to login to Spotify')
+      }
       window.location = res.data;
     },
   },
@@ -78,10 +80,14 @@ button span {
 
 #spotify-login-btn {
   font-size: 20px;
-  border: none;
+  border: 1px solid gray;
   color: black;
   background-color: #16b5d9;
   vertical-align: middle;
   display: table-cell;
+  transition: all .3s ease-in;
+}
+#spotify-login-btn:hover {
+  transform: scale(0.97);
 }
 </style>
