@@ -54,7 +54,7 @@
         <tbody>
           <tr v-for="(song, songIndex) in set.songs" :key="songIndex" class="row">
             <td class="col-sm-1">{{ songIndex + 1 }}</td>
-            <td class="col-sm-3" style="color: #008d55; font-size:16px;">
+            <td class="col-sm-3 song-name" style="font-size:16px;">
               {{ song.name }}
             </td>
             <td class="col-sm-8 match-col">
@@ -66,13 +66,15 @@
               <template v-else-if="song.matches.length === 0">
                 <div class="no-match-warn">
                   <p>
-                    There were no matches found for "{{ song.name }}" by
-                    {{ selectedArtist.name }}, sorry :/
+                    No matches found for "{{ song.name }}" by
+                    {{ selectedArtist.name }}
                   </p>
                   <p>
-                    Currently, you'll have to add the song yourself (at position
-                    {{ songIndex + 1 }}), but in the future you'll be able to
-                    browse the artist's Spotify discogrophy right here!
+                    For now you'll have to add the song yourself at position
+                    {{ songIndex + 1 }}
+                  </p>
+                  <p>
+                    Checkout the <a :href="set.url" target="_blank">setlist</a> for more information
                   </p>
                 </div>
               </template>
@@ -129,9 +131,8 @@
     </div>
     <!-- <pre class="jsonView">{{ set | stringify }}</pre><br> -->
     <div class="panel-footer rounded">
-      <b-button variant="warning" @click="closePanel">Cancel</b-button>
-      <b-button variant="primary" @click="refreshSetlists"
-        >Create Playlist</b-button
+      <b-button @click="closePanel">Cancel</b-button>
+      <b-button variant="primary" @click="refreshSetlists" id="create-playlist-btn">Create Playlist</b-button
       >
     </div>
   </div>
@@ -239,6 +240,10 @@ export default {
   height: 100%;
 }
 
+#create-playlist-btn {
+  // background-color: #16b5d9;
+}
+
 .match-desc {
   overflow-x: auto; 
   white-space: nowrap;
@@ -280,6 +285,10 @@ div.row, tr.row {
   border: solid 1px #e9e9e9;
 }
 
+.song-name {
+  color: $primary-shade;
+}
+
 .match-div {
   padding-left: 0.5em;
   padding-top: 0.2em;
@@ -296,14 +305,15 @@ div.row, tr.row {
 .panel-footer {
   padding-right: 25px;
   padding-top: 8px;
-  // margin-top: 25px;
   text-align: right;
   background-color: #e9e9e994;
   height: 7%
 }
 
 .no-match-warn {
-  background-color: #ff9a5f8a;
+  background-color: #fab0862d;
+  border-radius: 5px;
+  padding: 5px  0px 1px 7px;
 }
 
 table {
