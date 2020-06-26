@@ -84,7 +84,9 @@ const store = new Vuex.Store({
     },
   },
   actions: {},
-  plugins: [createPersistedState()],
+  plugins: [createPersistedState({
+    storage: window.sessionStorage,
+  })],
 });
 
 export default store;
