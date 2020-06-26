@@ -7,8 +7,8 @@
     </b-navbar-brand>
     <b-navbar-toggle target="nav-collapse">
       <template v-slot:default="{ expanded }">
-        <b-icon v-if="expanded" variant="primary" icon="dash-square"></b-icon>
-        <b-icon v-else variant="primary" icon="plus-square"></b-icon>
+        <b-icon v-if="expanded" variant="primary" icon="dash-square" font-scale="1.5"></b-icon>
+        <b-icon v-else variant="primary" icon="plus-square" font-scale="1.5"></b-icon>
       </template>
     </b-navbar-toggle>
     <b-collapse id="nav-collapse" is-nav>
@@ -73,6 +73,10 @@ export default {
 nav {
   padding: 0;
   border-bottom: lightgray solid 1px;
+}
+
+.navbar-toggler {
+  border: none !important;
 }
 
 #nav-collapse.show {
