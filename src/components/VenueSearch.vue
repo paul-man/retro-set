@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div id="venue-search">
     <div>
       <span class="text-w-svg">
         <h2>Venue</h2>
@@ -13,7 +13,7 @@
         class="mb-4"
         size="lg"
         :serializer="s => s.name"
-        placeholder="Venue name"
+        placeholder="..."
         @hit="setSelectedVenue"
       >
         <template slot="suggestion" slot-scope="{ data, htmlText }">
@@ -75,6 +75,6 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 
 </style>

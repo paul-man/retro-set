@@ -10,7 +10,7 @@
           </div>
         </div>
       </div>
-      <b-container class="bv-example-row">
+      <b-container>
         <b-row>
           <b-col lg="6"><artist-search /></b-col>
           <b-col lg="6"><venue-search /></b-col>
@@ -62,7 +62,7 @@ export default {
   components: {
     VenueSearch,
     ArtistSearch,
-    SetlistView
+    SetlistView,
   },
 
   mounted() {

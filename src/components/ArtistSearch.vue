@@ -11,7 +11,7 @@
         class="mb-4"
         size="lg"
         :serializer="s => s.name"
-        placeholder="Artist name"
+        placeholder="..."
         @hit="setSelectedArtist"
       >
         <template slot="suggestion" slot-scope="{ data, htmlText }">
@@ -72,3 +72,7 @@ export default {
   }
 }
 </script>
+
+<style lang="scss">
+
+</style>
