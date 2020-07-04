@@ -16,6 +16,12 @@ Vue.mixin({
         variant: type,
         solid: true,
       });
-    }
+    },
+    getAlbumImg: function (imgSrc) {
+      if (imgSrc !== '') {
+        return imgSrc
+      }
+      return require('@/assets/no-album-art.png');
+    },
   }
 })

@@ -56,7 +56,8 @@ router.get("/user/:userID", function(req, res) {
 });
 
 // Search track given track name + artists name
-router.get("/track/", function(req, res) {
+router.get("/track/", async function(req, res) {
+  await setGenericAccessToken();
   const track = req.query.track;
   const artist = req.query.artist;
   spotifyApi.searchTracks("track:" + track + " artist:" + artist).then(
@@ -113,11 +114,14 @@ router.get("/create_playlist/", async function(req, res) {
 let flattenTrackMatches = (tracks) => {
   let matches = [];
   for (let item of tracks.items) {
+    const artistName = item.artists.map(artist => artist.name).join(', ');
     if (item.album.images.length === 0) {
       item.album.images.push({url: ""});
     }
+    
     let newMatch = {
       songTitle: item.name,
+      artistName: artistName,
       albumTitle: item.album.name,
       albumImageUrl: item.album.images[0].url,
       id: item.id,
@@ -134,6 +138,29 @@ let remove_user= () => {
   spotifyApi.resetAccessToken();
   spotifyApi.resetRefreshToken();
 };
+
+let setAccessToken = async (userId) => {
+  if (userId) {
+    const user = await mongoUtil.getUserData(userId);
+    spotifyApi.setAccessToken(user.accessToken);
+    spotifyApi.setRefreshToken(user.refreshToken);
+  }
+}
+
+/* Retrieve an access token
+*  Useful when searchig, or other tasks not requiring user login
+*/
+let setGenericAccessToken = async () => {
+  if (spotifyApi.getAccessToken()) {
+    return;
+  }
+  try {
+    let spotifyApiData = await spotifyApi.clientCredentialsGrant();
+    spotifyApi.setAccessToken(spotifyApiData.body.access_token);
+  } catch (err) {
+    console.log("Something went wrong when retrieving an access token", err);
+  }
+}
 
 let refreshAccessToken = () => {
   // set user's refresh token
@@ -158,19 +185,5 @@ const spotifyApi = new SpotifyWebApi({
   clientSecret: process.env.SPOTIFY_CLIENT_SECRET,
   redirectUri: process.env.SPOTIFY_CALLBACK_URL,
 });
-
-/* Retrieve an access token
-*  Useful when searchig, or other tasks not requiring user login
-*/
-// spotifyApi.clientCredentialsGrant().then(
-//   function(data) {
-//     // Save the access token so that it's used in future calls
-//     spotifyApi.setAccessToken(data.body.access_token);
-//   },
-//   function(err) {
-//     console.log("Something went wrong when retrieving an access token", err);
-//   }
-// );
-//
 
 module.exports = router;
