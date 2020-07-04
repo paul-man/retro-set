@@ -10,40 +10,48 @@
           label-cols-lg="2"
           label="Playlist Name"
           label-for="playlist-name"
-          maxLength="100"
-        >
-          <b-form-input 
+          maxLength="100">
+          <b-form-input
             v-model="set.playlistName"
             :placeholder="defaultPlaylistName"
-            id="playlist-name"></b-form-input>
+            id="playlist-name"
+          ></b-form-input>
         </b-form-group>
         <b-form-group
           label-cols-sm="4"
           label-cols-lg="2"
           label="Playlist Description"
           label-for="playlist-description"
-          maxLength="300"
-        >
+          maxLength="300">
           <b-form-textarea
             id="playlist-description"
             v-model="set.playlistDescription"
             placeholder="Add a description for your playlist"
             rows="3"
-            max-rows="6"
-          ></b-form-textarea>
+            max-rows="6"/>
         </b-form-group>
-        <b-form-group 
+        <b-form-group
           label-cols-sm="4"
           label-cols-lg="2"
           label="Playlist Visibility">
-          <b-form-radio v-model="set.playlistVisibility" name="playlist-visibility" value="private" checked><b-icon icon="lock"></b-icon> Private</b-form-radio>
-          <b-form-radio v-model="set.playlistVisibility" name="playlist-visibility" value="public"><b-icon icon="unlock"></b-icon> Public</b-form-radio>
+          <b-form-radio
+            v-model="set.playlistVisibility"
+            name="playlist-visibility"
+            value="private"
+            checked
+            ><b-icon icon="lock"></b-icon> Private
+          </b-form-radio>
+          <b-form-radio
+            v-model="set.playlistVisibility"
+            name="playlist-visibility"
+            value="public"
+            ><b-icon icon="unlock"></b-icon> Public
+          </b-form-radio>
         </b-form-group>
       </b-container>
       <table
         class="table table-striped table-bordered table-sm"
-        id="matches-table"
-      >
+        id="matches-table">
         <thead class="thead-dark">
           <tr class="row">
             <th class="col-sm-1">#</th>
@@ -52,19 +60,31 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(song, songIndex) in set.songs" :key="songIndex" class="row">
+          <tr
+            v-for="(song, songIndex) in set.songs"
+            :key="songIndex"
+            class="row">
             <td class="col-sm-1">{{ songIndex + 1 }}</td>
             <td class="col-sm-3 song-name" style="font-size:16px;">
               {{ song.name }}
             </td>
             <td class="col-sm-8 match-col">
-              <template v-if="!song.matches">
+              <template v-if="typeof song.matches === 'undefined'">
                 <div>
                   <b-spinner label="Loading..."></b-spinner>
                 </div>
               </template>
-              <template v-else-if="song.matches.length === 0">
-                <div class="no-match-warn">
+              <template v-else>
+                <div class="add-match-btn-div">
+                  <b-button
+                    size="sm"
+                    class="mb-2"
+                    title="Search Spotify for song"
+                    @click="openTrackSearchModal(song)">
+                    <b-icon icon="music-note" aria-hidden="true"></b-icon>+
+                  </b-button>
+                </div>
+                <div v-if="song.matches.length === 0" class="no-match-warn">
                   <p>
                     No matches found for "{{ song.name }}" by
                     {{ selectedArtist.name }}
@@ -74,20 +94,14 @@
                     {{ songIndex + 1 }}
                   </p>
                   <p>
-                    Checkout the <a :href="set.url" target="_blank">setlist</a> for more information
+                    Checkout the
+                    <a :href="set.url" target="_blank">setlist</a> for more
+                    information
                   </p>
                 </div>
-              </template>
-              <template v-else-if="song.matches.warning">
-                <p>{{ song.matches.warning }}</p>
-              </template>
-              <template v-else>
                 <div
-                  :class="
-                    'container matches-wrapper' +
-                      (song.matches.length > 1 ? ' shadow rounded multiple' : '')
-                  "
-                >
+                  v-else
+                  :class="'container matches-wrapper' + (song.matches.length > 1 ? ' shadow rounded multiple' : '')">
                   <div
                     class="row match-div"
                     v-for="(match, matchIndex) in song.matches"
@@ -101,23 +115,23 @@
                       :name="'match-' + songIndex"
                     />
                     <p style="float: left;">
-                      <img v-if="match.albumImageUrl !== ''"
-                        :src="match.albumImageUrl"
-                        height="64px"
-                        width="64px"
-                        border="1px"
-                      />
-                      <img v-else
-                        src="@/assets/no-album-art.png"
+                      <img
+                        :src="getAlbumImg(match.albumImageUrl)"
                         height="64px"
                         width="64px"
                         border="1px"
                       />
                     </p>
-                    <div class="float-right match-desc" style="text-align:left;">
+                    <div
+                      class="float-right match-desc"
+                      style="text-align:left;">
                       <p>
-                        <span class="bold">Title:</span> {{ match.songTitle
-                        }}<br />
+                        <span class="bold">Title:</span> {{ match.songTitle}}
+                      </p><br/>
+                      <p>
+                        <span class="bold">Artist:</span> {{ match.artistName}}
+                      </p><br/>
+                      <p>
                         <span class="bold">Album:</span> {{ match.albumTitle }}
                       </p>
                     </div>
@@ -129,21 +143,36 @@
         </tbody>
       </table>
     </div>
-    <!-- <pre class="jsonView">{{ set | stringify }}</pre><br> -->
+    <b-modal
+      no-close-on-backdrop
+      hide-footer
+      id="spotify-search-modal"
+      title="Search a track"
+      size="lg">
+      <spotify-track-search />
+    </b-modal>
     <div class="panel-footer rounded">
       <b-button @click="closePanel">Cancel</b-button>
-      <b-button variant="primary" @click="refreshSetlists" id="create-playlist-btn">Create Playlist</b-button
+      <b-button
+        variant="primary"
+        @click="refreshSetlists"
+        id="create-playlist-btn"
+        >Create Playlist</b-button
       >
     </div>
   </div>
 </template>
 
 <script>
+import SpotifyTrackSearch from "@/components/SpotifyTrackSearch";
 import { mapState } from "vuex";
 import { get } from "axios";
 
 export default {
   name: "track-select",
+  components: {
+    SpotifyTrackSearch,
+  },
   props: ["set"],
   data() {
     return {
@@ -151,20 +180,6 @@ export default {
       trackSearchError: false,
       trackSearchErrorCode: null,
     };
-  },
-
-  computed: {
-    ...mapState(["selectedArtist", "selectedVenue", "respCodes"]),
-    defaultPlaylistName() {
-      return (
-        this.selectedArtist.name +
-        " - " +
-        this.selectedVenue.name +
-        " (" +
-        this.set.eventDate +
-        ")"
-      );
-    },
   },
 
   async mounted() {
@@ -181,6 +196,20 @@ export default {
     this.forceRerender();
   },
 
+  computed: {
+    ...mapState(["selectedArtist", "selectedVenue", "respCodes"]),
+    defaultPlaylistName() {
+      return (
+        this.selectedArtist.name +
+        " - " +
+        this.selectedVenue.name +
+        " (" +
+        this.set.eventDate +
+        ")"
+      );
+    },
+  },
+
   methods: {
     async trackSearch(song) {
       song.matches = [];
@@ -193,9 +222,7 @@ export default {
       if (spotifyResp.data.error) {
         this.trackSearchError = true;
         this.trackSearchErrorCode = spotifyResp.data.status;
-        return {
-          warning: "Unable to retrieve resutls",
-        };
+        return [];
       }
       return spotifyResp.data;
     },
@@ -215,6 +242,11 @@ export default {
       if (this.set.playlistName === "")
         this.set.playlistName = this.defaultPlaylistName;
       this.$emit("closePanel", this.set);
+    },
+    openTrackSearchModal(song) {
+      this.$store.commit("setCurrentSongToSearch", song.name);
+      this.$store.commit("setCurrentSong", song);
+      this.$bvModal.show("spotify-search-modal");
     },
     closePanel() {
       this.$emit("closePanel", null);
@@ -240,21 +272,29 @@ export default {
   height: 100%;
 }
 
-#create-playlist-btn {
-  // background-color: #16b5d9;
+.add-match-btn-div {
+  position: absolute;
+  right: 1em;
+  top: 1em;
+}
+
+#spotify-search-modal {
+  z-index: 1022 !important;
 }
 
 .match-desc {
-  overflow-x: auto; 
+  overflow-x: auto;
   white-space: nowrap;
   display: inline-block;
 }
 .match-desc > p {
-  display: inline-block; 
-  float: none; 
+  display: inline-block;
+  float: none;
+  margin-bottom: 0;
 }
 
-div.row, tr.row {
+div.row,
+tr.row {
   margin-right: 0;
   margin-left: 0;
 }
@@ -282,7 +322,8 @@ div.row, tr.row {
 }
 
 .matches-wrapper.multiple {
-  border: solid 1px #e9e9e9;
+  border-right: solid 1px #e9e9e9;
+  border-bottom: solid 1px #e9e9e9;
 }
 
 .song-name {
@@ -307,13 +348,13 @@ div.row, tr.row {
   padding-top: 8px;
   text-align: right;
   background-color: #e9e9e994;
-  height: 7%
+  height: 7%;
 }
 
 .no-match-warn {
   background-color: #fab0862d;
   border-radius: 5px;
-  padding: 5px  0px 1px 7px;
+  padding: 5px 0px 1px 7px;
 }
 
 table {
@@ -338,12 +379,12 @@ tr:nth-child(even) {
   padding-top: 1em;
 }
 
-#playlist-data-wrapper{
+#playlist-data-wrapper {
   max-height: 89%;
   overflow-y: scroll;
 }
 
-#playlist-header{
+#playlist-header {
   background-color: #e9e9e994;
   height: 4%;
 }

@@ -10,6 +10,8 @@ const store = new Vuex.Store({
     selectedArtist: {},
     selectedVenue: {},
     setlists: [],
+    currentSongToSearch: "",
+    currentSong: {},
     respCodes: {
       "512": "Unable to create playlist",
       "513": "Unable to add song(s) to playlist",
@@ -68,6 +70,12 @@ const store = new Vuex.Store({
     respCodes: (state) => {
       return state.respCodes;
     },
+    currentSongToSearch: (state) => {
+      return state.currentSongToSearch;
+    },
+    currentSong: (state) => {
+      return state.currentSong;
+    },
   },
   mutations: {
     setSelectedArtist(state, payload) {
@@ -81,6 +89,12 @@ const store = new Vuex.Store({
     },
     setUser(state, payload) {
       Vue.set(state, "user", JSON.parse(JSON.stringify(payload)));
+    },
+    setCurrentSongToSearch(state, payload) {
+      Vue.set(state, "currentSongToSearch", payload);
+    },
+    setCurrentSong(state, payload) {
+      Vue.set(state, "currentSong", payload);
     },
   },
   actions: {},
