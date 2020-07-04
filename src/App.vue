@@ -45,7 +45,6 @@ body {
   );
 
   font-family: "Roboto", sans-serif;
-  // font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
@@ -59,7 +58,7 @@ body {
 
 .tracklistPanel {
   width: 70% !important;
-  z-index: 9999 !important;
+  z-index: 1021 !important;
 }
 
 .bold {
