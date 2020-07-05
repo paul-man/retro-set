@@ -1,30 +1,32 @@
 <template>
-  <div>
-    <div>
-      <span class="text-w-svg">
-        <h2>Artist</h2>
-        <img src="@/assets/search.svg" class="icon-svg"/>
-      </span>
-      <vue-bootstrap-typeahead
-        :data="artistSearchSuggestions"
-        v-model="artistNameSearch"
-        class="mb-4"
-        size="lg"
-        :serializer="s => s.name"
-        placeholder="..."
-        @hit="setSelectedArtist"
-      >
-        <template slot="suggestion" slot-scope="{ data, htmlText }">
-          <div class="d-flex align-items-center">
-            <span class="ml-4" v-html="htmlText"></span>
-            <span v-if="data.disambiguation" style="padding-left:20px;">({{ data.disambiguation }})</span>
-          </div>
-        </template>
-      </vue-bootstrap-typeahead>
-      <br>
-    </div>
-    <br>
-  </div>
+  <b-container id="artist-search">
+    <b-row align-h="center">
+      <b-col sm="4" align-self="center">
+        <h2 class="inline-heading">Artist</h2>
+        <b-icon icon="search" class="search-icon"></b-icon>
+      </b-col>
+    </b-row>
+    <b-row>
+      <b-col>
+        <vue-bootstrap-typeahead
+          :data="artistSearchSuggestions"
+          v-model="artistNameSearch"
+          class="mb-4"
+          size="lg"
+          :serializer="s => s.name"
+          placeholder="..."
+          @hit="setSelectedArtist"
+        >
+          <template slot="suggestion" slot-scope="{ data, htmlText }">
+            <div class="d-flex align-items-center">
+              <span class="ml-4" v-html="htmlText"></span>
+              <span v-if="data.disambiguation" style="padding-left:20px;">({{ data.disambiguation }})</span>
+            </div>
+          </template>
+        </vue-bootstrap-typeahead>
+      </b-col>
+    </b-row>
+  </b-container>
 </template>
 
 <script>
