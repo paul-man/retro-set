@@ -23,5 +23,8 @@ Vue.mixin({
       }
       return require('@/assets/no-album-art.png');
     },
+    isDev() {
+      return process.env.NODE_ENV.trim() === "development";
+    },
   }
 })
