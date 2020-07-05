@@ -1,8 +1,10 @@
 <template>
-  <!-- <div id="nav"> -->
   <b-navbar toggleable="lg" type="light" variant="light" sticky>
     <b-navbar-brand>
-      <img src="@/assets/icon.png" id="retroset-icon" height="30" width="30" />
+      <img
+        src="@/assets/icon.png"
+        class="img-sm"
+        id="retroset-icon"/>
       RetroSet
     </b-navbar-brand>
     <b-navbar-toggle target="nav-collapse">
@@ -12,27 +14,29 @@
       </template>
     </b-navbar-toggle>
     <b-collapse id="nav-collapse" is-nav>
-      <!-- Right aligned nav items -->
       <b-navbar-nav class="ml-auto">
         <b-nav-item-dropdown right>
-          <!-- Using 'button-content' slot -->
           <template v-slot:button-content>
             <img
               :src="user.imgUrl"
-              class="d-inline-block align-top"
-              id="spotify-user-img"
-              alt="Spotify user image"
-            />{{ user.id }}
+              class="d-inline-block align-top spotify-user-img"
+              alt="Spotify user image"/>
+            <p class="nav-user-id">{{ user.id }}</p>
           </template>
           <b-dropdown-item
             :href="'https://open.spotify.com/user/' + user.id"
-            target="_blank"
-            >Spotify Profile</b-dropdown-item
-          >
+            target="_blank">
+            Spotify Profile
+          </b-dropdown-item>
+          <b-dropdown-item @click="logout" title="Switch spotify account">
+            Not you?
+          </b-dropdown-item>
           <b-dropdown-divider></b-dropdown-divider>
-          <b-dropdown-item @click="logout" title="Switch spotify account"
-            >Not you?</b-dropdown-item
-          >
+          <b-dropdown-item
+            href="https://buymeacoff.ee/paulman"
+            target="_blank">
+            Buy me a coffee
+          </b-dropdown-item>          
         </b-nav-item-dropdown>
       </b-navbar-nav>
     </b-collapse>
@@ -47,23 +51,22 @@ export default {
   data() {
     return {};
   },
-
   mounted() {
   },
-
   components: {},
 
   computed: {
-    ...mapState(["user"]),
-    isDev() {
-      return process.env.NODE_ENV.trim() === "development";
-    },
+    ...mapState(["user"])
   },
+
   methods: {
     async logout() {
       this.$store.commit("setUser", {});
-      let res = await get("api/spotify/login/", { params: { newUser: true } });
-      window.location = res.data;
+      get("api/spotify/login/", { params: { newUser: true } }).then(result => {
+        window.location = result.data;
+      }).catch(error => {
+        this.makeErrorToast(error);
+      });
     },
   },
 };
@@ -73,6 +76,12 @@ export default {
 nav {
   padding: 0;
   border-bottom: lightgray solid 1px;
+}
+
+.nav-user-id {
+  display: inline-block;
+  margin-bottom: 0;
+  margin-top: 1.5em;
 }
 
 .navbar-toggler {
