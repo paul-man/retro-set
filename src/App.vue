@@ -29,11 +29,11 @@ export default {
 <style lang="scss">
 @import "@/scss/settings.scss";
 @import "@/scss/base.scss";
-html,
-body {
+
+html, body {
   margin: 0;
   min-height: 100vh;
-  background-color: #00e286 !important;
+  background-color: $retro-green !important;
   background-size: cover;
 }
 
@@ -41,7 +41,7 @@ body {
   background: linear-gradient(
     180deg,
     rgba(255, 255, 255, 1) 3%,
-    rgba(0, 226, 134, 1) 45%
+    rgba(11, 217, 141, 1) 45%
   );
 
   font-family: "Roboto", sans-serif;
@@ -52,34 +52,46 @@ body {
   height: 100%;
 }
 
+.inline-heading {
+  display: inline-block;
+  padding-right: 1em;
+}
+
 .app-wrap {
   padding: 10px;
 }
 
 .tracklistPanel {
-  width: 70% !important;
+  width: 55% !important;
   z-index: 1021 !important;
+}
+
+.img-lg {
+  
+  height: 175px;
+  width: 175px;
+}
+
+.img-md {
+  height: 64px;
+  width: 64px;
+  border: 1px solid gray;
+}
+
+.img-sm {
+  height: 30px;
+  width: 30px;
 }
 
 .bold {
   font-weight: bold;
 }
 
-.text-w-svg h2 {
-  display: inline;
-}
 
-.text-w-svg img {
-  display: inline;
-  margin-top: -5px;
-  margin-left: 5px;
-}
-
-.icon-svg,
-.icon-img {
-  height: 20px;
-  width: 20px;
-  margin-left: 0.5em !important;
+.search-icon {
+  height: 25px;
+  width: 25px;
+  
 }
 
 .icon-svg {
@@ -90,5 +102,15 @@ footer {
   padding-bottom: 10px;
   bottom: 0%;
   width: 100%;
+}
+
+.action-word {
+  text-decoration: underline;
+  color: $primary-shade;
+}
+
+a.action {
+  // color: $retro-green !important;
+  text-decoration: underline !important;
 }
 </style>
