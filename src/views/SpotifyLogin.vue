@@ -4,8 +4,7 @@
       <img
         src="@/assets/icon.png"
         id="retroset-icon"
-        height="175"
-        width="175"
+        class="img-lg"
       />
     </div>
     <div class="container">
