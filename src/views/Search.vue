@@ -24,7 +24,11 @@
                 Select a <u>setlist</u>, confirm the songs, and create a playlist
               </h3>
               <h3>
-                <a :href="selectedArtist.url" target="_blank">{{selectedArtist.name}}</a> has played at <a :href="selectedVenue.url" target="_blank">{{selectedVenue.name}}</a> {{setlists.length}} time{{ setlists.length > 1 ? "s" : "" }}
+                <a class="action" :href="selectedArtist.url" target="_blank">
+                  {{selectedArtist.name}}
+                </a> has played at <a class="action" :href="selectedVenue.url" target="_blank">
+                  {{selectedVenue.name}}
+                </a> {{setlists.length}} time{{ setlists.length > 1 ? "s" : "" }}
               </h3>
             </b-col>
           </b-row>
@@ -82,9 +86,6 @@ export default {
       return (
         this.$store.getters.selectedVenue.id !== undefined && this.$store.getters.selectedArtist.mbid !== undefined
       );
-    },
-    isDev() {
-      return process.env.NODE_ENV.trim() == 'development'
     }
   },
 
@@ -142,11 +143,11 @@ export default {
   min-height: 50vh;
 }
 
-#spotify-user-img {
+.spotify-user-img {
   height:40px;
   width:40px;
   border-radius: 50%;
-  margin-right:1em;
+  margin-right:1em !important;
 }
 
 .text-center {
