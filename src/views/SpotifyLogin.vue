@@ -3,8 +3,7 @@
     <div class="container">
       <img
         src="@/assets/icon.png"
-        id="retroset-icon"
-        class="img-lg"
+        class="img-lg retroset-icon"
       />
     </div>
     <div class="container">
@@ -63,10 +62,6 @@ export default {
 
 button span {
   margin-right: 0.5em;
-}
-
-#retroset-icon {
-  display: inline;
 }
 
 #spotify-login button {
