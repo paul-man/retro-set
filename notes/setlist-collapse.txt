@@ -1,0 +1,3 @@
+- have 2 lists and move hidden/shown setlists between the lists
+  - render them separately, problem should sort itself out
+- Maybe just collapes song list?

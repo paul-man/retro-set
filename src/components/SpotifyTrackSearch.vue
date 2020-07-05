@@ -41,9 +41,7 @@
               <b-col sm="2" class="album-art-col">
                 <img
                   :src="getAlbumImg(track.albumImageUrl)"
-                  height="64px"
-                  width="64px"
-                  border="1px"/>
+                  class="img-md"/>
               </b-col>
               <b-col sm="9" class="song-search-data">
                 <p>Title: {{ track.songTitle }}</p>
@@ -62,6 +60,7 @@
 import { mapState } from "vuex";
 import { get } from "axios";
 import { debounce } from "underscore";
+import Vue from "vue";
 export default {
   name: "SpotifyTrackSearch",
   components: {},
@@ -106,9 +105,13 @@ export default {
       if (typeof this.currentSong.matches === 'undefined') {
         this.currentSong.matches = [];
       }
-      this.currentSong.matches.push(track);
-      this.$bvModal.hide('spotify-search-modal');
+      Vue.set(this.currentSong.matches, this.currentSong.matches.length, track);
+      // TODO: Figure this out
+      this.$parent.$parent.$parent.$forceUpdate();
+      this.$parent.$parent.$forceUpdate();
       this.$parent.$forceUpdate();
+      // ^^^^^^^^^^^^^^^^^^^^^^
+      this.$bvModal.hide('spotify-search-modal');
     }
   },
 
