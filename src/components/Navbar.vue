@@ -1,10 +1,9 @@
 <template>
-  <b-navbar toggleable="lg" type="light" variant="light" sticky>
+  <b-navbar toggleable="sm" type="light" variant="light" sticky>
     <b-navbar-brand>
       <img
         src="@/assets/icon.png"
-        class="img-sm"
-        id="retroset-icon"/>
+        class="img-sm retroset-icon"/>
       RetroSet
     </b-navbar-brand>
     <b-navbar-toggle target="nav-collapse">
@@ -21,7 +20,7 @@
               :src="user.imgUrl"
               class="d-inline-block align-top spotify-user-img"
               alt="Spotify user image"/>
-            <p class="nav-user-id">{{ user.id }}</p>
+            <p class="nav-user-id" :title="user.id">{{ user.id }}</p>
           </template>
           <b-dropdown-item
             :href="'https://open.spotify.com/user/' + user.id"
@@ -35,7 +34,7 @@
           <b-dropdown-item
             href="https://buymeacoff.ee/paulman"
             target="_blank">
-            Buy me a coffee
+            Buy me a coffee <p class="emoji">&#x1F389;</p>
           </b-dropdown-item>          
         </b-nav-item-dropdown>
       </b-navbar-nav>
@@ -81,7 +80,19 @@ nav {
 .nav-user-id {
   display: inline-block;
   margin-bottom: 0;
-  margin-top: 1.5em;
+  margin-top: 1.25em;
+}
+@media only screen and (max-width: 576px) {
+  .nav-user-id {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 80%;
+    text-align: left;
+  }
+
+  #nav-collapse li {
+    text-align: left;
+  }
 }
 
 .navbar-toggler {
@@ -92,15 +103,11 @@ nav {
   border-top: 1px solid rgba(211, 211, 211, 0.562);
 }
 
-.navbar-nav.ml-auto {
-  width: 10em !important;
-}
-
-#retroset-icon {
-  display: inline;
-}
-
 .navbar-brand {
   font-size: 2em;
+}
+
+.emoji{
+  display: inline-block;
 }
 </style>
