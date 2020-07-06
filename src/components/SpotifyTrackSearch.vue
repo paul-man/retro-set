@@ -64,6 +64,7 @@ import Vue from "vue";
 export default {
   name: "SpotifyTrackSearch",
   components: {},
+  props: ["song", "songIndex", "set", "setIndex"],
   data() {
     return {
       trackNameSearch: "",
@@ -71,15 +72,13 @@ export default {
       trackSuggestions: [],
     };
   },
-
   mounted() {
     this.artistNameSearch = this.selectedArtist.name;
     this.trackNameSearch = this.currentSongToSearch;
   },
 
-
   computed: {
-    ...mapState(["selectedArtist", "currentSongToSearch", "currentSong"]),
+    ...mapState(["selectedArtist", "currentSongToSearch", "setlists"]),
     incompleteSearchTerms() {
       return this.trackNameSearch === '' ||  this.artistNameSearch === '';
     }
@@ -102,16 +101,17 @@ export default {
       this.trackSuggestions = spotifyResp.data;
     },
     selectSong(track) {
-      if (typeof this.currentSong.matches === 'undefined') {
-        this.currentSong.matches = [];
+      if (typeof this.song.matches === 'undefined') {
+        this.song.matches = [];
       }
-      Vue.set(this.currentSong.matches, this.currentSong.matches.length, track);
-      // TODO: Figure this out
-      this.$parent.$parent.$parent.$forceUpdate();
-      this.$parent.$parent.$forceUpdate();
-      this.$parent.$forceUpdate();
-      // ^^^^^^^^^^^^^^^^^^^^^^
-      this.$bvModal.hide('spotify-search-modal');
+      this.song.matches.push(track);
+      console.log(this.setlists[this.setIndex].songs[this.songIndex])
+      this.setlists[this.setIndex].songs[this.songIndex] = this.song;
+      this.$store.commit('setSetlists', this.setlists);
+
+      console.log(this.setlists[this.setIndex].songs[this.songIndex])
+      // Vue.set(this.song.matches, this.song.matches.length, track);
+      this.$bvModal.hide(`spotify-search-modal${this.songIndex}`);
     }
   },
 
