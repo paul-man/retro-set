@@ -70,13 +70,13 @@ export default {
 
   methods: {
     openTrackSelctPanel(set, index) {
-      /* eslint-disable-next-line no-unused-vars */
       const trackSelctPanel = this.$showPanel({
         component : 'track-select',
         cssClass: 'tracklistPanel',
         disableBgClick: true,
         props: {
-          set: set
+          set: set,
+          setIndex: index
         }
       })
       trackSelctPanel.promise
