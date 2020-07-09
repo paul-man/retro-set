@@ -1,9 +1,9 @@
 <template>
-  <div id="track-select" :key="componentKey" ref="trackSelect">
+  <div id="track-select">
     <b-container class="rounded" id="playlist-header">
       <p
         class="d-inline-block d-none d-md-block d-sm-block spotify-user-id">
-        Playlist for 
+        New playlist for 
         <a
           :href="'https://open.spotify.com/user/' + user.id"
           target="_blank">
@@ -89,32 +89,8 @@
               <b-row>
                 <b-col class="match-col" sm="12">
                   <match-container
-                    :set="set"
-                    :song="song"
+                    :setIndex="setIndex"
                     :songIndex="songIndex"/>
-                </b-col>
-              </b-row>
-              <b-row>
-                <b-col>
-                  <b-button
-                    size="sm"
-                    class="mb-2 add-song-btn"
-                    title="Search Spotify for song"
-                    @click="openTrackSearchModal(song, songIndex)">
-                    <b-icon icon="music-note" aria-hidden="true"></b-icon>+
-                  </b-button>
-                  <b-modal
-                    no-close-on-backdrop
-                    hide-footer
-                    :id="'spotify-search-modal' + songIndex"
-                    title="Search a track"
-                    size="lg">
-                    <spotify-track-search 
-                      :set="set"
-                      :song="song"
-                      :songIndex="songIndex"
-                      :setIndex="setIndex"/>
-                  </b-modal>
                 </b-col>
               </b-row>
             </td>
@@ -136,23 +112,21 @@
 </template>
 
 <script>
-import SpotifyTrackSearch from "@/components/SpotifyTrackSearch";
 import MatchContainer from "@/components/TrackSelect/MatchContainer";
 import { mapState } from "vuex";
-// import { get } from "axios";
 
 export default {
   name: "track-select",
+
   components: {
-    SpotifyTrackSearch,
     MatchContainer,
   },
-  props: ["set", "setIndex"],
+
+  props: ["setIndex"],
+
   data() {
     return {
-      componentKey: 0,
-      trackSearchError: false,
-      trackSearchErrorCode: null,
+      spotifyUrisPayload: {},
     };
   },
 
@@ -160,53 +134,45 @@ export default {
     this.set.playlistName = "";
     this.set.playlistVisibility = "private";
     this.set.playlistDescription = "";
+    this.spotifyUrisPayload = {
+      setIndex: this.setIndex,
+      spotifyUris: [],
+    }
   },
 
   computed: {
-    ...mapState(["selectedArtist", "selectedVenue", "respCodes", "user"]),
+    ...mapState(["selectedArtist", "selectedVenue", "user", "setlists"]),
     defaultPlaylistName() {
       return (
         this.selectedArtist.name + " - " + this.selectedVenue.name + " (" + this.set.eventDate + ")"
       );
     },
+    set() {
+      return this.$store.getters.setlists[this.setIndex];
+    }
   },
 
   methods: {
-    setDefaultMatch(song, uri, index) {
-      if (index === 0) {
-        song.selectedUri = uri;
-      }
-    },
     refreshSetlists() {
-      this.set.spotifyUris = [];
+      // debugger
+      this.spotifyUrisPayload.spotifyUris = [];
+      this.$store.commit('setSetlistSpotifyURIs', this.spotifyUrisPayload);
+      let tempSpotifyUris = []
       for (let song of this.set.songs) {
         if (song.selectedUri) {
-          this.set.spotifyUris.push(song.selectedUri);
+          tempSpotifyUris.push(song.selectedUri);
         }
       }
-
-      if (this.set.playlistName === "")
+      
+      this.spotifyUrisPayload.spotifyUris = tempSpotifyUris;
+      this.$store.commit('setSetlistSpotifyURIs', this.spotifyUrisPayload);
+      if (this.set.playlistName === "") {
         this.set.playlistName = this.defaultPlaylistName;
+      }
       this.$emit("closePanel", this.set);
-    },
-    openTrackSearchModal(song, songIndex) {
-      this.$store.commit("setCurrentSongToSearch", song.name);
-      this.$store.commit("setCurrentSong", song);
-      this.$bvModal.show(`spotify-search-modal${songIndex}`);
     },
     closePanel() {
       this.$emit("closePanel", null);
-    },
-    forceRerender() {
-      this.componentKey += 1;
-      console.log(this.componentKey)
-    },
-    makeToast(msg) {
-      this.$bvToast.toast(msg, {
-        title: "Uh oh!",
-        variant: "warning",
-        solid: true,
-      });
     },
   },
 
@@ -228,13 +194,6 @@ export default {
 
 #spotify-search-modal {
   z-index: 1022 !important;
-}
-
-.add-song-btn {
-  margin-top: 0.5em;
-  background-color: $retro-green;
-  color: #2156D9;
-  border: 0;
 }
 
 div.row,
@@ -287,6 +246,7 @@ tr:nth-child(even) {
 #playlist-header {
   background-color: #e9e9e994;
   max-height: 5%;
+  max-width: 100% !important;
   padding: 5px 0px 5px 5px;
   margin: 0;
 }

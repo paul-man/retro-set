@@ -10,7 +10,7 @@ const store = new Vuex.Store({
     selectedArtist: {},
     selectedVenue: {},
     setlists: [],
-    currentSongToSearch: "",
+    currentSongName: "",
     currentSong: {},
     respCodes: {
       "512": "Unable to create playlist",
@@ -49,6 +49,7 @@ const store = new Vuex.Store({
         url:
           "https://www.setlist.fm/venue/the-paramount-huntington-ny-usa-4bd7e35a.html",
       },
+      testSong: {"songTitle":"Cheeky Song (Touch My Bum)","artistName":"The Cheeky Girls","albumTitle":"Party Time","albumImageUrl":"https://i.scdn.co/image/ab67616d0000b273787f8022645548615a346154","id":"6MCovnA5m16hln36lk0gqM","uri":"spotify:track:6MCovnA5m16hln36lk0gqM"}
     },
   },
   getters: {
@@ -70,8 +71,8 @@ const store = new Vuex.Store({
     respCodes: (state) => {
       return state.respCodes;
     },
-    currentSongToSearch: (state) => {
-      return state.currentSongToSearch;
+    currentSongName: (state) => {
+      return state.currentSongName;
     },
     currentSong: (state) => {
       return state.currentSong;
@@ -90,11 +91,22 @@ const store = new Vuex.Store({
     setUser(state, payload) {
       Vue.set(state, "user", JSON.parse(JSON.stringify(payload)));
     },
-    setCurrentSongToSearch(state, payload) {
-      Vue.set(state, "currentSongToSearch", payload);
+    setCurrentSongName(state, payload) {
+      Vue.set(state, "currentSongName", payload);
     },
     setCurrentSong(state, payload) {
       Vue.set(state, "currentSong", payload);
+    },
+    setSongMatches(state, payload) {
+      Vue.set(state.setlists[payload.setIndex].songs[payload.songIndex], 'matches', payload.matches);
+    },
+    addSongMatch(state, payload) {
+      const matchesLength = state.setlists[payload.setIndex].songs[payload.songIndex].matches.length;
+      Vue.set(state.setlists[payload.setIndex].songs[payload.songIndex].matches, matchesLength, payload.song);
+    },
+    setSetlistSpotifyURIs(state, payload) {
+      // debugger
+      Vue.set(state.setlists[payload.setIndex], 'spotifyUris', payload.spotifyUris);
     },
   },
   actions: {},

@@ -34,6 +34,19 @@ html, body {
   z-index: 1021 !important;
 }
 
+@media screen and (max-width: 1560px) {
+  .tracklistPanel {
+      width: 85% !important;
+  }
+}
+
+@media screen and (max-width: 1200px) {
+  .tracklistPanel {
+      width: 100% !important;
+  }
+}
+
+
 .img-lg {
   height: 175px;
   width: 175px;
@@ -89,4 +102,15 @@ a.action {
 
 .retroset-icon {
   display: inline !important;
+}
+
+.add-song-btn {
+  margin-top: 0.5em !important;
+  background-color: $retro-green !important;
+  color: #2156D9 !important;
+  border: 0 !important;
+  transition: all .2s ease-in-out !important; 
+  &:hover {
+    transform: scale(1.1) !important;
+  }
 }

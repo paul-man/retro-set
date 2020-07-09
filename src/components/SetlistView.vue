@@ -30,7 +30,7 @@
           </b-button>
           <template v-if="set.spotifyPreviews">
             <div class="container">
-              <div v-for="preview in set.spotifyPreviews" v-bind:key="preview" class="row">
+              <div v-for="(preview, index) in set.spotifyPreviews" :key="index" class="row">
                 <div class="spotify-widget-container" v-html="preview.html"></div>
               </div>
             </div>
@@ -75,7 +75,6 @@ export default {
         cssClass: 'tracklistPanel',
         disableBgClick: true,
         props: {
-          set: set,
           setIndex: index
         }
       })

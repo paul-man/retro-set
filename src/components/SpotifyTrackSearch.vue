@@ -1,55 +1,69 @@
 <template>
   <div id="spotify-track-search">
     <b-container>
+
+      <!-- Track name search -->
       <b-row id="track-input-row">
         <b-col sm="1">
           <label for="track-input">Track</label>
         </b-col>
         <b-col sm="8">
-          <b-form-input v-model="trackNameSearch" id="track-input" type="text"></b-form-input>
+          <b-form-input
+            v-model="trackNameSearch"
+            id="track-input"
+            type="text"></b-form-input>
         </b-col>
       </b-row>
+
+      <!-- Artist name search -->
       <b-row id="artist-input-row">
         <b-col sm="1">
           <label for="artist-input">Artist</label>
         </b-col>
         <b-col sm="8">
-          <b-form-input v-model="artistNameSearch" id="artist-input" type="text"></b-form-input>
+          <b-form-input
+            v-model="artistNameSearch"
+            id="artist-input"
+            type="text"></b-form-input>
         </b-col>
       </b-row>
+
+      <!-- Spotify results -->
       <b-row id="search-results-container">
-        <b-col v-if="incompleteSearchTerms">
-          <b-container class="search-results-text">
-            <p>Search for a track and artist to select results</p>
-          </b-container>
-        </b-col>
-        <b-col v-else-if="trackSuggestions.length === 0">
-          <b-container class="search-results-text">
-            <p>Sorry, no results</p>
-          </b-container>
-        </b-col>
-        <b-col v-else>
-          <b-container>
-            <b-row v-for="(track, index) in trackSuggestions" :key="index">
-              <b-col sm="1" class="add-track-btn-col">
-                <div class="add-track-btn-div">
-                  <b-button size="sm" class="mb-2 add-song-btn" title="Add song to matches list" @click="selectSong(track)">
-                    <b-icon icon="plus-circle" variant="primary" aria-hidden="true"></b-icon>
-                  </b-button>
-                </div>
-              </b-col>
-              <b-col sm="2" class="album-art-col">
-                <img
-                  :src="getAlbumImg(track.albumImageUrl)"
-                  class="img-md"/>
-              </b-col>
-              <b-col sm="9" class="song-search-data">
-                <p>Title: {{ track.songTitle }}</p>
-                <p>Artist: {{ track.artistName }}</p>
-                <p>Album: {{ track.albumTitle }}</p>
-              </b-col>
-            </b-row>
-          </b-container>
+        <b-col>
+          <template v-if="incompleteSearchTerms">
+            <b-container class="search-results-text">
+              <p>Search for a track and artist to select results</p>
+            </b-container>
+          </template>
+          <template v-else-if="trackSuggestions.length === 0">
+            <b-container class="search-results-text">
+              <p>Sorry, no results</p>
+            </b-container>
+          </template>
+          <template v-else>
+            <b-container>
+              <b-row v-for="(track, index) in trackSuggestions" :key="index">
+                <b-col sm="1" class="add-track-btn-col">
+                  <div class="add-track-btn-div">
+                    <b-button size="sm" class="mb-2 add-track-btn" title="Add song to matches list" @click="selectSong(track)">
+                      <b-icon icon="plus-circle" variant="primary" aria-hidden="true"></b-icon>
+                    </b-button>
+                  </div>
+                </b-col>
+                <b-col sm="2" class="album-art-col">
+                  <img
+                    :src="getAlbumImg(track.albumImageUrl)"
+                    class="img-md"/>
+                </b-col>
+                <b-col sm="9" class="song-search-data">
+                  <p>Title: {{ track.songTitle }}</p>
+                  <p>Artist: {{ track.artistName }}</p>
+                  <p>Album: {{ track.albumTitle }}</p>
+                </b-col>
+              </b-row>
+            </b-container>
+          </template>
         </b-col>
       </b-row>
     </b-container>
@@ -60,29 +74,58 @@
 import { mapState } from "vuex";
 import { get } from "axios";
 import { debounce } from "underscore";
-import Vue from "vue";
+
 export default {
   name: "SpotifyTrackSearch",
+
   components: {},
-  props: ["song", "songIndex", "set", "setIndex"],
+
+  props: ["songIndex", "setIndex"],
+
   data() {
     return {
       trackNameSearch: "",
       artistNameSearch: "",
       trackSuggestions: [],
+      // TODO: There's gotta be a better way!
+      songPayload: {},
+      matchesPayload: {},
     };
-  },
-  mounted() {
-    this.artistNameSearch = this.selectedArtist.name;
-    this.trackNameSearch = this.currentSongToSearch;
   },
 
   computed: {
-    ...mapState(["selectedArtist", "currentSongToSearch", "setlists"]),
+    ...mapState(["selectedArtist", "currentSongName", "setlists"]),
     incompleteSearchTerms() {
       return this.trackNameSearch === '' ||  this.artistNameSearch === '';
+    },
+    currentMatches() {
+      return this.song.matches.map( match => match.id );
+    },
+    set() {
+      return this.$store.getters.setlists[this.setIndex];
+    },
+    song() {
+      return this.$store.getters.setlists[this.setIndex].songs[this.songIndex];
+    },
+  },
+  
+  mounted() {
+    this.artistNameSearch = this.selectedArtist.name;
+    this.trackNameSearch = this.currentSongName;
+    
+    // TODO: There's gotta be a better way!
+    this.songPayload = {
+      setIndex: this.setIndex,
+      songIndex: this.songIndex,
+      song: {},
+    };
+    this.matchesPayload = {
+      setIndex: this.setIndex,
+      songIndex: this.songIndex,
+      matches: [],
     }
   },
+
   methods: {
     async searchTrack() {
       const spotifyResp = await get("api/spotify/track/", {
@@ -93,25 +136,24 @@ export default {
       });
       if (spotifyResp.data.error) {
         this.trackSearchError = true;
-        this.trackSearchErrorCode = spotifyResp.data.status;
-        return {
-          warning: "Unable to retrieve resutls",
-        };
       }
       this.trackSuggestions = spotifyResp.data;
     },
     selectSong(track) {
-      if (typeof this.song.matches === 'undefined') {
-        this.song.matches = [];
+      if (this.currentMatches.indexOf(track.id) !== -1) {
+        this.makeWarningToast('This song is already in the song matches!');
+        return;
       }
-      this.song.matches.push(track);
-      console.log(this.setlists[this.setIndex].songs[this.songIndex])
-      this.setlists[this.setIndex].songs[this.songIndex] = this.song;
-      this.$store.commit('setSetlists', this.setlists);
 
-      console.log(this.setlists[this.setIndex].songs[this.songIndex])
-      // Vue.set(this.song.matches, this.song.matches.length, track);
-      this.$bvModal.hide(`spotify-search-modal${this.songIndex}`);
+      if (typeof this.song.matches === 'undefined') {
+        this.matchesPayload.matches = [];
+        this.$store.commit('setSongMatches', this.matchesPayload);
+      }
+
+      this.songPayload.song = track;
+      this.$store.commit('addSongMatch', this.songPayload);
+      this.$parent.$parent.$parent.$parent.$forceUpdate();
+      this.$bvModal.hide(`spotify-search-modal-${this.songIndex}`);
     }
   },
 
@@ -158,17 +200,18 @@ export default {
   margin: 0;
   position: absolute;
   top: 50%;
-  -ms-transform: translateY(-50%);
-  transform: translateY(-50%);
+  left: 50%;
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+}
+
+.add-track-btn {
+  border: 0 !important;
+  background-color: transparent !important;
 }
 
 .album-art-col {
   padding: 0;
-}
-
-.add-song-btn {
-  border: 0;
-  background-color: transparent;
 }
 
 .add-track-btn-col {

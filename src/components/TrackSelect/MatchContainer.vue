@@ -1,19 +1,22 @@
 <template>
   <b-container
+    :id="'matches-wrapper-' + songIndex"
     class="matches-wrapper">
     <b-overlay
       :show="isLoading"
+      spinner-variant="success"
       rounded="sm">
 
       <!-- Matches container -->
-      <template v-if="!isLoading && matches.length > 0">
+      <template v-if="!isLoading && song.matches.length > 0">
         <b-container
           :class="containerClassname">
           <b-row
             class="match-div"
-            v-for="(match, matchIndex) in matches"
-            :key="matchIndex">
+            v-for="(match, matchIndex) in song.matches"
+            :key="match.id">
             {{ setDefaultMatch(song, match.uri, matchIndex) }}
+
             <!-- Radio col -->
             <b-col sm="1" class="radio-col">
               <b-form-radio
@@ -33,7 +36,7 @@
             <!-- Song data col -->
             <b-col
               sm="8"
-              class="float-right match-desc">
+              class="float-right match-description">
               <p>
                 <span class="bold">Title:</span> {{ match.songTitle}}
               </p>
@@ -53,54 +56,93 @@
         <b-row class="no-match-warn">
           <b-col>
             <p>
-              No matches found for "{{ song.name }}" by
-              {{ selectedArtist.name }}. Search for a replacement track or add it later at position
-              {{ songIndex + 1 }}.
+              <template v-if="trackSearchError">
+                There was an unexpected error when searching for "{{ song.name }}" by {{ selectedArtist.name }}. 
+              </template>
+              <template v-else>
+                No matches found for "{{ song.name }}" by {{ selectedArtist.name }}. 
+              </template>
+              Please search for a replacement track or add it later at position {{ songIndex + 1 }}.
             </p>
             <p>
-              Checkout the
-              <a :href="set.url" target="_blank">setlist</a> for more
-              information
+              Check out the
+              <a :href="set.url" target="_blank">setlist</a> for more information
             </p>
           </b-col>
         </b-row>
       </template>
+      
+      <!-- Add Track button/modal row -->
+      <b-row class="add-song-action-row">
+        <b-col class="add-song-btn-col">
+          <b-button
+            size="sm"
+            class="mb-2 add-song-btn"
+            title="Search Spotify for song"
+            @click="openTrackSearchModal()">
+            <b-icon icon="music-note" aria-hidden="true"></b-icon>+
+          </b-button>
+          <b-modal
+            no-close-on-backdrop
+            hide-footer
+            :id="'spotify-search-modal-' + songIndex"
+            title="Search a track"
+            size="lg">
+            <spotify-track-search
+              :songIndex="songIndex"
+              :setIndex="setIndex"/>
+          </b-modal>
+        </b-col>
+      </b-row>
     </b-overlay>
   </b-container>
 </template>
 
 <script>
+import Vue from "vue";
+import SpotifyTrackSearch from "@/components/SpotifyTrackSearch";
 import { get } from "axios";
 import { mapState } from "vuex";
+
 export default {
   name: "MatchContainer",
+
   components: {
+    SpotifyTrackSearch,
   },
-  props: ["song", "songIndex", "set", "setIndex"],
+
+  props: ["songIndex", "setIndex"],
+
   data() {
     return {
       isLoading: true,
       trackSearchError: false,
-      trackSearchErrorCode: null,
+      matchesPayload: {
+        setIndex: this.setIndex,
+        songIndex: this.songIndex,
+        matches: [],
+      },
     };
+  },
+
+  computed: {
+    ...mapState(["selectedArtist"]),
+    containerClassname() {
+      if (this.song.matches && this.song.matches.length > 1) {
+        return 'shadow rounded multiple';
+      }
+      return '';
+    },
+    set() {
+      return this.$store.getters.setlists[this.setIndex];
+    },
+    song() {
+      return this.$store.getters.setlists[this.setIndex].songs[this.songIndex];
+    },
   },
 
   mounted() {
     this.trackSearch(this.song);
-  },
-
-  computed: {
-    ...mapState(["selectedArtist", "selectedVenue", "respCodes", "user"]),
-    containerClassname() {
-      if (this.song.matches && this.song.matches.length > 1) {
-        return 'shadow rounded multiple';
-      } else {
-        return '';
-      }
-    },
-    matches() {
-      return this.song.matches;
-    }
   },
 
   methods: {
@@ -111,12 +153,13 @@ export default {
           artist: this.selectedArtist.name,
         },
       }).then( result => {
-        song.matches = [];
+        this.matchesPayload.matches = [];
+        this.$store.commit('setSongMatches', this.matchesPayload);
         if (!result.data.error) {
-          song.matches = result.data
+          this.matchesPayload.matches = result.data;
+          this.$store.commit('setSongMatches', this.matchesPayload);
         } else {
           this.trackSearchError = true;
-          this.trackSearchErrorCode = result.data.status;
         }
         this.isLoading = false;
       }).catch( error => {
@@ -129,27 +172,34 @@ export default {
         song.selectedUri = uri;
       }
     },
+    openTrackSearchModal() {
+      this.$store.commit("setCurrentSongName", this.song.name);
+      this.$bvModal.show(`spotify-search-modal-${this.songIndex}`);
+    },
   },
-
-  watch: {},
 };
 </script>
 
 <style lang="scss" scoped>
-.match-desc {
+.match-description {
   text-align: left;
   padding: 10px;
+  overflow-x: auto;
+  white-space: nowrap;
+  display: inline-block;
   p {
+  float: none;
     margin-bottom: 0;
   }
 }
 
-.album-art-col {
-  padding-right: 0;
+.match-div {
+  padding-left: 0.5em;
+  padding-top: 0.2em;
 }
 
-.spinner-border {
-  color: $retro-green;
+.album-art-col {
+  padding-right: 0;
 }
 
 .no-match-warn {
@@ -160,36 +210,22 @@ export default {
   padding-top: 0.5em;
 }
 
-.custom-control-input {
-  position: relative !important;
+.add-song-action-row {
+  margin: 0;
+  .col {
+    padding: 0;
+  }
 }
 
 .matches-wrapper {
   padding: 0 !important;
+  img {
+    margin-right: 15px;
+  }
 }
 
-.matches-wrapper.multiple {
-  border-right: solid 1px #e9e9e9;
-  border-bottom: solid 1px #e9e9e9;
-}
-
-.match-div {
-  padding-left: 0.5em;
-  padding-top: 0.2em;
-}
-
-.matches-wrapper img {
-  margin-right: 15px;
-}
-
-.match-desc {
-  overflow-x: auto;
-  white-space: nowrap;
-  display: inline-block;
-}
-
-.match-desc > p {
-  float: none;
-  margin-bottom: 0;
+.multiple {
+  border: 1px solid #e9e9e9;
+  margin-top: 2px !important;
 }
 </style>
