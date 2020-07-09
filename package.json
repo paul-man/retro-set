@@ -21,7 +21,6 @@
     "dotenv-flow": "^3.1.0",
     "express": "^4.16.4",
     "mongodb": "^3.5.9",
-    "normalizr": "^3.6.0",
     "setlistfm-js": "^1.2.0",
     "spotify-web-api-node": "^4.0.0",
     "underscore": "^1.10.2",
