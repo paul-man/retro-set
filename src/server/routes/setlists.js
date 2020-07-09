@@ -3,6 +3,7 @@ const express = require("express"),
 let setlistfmJs = require("setlistfm-js"),
   parse = require("date-fns/parse"),
   format = require("date-fns/format");
+// import { normalize, schema } from 'normalizr';
 
 // Search Artists based on name
 router.get("/artist/:artist", function(req, res) {

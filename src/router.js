@@ -1,12 +1,12 @@
 import Vue from "vue";
 import Router from "vue-router";
+import store from "./store.js";
 import Search from "./views/Search.vue";
 import PageNotFound from "./views/PageNotFound.vue";
 import SpotifyLogin from "./views/SpotifyLogin.vue";
 import About from "./views/About.vue";
 import SpotifyError from "./views/SpotifyError.vue";
 import SetlistfmError from "./views/SetlistfmError.vue";
-import store from "./store.js";
 
 Vue.use(Router);
 

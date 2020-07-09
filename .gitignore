@@ -2,6 +2,7 @@
 node_modules
 /dist
 /mongodb
+notes/
 
 # local env files
 .env.local

@@ -2,35 +2,48 @@
   <div>
     <div class="container">
       <div class="row">
-        <div class="col-sm-5 col-md-6 setlist-container" v-for="(set, index) in setlists" :key="index">
+        <div class="col-sm-12 col-md-12 col-lg-6 setlist-container" v-for="(set, index) in setlists" :key="index">
           <b-container class="float-right" style="text-align:right; padding-top:1em;">
-            <b-button v-b-toggle="'set-collapse-'+index" variant="outline-primary">
-              <b-icon-plus></b-icon-plus>
-            </b-button>
+            <b-navbar-toggle :target="'set-collapse-'+index">
+              <template v-slot:default="{ expanded }">
+                <b-icon v-if="expanded" variant="primary" icon="dash-square"></b-icon>
+                <b-icon v-else variant="primary" icon="plus-square"></b-icon>
+              </template>
+            </b-navbar-toggle>
           </b-container>
-          <b-collapse :id="'set-collapse-'+index" visible class="mt-2">
-            <p class="setData">
-              Event date: {{ set.eventDate }}<br>
-              Songs played: {{ set.songs.length }}<br>
-              <a :href="set.url" target="_blank">More setlist Data</a>
-            </p>
-            <template v-if="set.tourName">{{ set.tourName }}</template>
-            <b-button variant="primary" @click="openTrackSelctPanel(set, index)">Search Songs</b-button><br><br>
-            <template v-if="set.spotifyPreviews">
-              <div class="container">
-                <div v-for="preview in set.spotifyPreviews" v-bind:key="preview" class="row">
-                  <div class="spotify-widget-container" v-html="preview.html"></div>
-                </div>
+          <p class="font-weight-bold">
+            Event date: {{ set.eventDate }}
+          </p>
+          <p class="font-weight-bold" v-if="set.tourName">
+            Tour Name: {{ set.tourName }}
+          </p>
+          <p class="font-weight-bold">
+            Songs played: {{ set.songs.length }}
+          </p>
+          <p class="font-weight-bold">
+            <a :href="set.url" target="_blank">More setlist Data</a>
+          </p>
+          <b-button
+            variant="primary"
+            @click="openTrackSelctPanel(set, index)">
+            Confirm Songs
+          </b-button>
+          <template v-if="set.spotifyPreviews">
+            <div class="container">
+              <div v-for="(preview, index) in set.spotifyPreviews" :key="index" class="row">
+                <div class="spotify-widget-container" v-html="preview.html"></div>
               </div>
-            </template>
-            <template v-else-if="set.songs">
+            </div>
+          </template>
+          <template v-if="set.songs">
+            <b-collapse :id="'set-collapse-'+index" class="mt-2">
               <b-list-group class="songlist">
                 <b-list-group-item v-for="(song, index) in set.songs" :key="index">
                   {{ song.name }}
                 </b-list-group-item>
               </b-list-group>
-            </template>
-          </b-collapse>
+            </b-collapse>            
+          </template>
         </div>
       </div>
     </div>
@@ -57,13 +70,12 @@ export default {
 
   methods: {
     openTrackSelctPanel(set, index) {
-      /* eslint-disable-next-line no-unused-vars */
       const trackSelctPanel = this.$showPanel({
         component : 'track-select',
         cssClass: 'tracklistPanel',
         disableBgClick: true,
         props: {
-          set: set
+          setIndex: index
         }
       })
       trackSelctPanel.promise
@@ -107,6 +119,7 @@ export default {
   border-radius: 2px;
   padding-bottom: 15px;
 }
+
 .songlist {
   list-style-type: none;
   text-align: left;
@@ -116,12 +129,16 @@ export default {
   border-color: lightgray;
 }
 
-.setData {
+.set-data {
   font-weight: bold;
-  padding-top: 15px;
 }
 
 .spotify-widget-container {
   width: 100%;
+}
+
+.collapsed > .when-open,
+.not-collapsed > .when-closed {
+  display: none;
 }
 </style>

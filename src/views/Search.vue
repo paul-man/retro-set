@@ -1,53 +1,52 @@
 <template>
-  <div class="search">
-    <div class="container shadow-lg rounded">
-      <div class="row container">
-        <div class="col">
-          <div v-if="isDev" class="float-right">
-            <b-button variant="secondary" @click="testSetlistSearch" id="test-btn">
-              <img src="@/assets/zap.svg" class="icon-svg"/>
-            </b-button>
-          </div>
+  <b-container class="shadow-lg rounded" id="search">
+
+    <!-- Dev test button row -->
+    <b-row v-if="isDev">
+      <b-col>
+        <div class="float-right">
+          <b-button variant="secondary" @click="testSetlistSearch" id="test-btn">
+            <img src="@/assets/zap.svg" class="icon-svg"/>
+          </b-button>
         </div>
-      </div>
-      <b-container class="bv-example-row">
-        <b-row>
-          <b-col lg="6"><artist-search /></b-col>
-          <b-col lg="6"><venue-search /></b-col>
-        </b-row>
-      </b-container>
-      <b-container>
-        <b-container v-if="readyToSearchSetlists">
-          <b-row>
-            <b-col>
-              <h3>
-                Select a <u>setlist</u>, confirm the songs, and create a playlist
-              </h3>
-              <h3>
-                <a :href="selectedArtist.url" target="_blank">{{selectedArtist.name}}</a> has played at <a :href="selectedVenue.url" target="_blank">{{selectedVenue.name}}</a> {{setlists.length}} time{{ setlists.length > 1 ? "s" : "" }}
-              </h3>
-            </b-col>
-          </b-row>
-        </b-container>
-        <b-container v-else>
-          <b-row>
-            <b-col>
-              <h3>
-                Begin by searching for an <u>artist</u> and <u>venue</u>
-              </h3>
-            </b-col>
-          </b-row>
-        </b-container>
-        <b-container>
-          <div class="row">
-            <div class="col">
-              <setlist-view />
-            </div>
-          </div>
-        </b-container>
-      </b-container>
-    </div>
-  </div>
+      </b-col>
+    </b-row>
+
+    <!-- Search fields row -->
+    <b-row>
+      <b-col lg="6"><artist-search /></b-col>
+      <b-col lg="6"><venue-search /></b-col>
+    </b-row>
+
+    <!-- Search text row -->
+    <b-row v-if="readyToSearchSetlists">
+      <b-col>
+        <h3>
+          <a class="action" :href="selectedArtist.url" target="_blank">
+            {{selectedArtist.name}}
+          </a> has played at <a class="action" :href="selectedVenue.url" target="_blank">
+            {{selectedVenue.name}}
+          </a> {{setlists.length}} time{{ setlists.length > 1 ? "s" : "" }}
+        </h3>
+      </b-col>
+    </b-row>
+
+    <!-- Search instructions row -->
+    <b-row v-else>
+      <b-col>
+        <h3>
+          Begin by searching for an <u>artist</u> and <u>venue</u>
+        </h3>
+      </b-col>
+    </b-row>
+
+    <!-- Setlists data row -->
+    <b-row v-if="setlists">
+      <b-col>
+        <setlist-view />
+      </b-col>
+    </b-row>
+  </b-container>
 </template>
 
 <script>
@@ -62,7 +61,7 @@ export default {
   components: {
     VenueSearch,
     ArtistSearch,
-    SetlistView
+    SetlistView,
   },
 
   mounted() {
@@ -82,9 +81,6 @@ export default {
       return (
         this.$store.getters.selectedVenue.id !== undefined && this.$store.getters.selectedArtist.mbid !== undefined
       );
-    },
-    isDev() {
-      return process.env.NODE_ENV.trim() == 'development'
     }
   },
 
@@ -129,39 +125,11 @@ export default {
 </script>
 
 <style lang="scss">
-.search {
-  padding-top: 20px;
-  // min-height: 50vh;
-}
-
-.search > div.container {
+#search {
   padding-top: 20px;
   padding-bottom: 20px;
   background-color: #f1f1f1;
   border: solid 1px lightgray;
   min-height: 50vh;
-}
-
-#spotify-user-img {
-  height:40px;
-  width:40px;
-  border-radius: 50%;
-  margin-right:1em;
-}
-
-.text-center {
-  vertical-align: middle;
-  height:40px;
-  line-height: 40px;
-}
-
-#spotify-user-link {
-  color: #00b66d;
-}
-
-#spotify-user-data a {
-  margin-top: 0.5em;
-  cursor: pointer;
-  text-decoration: underline;
 }
 </style>

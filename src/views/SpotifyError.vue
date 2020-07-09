@@ -3,9 +3,7 @@
     <b-container>
       <img
         src="@/assets/icon.png"
-        id="retroset-icon"
-        height="150"
-        width="150"
+        class="img-lg retroset-icon"
       />
     </b-container>
     <b-container class="error-msg-container">
@@ -50,10 +48,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-#retroset-icon {
-  display: inline;
-}
-
 .error-msg-container {
   padding: 2em;
 }
