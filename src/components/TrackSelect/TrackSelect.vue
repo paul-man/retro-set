@@ -154,7 +154,6 @@ export default {
 
   methods: {
     refreshSetlists() {
-      // debugger
       this.spotifyUrisPayload.spotifyUris = [];
       this.$store.commit('setSetlistSpotifyURIs', this.spotifyUrisPayload);
       let tempSpotifyUris = []

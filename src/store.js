@@ -105,7 +105,6 @@ const store = new Vuex.Store({
       Vue.set(state.setlists[payload.setIndex].songs[payload.songIndex].matches, matchesLength, payload.song);
     },
     setSetlistSpotifyURIs(state, payload) {
-      // debugger
       Vue.set(state.setlists[payload.setIndex], 'spotifyUris', payload.spotifyUris);
     },
   },
