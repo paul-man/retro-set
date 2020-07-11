@@ -107,6 +107,12 @@ const store = new Vuex.Store({
     setSetlistSpotifyURIs(state, payload) {
       Vue.set(state.setlists[payload.setIndex], 'spotifyUris', payload.spotifyUris);
     },
+    updateSetlist(state, payload) {
+      Vue.set(state.setlists[payload.setIndex], payload.set);
+    },
+    setSpotifyPreview(state, payload) {
+      Vue.set(state.setlists[payload.setIndex], 'spotifyPreview', payload.spotifyPreview);
+    }
   },
   actions: {},
   plugins: [createPersistedState({

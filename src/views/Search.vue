@@ -43,7 +43,7 @@
     <!-- Setlists data row -->
     <b-row v-if="setlists">
       <b-col>
-        <setlist-view />
+        <setlist-container />
       </b-col>
     </b-row>
   </b-container>
@@ -53,7 +53,7 @@
 import { mapState } from 'vuex';
 import VenueSearch from "@/components/VenueSearch";
 import ArtistSearch from "@/components/ArtistSearch";
-import SetlistView from "@/components/SetlistView";
+import SetlistContainer from "@/components/Setlist/SetlistContainer";
 import { get } from 'axios'
 
 export default {
@@ -61,7 +61,7 @@ export default {
   components: {
     VenueSearch,
     ArtistSearch,
-    SetlistView,
+    SetlistContainer,
   },
 
   mounted() {
