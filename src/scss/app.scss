@@ -29,19 +29,19 @@ html, body {
   padding: 10px;
 }
 
-.tracklistPanel {
+.songlistPanel {
   width: 65% !important;
   z-index: 1021 !important;
 }
 
 @media screen and (max-width: 1560px) {
-  .tracklistPanel {
+  .songlistPanel {
       width: 85% !important;
   }
 }
 
 @media screen and (max-width: 1200px) {
-  .tracklistPanel {
+  .songlistPanel {
       width: 100% !important;
   }
 }

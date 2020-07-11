@@ -25,7 +25,7 @@
           </p>
           <b-button
             variant="primary"
-            @click="openTrackSelctPanel(set, index)">
+            @click="openSongSelctPanel(set, index)">
             Confirm Songs
           </b-button>
           <template v-if="set.spotifyPreviews">
@@ -69,16 +69,16 @@ export default {
   },
 
   methods: {
-    openTrackSelctPanel(set, index) {
-      const trackSelctPanel = this.$showPanel({
-        component : 'track-select',
-        cssClass: 'tracklistPanel',
+    openSongSelctPanel(set, index) {
+      const songSelctPanel = this.$showPanel({
+        component : 'song-select',
+        cssClass: 'songlistPanel',
         disableBgClick: true,
         props: {
           setIndex: index
         }
       })
-      trackSelctPanel.promise
+      songSelctPanel.promise
         .then(set => {
           if (set) {
             this.setlists[index] = set;

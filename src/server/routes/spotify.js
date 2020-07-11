@@ -6,7 +6,7 @@ let SpotifyWebApi = require("spotify-web-api-node"),
   mongoUtil = require('../mongoUtil');
 const { RewriteFrames } = require("@sentry/integrations");
 
-// Search track given track name + artists name
+// Spotify login endpoint
 router.get("/login/", function(req, res) {
   let spotifyAuthUrl = spotifyApi.createAuthorizeURL(scopes);
   if (req.query.newUser) {
@@ -16,7 +16,7 @@ router.get("/login/", function(req, res) {
   res.send(spotifyAuthUrl);
 });
 
-// Search track given track name + artists name
+// Callback called from spotify
 router.get("/callback/", async function(req, res) {
   const { code } = req.query;
 
@@ -55,15 +55,16 @@ router.get("/user/:userID", function(req, res) {
   }
 });
 
-// Search track given track name + artists name
-router.get("/track/", async function(req, res) {
+// Search song given song name + artists name
+// Note: Spotify calls songs "track/s" but RetroSet will use "song/s"
+router.get("/song/", async function(req, res) {
   await setGenericAccessToken();
-  const track = req.query.track;
+  const song = req.query.song;
   const artist = req.query.artist;
-  spotifyApi.searchTracks("track:" + track + " artist:" + artist).then(
+  spotifyApi.searchTracks("track:" + song + " artist:" + artist).then(
     function(data) {
-      let tracks = flattenTrackMatches(data.body.tracks);
-      res.send(tracks);
+      let songs = flattenSongMatches(data.body.tracks);
+      res.send(songs);
     },
     function(err) {
       res.send({
@@ -110,10 +111,10 @@ router.get("/create_playlist/", async function(req, res) {
 
 /* HELPERS ***************************************************************** */
 
-// Flatten Spotify data for track results
-let flattenTrackMatches = (tracks) => {
+// Flatten Spotify data for song results
+let flattenSongMatches = (songs) => {
   let matches = [];
-  for (let item of tracks.items) {
+  for (let item of songs.items) {
     const artistName = item.artists.map(artist => artist.name).join(', ');
     if (item.album.images.length === 0) {
       item.album.images.push({url: ""});

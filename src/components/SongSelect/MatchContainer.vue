@@ -56,13 +56,13 @@
         <b-row class="no-match-warn">
           <b-col>
             <p>
-              <template v-if="trackSearchError">
+              <template v-if="songSearchError">
                 There was an unexpected error when searching for "{{ song.name }}" by {{ selectedArtist.name }}. 
               </template>
               <template v-else>
                 No matches found for "{{ song.name }}" by {{ selectedArtist.name }}. 
               </template>
-              Please search for a replacement track or add it later at position {{ songIndex + 1 }}.
+              Please search for a replacement song or add it later at position {{ songIndex + 1 }}.
             </p>
             <p>
               Check out the
@@ -72,23 +72,23 @@
         </b-row>
       </template>
       
-      <!-- Add Track button/modal row -->
+      <!-- Add Song button/modal row -->
       <b-row class="add-song-action-row">
         <b-col class="add-song-btn-col">
           <b-button
             size="sm"
             class="mb-2 add-song-btn"
             title="Search Spotify for song"
-            @click="openTrackSearchModal()">
+            @click="openSongSearchModal()">
             <b-icon icon="music-note" aria-hidden="true"></b-icon>+
           </b-button>
           <b-modal
             no-close-on-backdrop
             hide-footer
             :id="'spotify-search-modal-' + songIndex"
-            title="Search a track"
+            title="Search a song"
             size="lg">
-            <spotify-track-search
+            <spotify-song-search
               :songIndex="songIndex"
               :setIndex="setIndex"/>
           </b-modal>
@@ -99,8 +99,7 @@
 </template>
 
 <script>
-import Vue from "vue";
-import SpotifyTrackSearch from "@/components/SpotifyTrackSearch";
+import SpotifySongSearch from "@/components/SpotifySongSearch";
 import { get } from "axios";
 import { mapState } from "vuex";
 
@@ -108,7 +107,7 @@ export default {
   name: "MatchContainer",
 
   components: {
-    SpotifyTrackSearch,
+    SpotifySongSearch,
   },
 
   props: ["songIndex", "setIndex"],
@@ -116,7 +115,7 @@ export default {
   data() {
     return {
       isLoading: true,
-      trackSearchError: false,
+      songSearchError: false,
       matchesPayload: {
         setIndex: this.setIndex,
         songIndex: this.songIndex,
@@ -142,14 +141,14 @@ export default {
   },
 
   mounted() {
-    this.trackSearch(this.song);
+    this.songSearch(this.song);
   },
 
   methods: {
-    async trackSearch(song) {
-      get("api/spotify/track/", {
+    async songSearch(song) {
+      get("api/spotify/song/", {
         params: {
-          track: song.name,
+          song: song.name,
           artist: this.selectedArtist.name,
         },
       }).then( result => {
@@ -159,7 +158,7 @@ export default {
           this.matchesPayload.matches = result.data;
           this.$store.commit('setSongMatches', this.matchesPayload);
         } else {
-          this.trackSearchError = true;
+          this.songSearchError = true;
         }
         this.isLoading = false;
       }).catch( error => {
@@ -172,7 +171,7 @@ export default {
         song.selectedUri = uri;
       }
     },
-    openTrackSearchModal() {
+    openSongSearchModal() {
       this.$store.commit("setCurrentSongName", this.song.name);
       this.$bvModal.show(`spotify-search-modal-${this.songIndex}`);
     },

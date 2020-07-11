@@ -26,8 +26,8 @@ Vue.use(BootstrapVue)
 Vue.use(IconsPlugin)
 
 // Registering globally for usage with VueSlideoutPanel
-import TrackSelect from '@/components/TrackSelect/TrackSelect'
-Vue.component('track-select', TrackSelect);
+import SongSelect from '@/components/SongSelect/SongSelect'
+Vue.component('song-select', SongSelect);
 
 Vue.use(VueSlideoutPanel);
 Vue.component('vue-bootstrap-typeahead', VueBootstrapTypeahead);

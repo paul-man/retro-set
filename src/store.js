@@ -19,7 +19,7 @@ const store = new Vuex.Store({
       "515": "Something went wrong with SetlistFM",
       "516": "Something went wrong with Spotify",
       "517": "Unable to retrieve Spotify user data",
-      "518": "Having trouble searching Spotify for tracks. Try refreshing the page and logging back in"
+      "518": "Having trouble searching Spotify for songs. Try refreshing the page and logging back in"
     },
     testdata: {
       ARTIST: {
@@ -49,7 +49,7 @@ const store = new Vuex.Store({
         url:
           "https://www.setlist.fm/venue/the-paramount-huntington-ny-usa-4bd7e35a.html",
       },
-      testSong: {"songTitle":"Cheeky Song (Touch My Bum)","artistName":"The Cheeky Girls","albumTitle":"Party Time","albumImageUrl":"https://i.scdn.co/image/ab67616d0000b273787f8022645548615a346154","id":"6MCovnA5m16hln36lk0gqM","uri":"spotify:track:6MCovnA5m16hln36lk0gqM"}
+      testSong: {"songTitle":"Cheeky Song (Touch My Bum)","artistName":"The Cheeky Girls","albumTitle":"Party Time","albumImageUrl":"https://i.scdn.co/image/ab67616d0000b273787f8022645548615a346154","id":"6MCovnA5m16hln36lk0gqM","uri":"spotify:song:6MCovnA5m16hln36lk0gqM"}
     },
   },
   getters: {

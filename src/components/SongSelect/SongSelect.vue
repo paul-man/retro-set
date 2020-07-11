@@ -1,5 +1,5 @@
 <template>
-  <div id="track-select">
+  <div id="song-select">
     <b-container class="rounded" id="playlist-header">
       <p
         class="d-inline-block d-none d-md-block d-sm-block spotify-user-id">
@@ -112,11 +112,11 @@
 </template>
 
 <script>
-import MatchContainer from "@/components/TrackSelect/MatchContainer";
+import MatchContainer from "@/components/SongSelect/MatchContainer";
 import { mapState } from "vuex";
 
 export default {
-  name: "track-select",
+  name: "song-select",
 
   components: {
     MatchContainer,
@@ -148,7 +148,7 @@ export default {
       );
     },
     set() {
-      return this.$store.getters.setlists[this.setIndex];
+      return this.$store.getters.setlists[this.setIndex]
     }
   },
 
@@ -180,7 +180,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-#track-select {
+#song-select {
   height: 100%;
   text-align: left;
 }

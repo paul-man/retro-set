@@ -1,16 +1,16 @@
 <template>
-  <div id="spotify-track-search">
+  <div id="spotify-song-search">
     <b-container>
 
-      <!-- Track name search -->
-      <b-row id="track-input-row">
+      <!-- Song name search -->
+      <b-row id="song-input-row">
         <b-col sm="1">
-          <label for="track-input">Track</label>
+          <label for="song-input">Song</label>
         </b-col>
         <b-col sm="8">
           <b-form-input
-            v-model="trackNameSearch"
-            id="track-input"
+            v-model="songNameSearch"
+            id="song-input"
             type="text"></b-form-input>
         </b-col>
       </b-row>
@@ -33,33 +33,33 @@
         <b-col>
           <template v-if="incompleteSearchTerms">
             <b-container class="search-results-text">
-              <p>Search for a track and artist to select results</p>
+              <p>Search for a song and artist to select results</p>
             </b-container>
           </template>
-          <template v-else-if="trackSuggestions.length === 0">
+          <template v-else-if="songSuggestions.length === 0">
             <b-container class="search-results-text">
               <p>Sorry, no results</p>
             </b-container>
           </template>
           <template v-else>
             <b-container>
-              <b-row v-for="(track, index) in trackSuggestions" :key="index">
-                <b-col sm="1" class="add-track-btn-col">
-                  <div class="add-track-btn-div">
-                    <b-button size="sm" class="mb-2 add-track-btn" title="Add song to matches list" @click="selectSong(track)">
+              <b-row v-for="(song, index) in songSuggestions" :key="index">
+                <b-col sm="1" class="add-song-btn-col">
+                  <div class="add-song-btn-div">
+                    <b-button size="sm" class="mb-2 add-song-btn" title="Add song to matches list" @click="selectSong(song)">
                       <b-icon icon="plus-circle" variant="primary" aria-hidden="true"></b-icon>
                     </b-button>
                   </div>
                 </b-col>
                 <b-col sm="2" class="album-art-col">
                   <img
-                    :src="getAlbumImg(track.albumImageUrl)"
+                    :src="getAlbumImg(song.albumImageUrl)"
                     class="img-md"/>
                 </b-col>
                 <b-col sm="9" class="song-search-data">
-                  <p>Title: {{ track.songTitle }}</p>
-                  <p>Artist: {{ track.artistName }}</p>
-                  <p>Album: {{ track.albumTitle }}</p>
+                  <p>Title: {{ song.songTitle }}</p>
+                  <p>Artist: {{ song.artistName }}</p>
+                  <p>Album: {{ song.albumTitle }}</p>
                 </b-col>
               </b-row>
             </b-container>
@@ -76,7 +76,7 @@ import { get } from "axios";
 import { debounce } from "underscore";
 
 export default {
-  name: "SpotifyTrackSearch",
+  name: "SpotifySongSearch",
 
   components: {},
 
@@ -84,9 +84,9 @@ export default {
 
   data() {
     return {
-      trackNameSearch: "",
+      songNameSearch: "",
       artistNameSearch: "",
-      trackSuggestions: [],
+      songSuggestions: [],
       // TODO: There's gotta be a better way!
       songPayload: {},
       matchesPayload: {},
@@ -96,7 +96,7 @@ export default {
   computed: {
     ...mapState(["selectedArtist", "currentSongName", "setlists"]),
     incompleteSearchTerms() {
-      return this.trackNameSearch === '' ||  this.artistNameSearch === '';
+      return this.songNameSearch === '' ||  this.artistNameSearch === '';
     },
     currentMatches() {
       return this.song.matches.map( match => match.id );
@@ -111,7 +111,7 @@ export default {
   
   mounted() {
     this.artistNameSearch = this.selectedArtist.name;
-    this.trackNameSearch = this.currentSongName;
+    this.songNameSearch = this.currentSongName;
     
     // TODO: There's gotta be a better way!
     this.songPayload = {
@@ -127,20 +127,20 @@ export default {
   },
 
   methods: {
-    async searchTrack() {
-      const spotifyResp = await get("api/spotify/track/", {
+    async searchSong() {
+      const spotifyResp = await get("api/spotify/song/", {
         params: {
-          track: this.trackNameSearch,
+          song: this.songNameSearch,
           artist: this.artistNameSearch,
         },
       });
       if (spotifyResp.data.error) {
-        this.trackSearchError = true;
+        this.songSearchError = true;
       }
-      this.trackSuggestions = spotifyResp.data;
+      this.songSuggestions = spotifyResp.data;
     },
-    selectSong(track) {
-      if (this.currentMatches.indexOf(track.id) !== -1) {
+    selectSong(song) {
+      if (this.currentMatches.indexOf(song.id) !== -1) {
         this.makeWarningToast('This song is already in the song matches!');
         return;
       }
@@ -150,7 +150,7 @@ export default {
         this.$store.commit('setSongMatches', this.matchesPayload);
       }
 
-      this.songPayload.song = track;
+      this.songPayload.song = song;
       this.$store.commit('addSongMatch', this.songPayload);
       this.$parent.$parent.$parent.$parent.$forceUpdate();
       this.$bvModal.hide(`spotify-search-modal-${this.songIndex}`);
@@ -158,11 +158,11 @@ export default {
   },
 
   watch: {
-    trackNameSearch: debounce(function() {
-      this.searchTrack();
+    songNameSearch: debounce(function() {
+      this.searchSong();
     }, 750),
     artistNameSearch: debounce(function() {
-      this.searchTrack();
+      this.searchSong();
     }, 750),
   },
 };
@@ -196,7 +196,7 @@ export default {
   position:absolute;
 }
 
-.add-track-btn-div {
+.add-song-btn-div {
   margin: 0;
   position: absolute;
   top: 50%;
@@ -205,7 +205,7 @@ export default {
   transform: translate(-50%, -50%);
 }
 
-.add-track-btn {
+.add-song-btn {
   border: 0 !important;
   background-color: transparent !important;
 }
@@ -214,7 +214,7 @@ export default {
   padding: 0;
 }
 
-.add-track-btn-col {
+.add-song-btn-col {
   padding:0;
 }
 </style>
