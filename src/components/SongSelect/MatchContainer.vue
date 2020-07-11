@@ -18,7 +18,7 @@
             {{ setDefaultMatch(song, match.uri, matchIndex) }}
 
             <!-- Radio col -->
-            <b-col sm="1" class="radio-col">
+            <b-col cols="1" class="radio-col">
               <b-form-radio
                 variant="primary"
                 v-model="song.selectedUri"
@@ -27,7 +27,7 @@
             </b-col>
 
             <!-- Album art col -->
-            <b-col sm="3" class="album-art-col">
+            <b-col cols="3" class="album-art-col">
               <img
                 :src="getAlbumImg(match.albumImageUrl)"
                 class="img-md">
@@ -35,7 +35,7 @@
 
             <!-- Song data col -->
             <b-col
-              sm="8"
+              cols="8"
               class="float-right match-description">
               <p>
                 <span class="bold">Title:</span> {{ match.songTitle}}

@@ -4,10 +4,10 @@
 
       <!-- Song name search -->
       <b-row id="song-input-row">
-        <b-col sm="1">
+        <b-col cols="2">
           <label for="song-input">Song</label>
         </b-col>
-        <b-col sm="8">
+        <b-col>
           <b-form-input
             v-model="songNameSearch"
             id="song-input"
@@ -17,10 +17,10 @@
 
       <!-- Artist name search -->
       <b-row id="artist-input-row">
-        <b-col sm="1">
+        <b-col cols="2">
           <label for="artist-input">Artist</label>
         </b-col>
-        <b-col sm="8">
+        <b-col>
           <b-form-input
             v-model="artistNameSearch"
             id="artist-input"
@@ -44,19 +44,21 @@
           <template v-else>
             <b-container>
               <b-row v-for="(song, index) in songSuggestions" :key="index">
-                <b-col sm="1" class="add-song-btn-col">
+                <b-col cols="1" class="add-song-btn-col">
                   <div class="add-song-btn-div">
                     <b-button size="sm" class="mb-2 add-song-btn" title="Add song to matches list" @click="selectSong(song)">
                       <b-icon icon="plus-circle" variant="primary" aria-hidden="true"></b-icon>
                     </b-button>
                   </div>
                 </b-col>
-                <b-col sm="2" class="album-art-col">
-                  <img
-                    :src="getAlbumImg(song.albumImageUrl)"
-                    class="img-md"/>
+                <b-col cols="2" class="album-art-col">
+                  <div class="responsive-img-div">
+                    <img
+                      :src="getAlbumImg(song.albumImageUrl)"
+                      class="responsive-img"/>
+                  </div>
                 </b-col>
-                <b-col sm="9" class="song-search-data">
+                <b-col cols="9" class="song-search-data">
                   <p>Title: {{ song.songTitle }}</p>
                   <p>Artist: {{ song.artistName }}</p>
                   <p>Album: {{ song.albumTitle }}</p>
