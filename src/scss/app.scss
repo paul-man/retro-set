@@ -46,7 +46,6 @@ html, body {
   }
 }
 
-
 .img-lg {
   height: 175px;
   width: 175px;
@@ -56,6 +55,26 @@ html, body {
   height: 64px;
   width: 64px;
   border: 1px solid gray;
+}
+
+.responsive-img-div {
+  position: absolute;
+  width: 100%;
+  top: 50%;
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+}
+
+.responsive-img-div:after {
+  content: "";
+  display: block;
+  padding-bottom: 100%;
+}
+
+.responsive-img {
+  position: absolute;
+  width: 100%;
+  height: 100%;
 }
 
 .img-sm {
