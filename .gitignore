@@ -1,8 +1,12 @@
+# General
 .DS_Store
 node_modules
 /dist
 /mongodb
 notes/
+
+# symlinks/shortcuts
+*.lnk
 
 # local env files
 .env.local

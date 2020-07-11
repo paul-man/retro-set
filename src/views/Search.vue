@@ -6,7 +6,7 @@
       <b-col>
         <div class="float-right">
           <b-button variant="secondary" @click="testSetlistSearch" id="test-btn">
-            <img src="@/assets/zap.svg" class="icon-svg"/>
+            <b-icon icon="lightning-fill"></b-icon>
           </b-button>
         </div>
       </b-col>
