@@ -2,11 +2,11 @@ import Vue from "vue";
 import Router from "vue-router";
 import store from "./store.js";
 import Search from "./views/Search.vue";
-import PageNotFound from "./views/PageNotFound.vue";
+import PageNotFound from "./views/errors/PageNotFound.vue";
 import SpotifyLogin from "./views/SpotifyLogin.vue";
 import About from "./views/About.vue";
-import SpotifyError from "./views/SpotifyError.vue";
-import SetlistfmError from "./views/SetlistfmError.vue";
+import SpotifyError from "./views/errors/SpotifyError.vue";
+import SetlistfmError from "./views/errors/SetlistfmError.vue";
 
 Vue.use(Router);
 
@@ -62,7 +62,7 @@ const router = new Router({
       beforeEnter: ifUserNotLoaded,
     },
     {
-      path: "/404",
+      path: "*",
       component: PageNotFound,
     },
   ],
