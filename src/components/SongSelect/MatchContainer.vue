@@ -57,7 +57,7 @@
           <b-col>
             <p>
               <template v-if="songSearchError">
-                There was an unexpected error when searching for "{{ song.name }}" by {{ selectedArtist.name }}. 
+                There was an unexpected error when searching for "{{ song.name }}" by {{ selectedArtist.name }}.{{ errorMsg }}
               </template>
               <template v-else>
                 No matches found for "{{ song.name }}" by {{ selectedArtist.name }}. 
@@ -115,6 +115,7 @@ export default {
   data() {
     return {
       isLoading: true,
+      errorMsg: '',
       songSearchError: false,
       matchesPayload: {
         setIndex: this.setIndex,
@@ -158,12 +159,15 @@ export default {
           this.matchesPayload.matches = result.data;
           this.$store.commit('setSongMatches', this.matchesPayload);
         } else {
-          this.songSearchError = true;
+          throw new Error(result.data.errorMsg);
         }
         this.isLoading = false;
       }).catch( error => {
         this.isLoading = false;
-        this.makeErrorToast(error);
+        this.songSearchError = true;
+        if (error) {
+          this.error = `<br>${error}`
+        }
       });
     },
     setDefaultMatch(song, uri, index) {
