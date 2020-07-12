@@ -4,7 +4,7 @@ const express = require("express"),
   scopes = ["user-read-email", "playlist-modify-private", "playlist-modify-public"];
 let SpotifyWebApi = require("spotify-web-api-node"),
   mongoUtil = require('../mongoUtil');
-const { RewriteFrames } = require("@sentry/integrations");
+const logger = require('../logger');
 
 // Spotify login endpoint
 router.get("/login/", function(req, res) {
@@ -42,6 +42,7 @@ router.get("/callback/", async function(req, res) {
       })}`
     );
   } catch (err) {
+    logger.error(err);
     res.redirect(`/spotify-error?status=517`);
   }
 });
@@ -67,6 +68,7 @@ router.get("/song/", async function(req, res) {
       res.send(songs);
     },
     function(err) {
+      logger.error(err);
       res.send({
         error: true,
         status: 518,
@@ -93,7 +95,7 @@ router.get("/create_playlist/", async function(req, res) {
         res.send(data)
       })
       .catch((err) => {
-        console.log(err);
+        logger.error(err);
         res.send({
           error: true,
           status: 513,
@@ -101,7 +103,7 @@ router.get("/create_playlist/", async function(req, res) {
       });
   })
   .catch((err) => {
-    console.log(err);
+    logger.error(err);
     res.send({
       error: true,
       status: 512,
