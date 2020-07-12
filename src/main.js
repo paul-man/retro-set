@@ -14,7 +14,7 @@ import { Vue as VueIntegration } from '@sentry/integrations';
 // 
 if (process.env.NODE_ENV.trim() === 'production') {
   Sentry.init({
-    dsn: 'https://3f6a94636953494c9d12ab520e693cbc@o409962.ingest.sentry.io/5283409',
+    dsn: process.env.SENTRY_DSN || '',
     integrations: [new VueIntegration({Vue, attachProps: true})],
   });
 }

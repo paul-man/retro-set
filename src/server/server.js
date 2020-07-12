@@ -2,13 +2,16 @@
 "use strict";
 
 const Sentry = require('@sentry/node');
-Sentry.init({ dsn: 'https://3f6a94636953494c9d12ab520e693cbc@o409962.ingest.sentry.io/5283409' });
+Sentry.init({ dsn: process.env.SENTRY_DSN || '' });
 
 const express = require("express"),
   app = express(),
   PORT = process.env.PORT || 8080,
   { resolve } = require("path"),
   configureAPI = require('./configure');
+
+app.use(Sentry.Handlers.requestHandler());
+app.use(Sentry.Handlers.errorHandler());
 
 // API
 configureAPI(app);
