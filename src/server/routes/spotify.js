@@ -30,7 +30,11 @@ router.get("/callback/", async function(req, res) {
     let spotifyUserData = await spotifyApi.getMe();
     let user = {
       id: spotifyUserData.body.id,
-      imgUrl: spotifyUserData.body.images[0].url,
+      // LOL
+      imgUrl: (spotifyUserData.body.images
+          && spotifyUserData.body.images[0]
+          && spotifyUserData.body.images[0].url)
+          || '',
       accessToken: accessToken,
       refreshToken: refreshToken
     };
