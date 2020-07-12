@@ -17,7 +17,7 @@
         <b-nav-item-dropdown right>
           <template v-slot:button-content>
             <img
-              :src="user.imgUrl"
+              :src="getUserImg(user.imgUrl)"
               class="d-inline-block align-top spotify-user-img"
               alt="Spotify user image"/>
             <p class="nav-user-id" :title="user.id">{{ user.id }}</p>
