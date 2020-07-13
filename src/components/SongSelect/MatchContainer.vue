@@ -99,7 +99,7 @@
 </template>
 
 <script>
-import SpotifySongSearch from "@/components/SongSelect/SpotifySongSearch";
+import SpotifySongSearch from "@/components/songSelect/SpotifySongSearch";
 import { get } from "axios";
 import { mapState } from "vuex";
 

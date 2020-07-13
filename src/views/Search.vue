@@ -53,7 +53,7 @@
 import { mapState } from 'vuex';
 import VenueSearch from "@/components/VenueSearch";
 import ArtistSearch from "@/components/ArtistSearch";
-import SetlistContainer from "@/components/Setlist/SetlistContainer";
+import SetlistContainer from "@/components/setlist/SetlistContainer";
 import { get } from 'axios'
 
 export default {

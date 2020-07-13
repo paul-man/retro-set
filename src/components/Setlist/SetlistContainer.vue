@@ -16,7 +16,7 @@
 
 <script>
 import { mapState } from "vuex";
-import Setlist from "@/components/Setlist/Setlist"
+import Setlist from "@/components/setlist/Setlist"
 
 export default {
   name: "SetlistContainer",

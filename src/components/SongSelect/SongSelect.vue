@@ -112,7 +112,7 @@
 </template>
 
 <script>
-import MatchContainer from "@/components/SongSelect/MatchContainer";
+import MatchContainer from "@/components/songSelect/MatchContainer";
 import { mapState } from "vuex";
 
 export default {
