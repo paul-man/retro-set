@@ -23,6 +23,12 @@ Vue.mixin({
       }
       return require('@/assets/no-album-art.png');
     },
+    getUserImg: function (imgSrc) {
+      if (imgSrc !== '') {
+        return imgSrc
+      }
+      return require('@/assets/no-user-img.png');
+    },
     isDev() {
       return process.env.NODE_ENV.trim() === "development";
     },

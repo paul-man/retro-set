@@ -3,7 +3,7 @@ const express = require("express"),
 let setlistfmJs = require("setlistfm-js"),
   parse = require("date-fns/parse"),
   format = require("date-fns/format");
-// import { normalize, schema } from 'normalizr';
+const logger = require('../logger');
 
 // Search Artists based on name
 router.get("/artist/:artist", function(req, res) {
@@ -21,7 +21,7 @@ router.get("/artist/:artist", function(req, res) {
       res.json(results.artist);
     })
     .catch(function(error) {
-      console.log("Something went wrong!", error);
+      logger.error(error);
       res.send({
         error: true,
         status: 519,
@@ -42,7 +42,7 @@ router.get("/venue/:venue", function(req, res) {
       res.json(results.venue);
     })
     .catch(function(error) {
-      console.log("Something went wrong!", error);
+      logger.error(error);
       res.redirect({
         error: true,
         status: 520,
@@ -66,7 +66,7 @@ router.get("/setlist/", function(req, res) {
       res.json(setlists);
     })
     .catch(function(error) {
-      console.log("Something went wrong!", error);
+      logger.error(error);
       res.redirect({
         error: true,
         status: 521,
