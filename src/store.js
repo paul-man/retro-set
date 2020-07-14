@@ -116,6 +116,7 @@ const store = new Vuex.Store({
   },
   actions: {},
   plugins: [createPersistedState({
+    paths: ['user'],
     storage: window.sessionStorage,
   })],
 });
