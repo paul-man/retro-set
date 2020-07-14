@@ -1,19 +1,30 @@
 <template>
   <b-container id="venue-search">
-    <vue-bootstrap-typeahead
-      :data="venueSearchSuggestions"
-      v-model="venueName"
-      class="mb-4"
-      :serializer="s => s.name"
-      placeholder="Venue name"
-      @hit="setSelectedVenue">
-      <template slot="suggestion" slot-scope="{ data, htmlText }">
-        <div class="d-flex align-items-center">
-          <span class="ml-4" v-html="htmlText"></span>
-          <span class="float-right" style="padding-left:20px;">({{ data.city.name }}, {{ data.city.country.code }})</span>
-        </div>
+    <b-overlay 
+      :show="isLoading"
+      spinner-variant="success"
+      no-center
+      opacity="0.4"
+      rounded="sm">
+      <template v-slot:overlay>
+        <b-spinner variant="success" class="text-field-spinner"></b-spinner>
       </template>
-    </vue-bootstrap-typeahead>
+      <vue-bootstrap-typeahead
+        :data="venueSearchSuggestions"
+        v-model="venueName"
+        class="mb-4"
+        size="lg"
+        :serializer="s => s.name"
+        placeholder="Venue name"
+        @hit="setSelectedVenue">
+        <template slot="suggestion" slot-scope="{ data, htmlText }">
+          <div class="d-flex align-items-center">
+            <span class="ml-4" v-html="htmlText"></span>
+            <span class="float-right" style="padding-left:20px;">({{ data.city.name }}, {{ data.city.country.code }})</span>
+          </div>
+        </template>
+      </vue-bootstrap-typeahead>
+    </b-overlay>
   </b-container>
 </template>
 
@@ -28,7 +39,8 @@ export default {
     return {
       venueSearchSuggestions: [],
       venueName: "",
-      hasSelectedVenue: false
+      hasSelectedVenue: false,
+      isLoading: false,
     }
   },
 
@@ -43,6 +55,7 @@ export default {
         this.makeErrorToast('Having issues search for venues, please try again')
       }
       this.venueSearchSuggestions = suggestions.data
+      this.isLoading = false;
     },
     setSelectedVenue(venue) {
       this.hasSelectedVenue = true
@@ -57,6 +70,7 @@ export default {
         this.hasSelectedVenue = false
         return
       }
+      this.isLoading = true;
       this.searchVenue(venue)
     }, 500)
   }
@@ -66,5 +80,11 @@ export default {
 <style lang="scss" scoped>
 #venue-search {
   padding: 0;
+}
+
+.text-field-spinner {
+  position: absolute;
+  right: 5px;
+  top: 5px;
 }
 </style>
