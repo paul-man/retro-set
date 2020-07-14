@@ -68,6 +68,7 @@
               :max="currentYear"
               v-model="year"
               placeholder="Concert year"
+              :formatter="validateYear"
               :disabled="searchByDate"></b-form-input>
           </b-col>
           
@@ -175,6 +176,24 @@ export default {
       }
       
       this.$store.commit("setSetlists", setlists.data);
+    },
+    validateYear(value) {
+      const len = value.length;
+      if (len === 0) {
+        return '';
+      }
+      
+      if (len === 2) {
+        if (value !== "19" && value !== "20") {
+          return value.slice(0, -1); 
+        }
+      }
+
+      // if is not not a number == if is a number
+      if (!isNaN(value.charAt(len - 1)) && len <= 4) {
+        return value;
+      }
+      return value.slice(0, -1);
     },
   },
 
