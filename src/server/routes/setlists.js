@@ -16,7 +16,7 @@ router.get("/artist/:artist", function(req, res) {
     .then(function(results) {
       let artists = results.artist;
       for (let artist of artists) {
-        delete artist.sortName;
+        artist['id'] = artist.mbid;
       }
       res.json(results.artist);
     })

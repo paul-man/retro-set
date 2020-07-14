@@ -23,7 +23,7 @@ const store = new Vuex.Store({
     },
     testdata: {
       ARTIST: {
-        mbid: "9311e2bc-bb3f-44cf-90d8-b1fe6912b60b",
+        id: "9311e2bc-bb3f-44cf-90d8-b1fe6912b60b",
         name: "Brand New",
         sortName: "Brand New",
         disambiguation: "US alternative rock",

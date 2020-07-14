@@ -112,7 +112,7 @@ export default {
   },
   
   mounted() {
-    this.artistNameSearch = this.selectedArtist.name;
+    this.artistNameSearch = this.set.artist.name;
     this.songNameSearch = this.currentSongName;
     
     // TODO: There's gotta be a better way!
