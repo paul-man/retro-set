@@ -87,13 +87,16 @@ router.get("/setlist/", function(req, res) {
 let flattenSetlists = (setlists) => {
   let newSetlistArr = [];
   for (let setlist of setlists) {
+    setlist.artist['id'] = setlist.artist.mbid;
     let newSetlist = {
+      artist: setlist.artist,
+      venue: setlist.venue,
       songs: [],
       id: setlist.id,
       url: setlist.url,
       eventDate: format(
         parse(setlist.eventDate, "dd-MM-yyyy", new Date()),
-        "MMM do, yyyy"
+        "MMMM do, yyyy"
       ),
     };
 

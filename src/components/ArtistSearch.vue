@@ -61,7 +61,6 @@ export default {
     },
     setSelectedArtist(artist) {
       this.hasSelectedArtist = true
-      artist['id'] = artist.mbid;
       this.$store.commit("setSelectedArtist", artist)
     }
   },

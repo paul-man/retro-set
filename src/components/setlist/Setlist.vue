@@ -15,6 +15,12 @@
 
     <!-- Set data -->
     <p class="font-weight-bold">
+      Artist: <a :href="set.artist.url">{{ set.artist.name }}</a>
+    </p>
+    <p class="font-weight-bold">
+      Venue: <a :href="set.venue.url">{{ set.venue.name }}</a>
+    </p>
+    <p class="font-weight-bold">
       Event date: {{ set.eventDate }}
     </p>
     <p class="font-weight-bold" v-if="set.tourName">

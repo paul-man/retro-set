@@ -65,7 +65,7 @@ export default {
     ...mapState(['selectedVenue', 'selectedArtist', 'setlists', 'testdata', 'user']),
     readyToSearchSetlists() {
       return (
-        this.$store.getters.selectedVenue.id !== undefined && this.$store.getters.selectedArtist.mbid !== undefined
+        this.$store.getters.selectedVenue.id !== undefined && this.$store.getters.selectedArtist.id !== undefined
       );
     }
   },
@@ -78,7 +78,7 @@ export default {
     async getSetlists() {
       let setlists = await get("api/setlists/setlist/", {
         params: {
-          artistId: this.selectedArtist.mbid,
+          artistId: this.selectedArtist.id,
           venueId: this.selectedVenue.id
         }
       });
