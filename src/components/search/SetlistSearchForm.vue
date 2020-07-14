@@ -147,9 +147,6 @@ export default {
     currentYear() {
       return new Date().getFullYear();
     },
-    years() {
-      return Array.from({length: this.currentYear - 1900}, (value, index) => 1901 + index)
-    }
   },
 
   methods: {
@@ -176,6 +173,7 @@ export default {
         this.makeErrorToast('Having trouble finding those setlists, please try searching again')
         return
       }
+      
       this.$store.commit("setSetlists", setlists.data);
     },
   },

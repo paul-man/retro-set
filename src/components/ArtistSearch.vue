@@ -14,6 +14,7 @@
         :data="artistSearchSuggestions"
         v-model="artistNameSearch"
         class="mb-4"
+        size="lg"
         :serializer="s => s.name"
         placeholder="Artist name"
         @hit="setSelectedArtist"
@@ -21,7 +22,7 @@
         <template slot="suggestion" slot-scope="{ data, htmlText }">
           <div class="d-flex align-items-center">
             <span class="ml-4" v-html="htmlText"></span>
-            <span v-if="data.disambiguation" style="padding-left:20px;">({{ data.disambiguation }})</span>
+            <span v-if="data.disambiguation" class="pull-right" style="padding-left:20px;">({{ data.disambiguation }})</span>
           </div>
         </template>
       </vue-bootstrap-typeahead>
@@ -41,7 +42,7 @@ export default {
       artistSearchSuggestions: [],
       artistNameSearch: "",
       hasSelectedArtist: false,
-      isLoading: false
+      isLoading: false,
     }
   },
 

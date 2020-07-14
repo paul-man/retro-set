@@ -2,7 +2,7 @@
   <b-container class="shadow-lg rounded" id="search">
 
     <!-- Dev test button row -->
-    <b-row v-if="false && isDev()">
+    <b-row v-if="isDev()">
       <b-col>
         <div class="float-right">
           <b-button variant="secondary" @click="testSetlistSearch" id="test-btn">
