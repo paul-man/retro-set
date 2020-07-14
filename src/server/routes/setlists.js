@@ -58,6 +58,12 @@ router.get("/setlist/", function(req, res) {
     venueId: req.query.venueId,
   };
 
+  if (req.query.year) {
+    reqObj['year'] = req.query.year;
+  } else if (req.query.date) {
+    reqObj['date'] = req.query.date;
+  }
+
   setlistfmClient
     .searchSetlists(reqObj)
     .then(function(results) {

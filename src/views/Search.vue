@@ -2,7 +2,7 @@
   <b-container class="shadow-lg rounded" id="search">
 
     <!-- Dev test button row -->
-    <b-row v-if="isDev()">
+    <b-row v-if="false && isDev()">
       <b-col>
         <div class="float-right">
           <b-button variant="secondary" @click="testSetlistSearch" id="test-btn">
@@ -12,14 +12,11 @@
       </b-col>
     </b-row>
 
-    <!-- Search fields row -->
-    <b-row>
-      <b-col lg="6"><artist-search /></b-col>
-      <b-col lg="6"><venue-search /></b-col>
-    </b-row>
+    <!-- Search fields form -->
+    <setlist-search-form/>
 
     <!-- Search text row -->
-    <b-row v-if="readyToSearchSetlists">
+    <!-- <b-row v-if="readyToSearchSetlists">
       <b-col>
         <h3>
           <a class="action" :href="selectedArtist.url" target="_blank">
@@ -29,16 +26,7 @@
           </a> {{setlists.length}} time{{ setlists.length > 1 ? "s" : "" }}
         </h3>
       </b-col>
-    </b-row>
-
-    <!-- Search instructions row -->
-    <b-row v-else>
-      <b-col>
-        <h3>
-          Begin by searching for an <u>artist</u> and <u>venue</u>
-        </h3>
-      </b-col>
-    </b-row>
+    </b-row> -->
 
     <!-- Setlists data row -->
     <b-row v-if="setlists">
@@ -51,16 +39,14 @@
 
 <script>
 import { mapState } from 'vuex';
-import VenueSearch from "@/components/VenueSearch";
-import ArtistSearch from "@/components/ArtistSearch";
+import { get } from 'axios';
+import SetlistSearchForm from "@/components/search/SetlistSearchForm";
 import SetlistContainer from "@/components/setlist/SetlistContainer";
-import { get } from 'axios'
 
 export default {
   name: "search",
   components: {
-    VenueSearch,
-    ArtistSearch,
+    SetlistSearchForm,
     SetlistContainer,
   },
 
@@ -105,21 +91,7 @@ export default {
   },
 
   watch: {
-    readyToSearchSetlists: function(ready) {
-      if (ready) {
-        this.getSetlists();
-      }
-    },
-    selectedArtist: function() {
-      if (this.selectedVenue.id !== undefined) {
-        this.getSetlists();
-      }
-    },
-    selectedVenue: function() {
-      if (this.selectedArtist.mbid !== undefined) {
-        this.getSetlists();
-      }
-    }
+    
   }
 };
 </script>

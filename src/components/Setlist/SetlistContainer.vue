@@ -1,5 +1,7 @@
 <template>
-  <div class="container">
+  <div
+    id="setlist-container-comp"
+    class="container">
     <div class="row">
       <div
         class="col-sm-12 col-md-12 col-lg-6 setlist-container"
@@ -42,8 +44,7 @@ export default {
 };
 </script>
 
-<style scoped>
-
+<style lang="scss" scoped>
  /* Add border between mutliple setlists */
 .setlist-container {
   border: solid 1px rgba(211, 211, 211, 0.459);
