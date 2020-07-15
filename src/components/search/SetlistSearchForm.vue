@@ -152,6 +152,10 @@ export default {
 
   methods: {
     async search() {
+      if (typeof this.selectedArtist.id === 'undefined' && typeof this.selectedVenue.id === 'undefined') {
+        this.makeWarningToast('Please select an artist and/or venue');
+        return;
+      }
       let searchData = {
         params: {
         }
