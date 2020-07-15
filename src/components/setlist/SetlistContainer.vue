@@ -2,6 +2,11 @@
   <div
     id="setlist-container-comp"
     class="container">
+    <b-row v-if="setlists.length > 0" class="mb-4">
+      <b-col md="2" offset-md="10">
+        <b-button variant="danger" @click="clearResults">Clear results</b-button>
+      </b-col>
+    </b-row>
     <div class="row">
       <div
         class="col-sm-12 col-md-12 col-lg-6 setlist-container"
@@ -38,6 +43,9 @@ export default {
   },
 
   methods: {
+    clearResults() {
+      this.$store.commit('setSetlists', []);
+    }
   },
 
   watch: {},
