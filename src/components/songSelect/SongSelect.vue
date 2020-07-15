@@ -112,7 +112,7 @@
 </template>
 
 <script>
-import MatchContainer from "@/components/SongSelect/MatchContainer";
+import MatchContainer from "@/components/songSelect/MatchContainer";
 import { mapState } from "vuex";
 
 export default {
@@ -144,7 +144,7 @@ export default {
     ...mapState(["selectedArtist", "selectedVenue", "user", "setlists"]),
     defaultPlaylistName() {
       return (
-        this.selectedArtist.name + " - " + this.selectedVenue.name + " (" + this.set.eventDate + ")"
+        this.set.artist.name + " - " + this.set.venue.name + " (" + this.set.eventDate + ")"
       );
     },
     set() {

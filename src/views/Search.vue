@@ -12,14 +12,11 @@
       </b-col>
     </b-row>
 
-    <!-- Search fields row -->
-    <b-row>
-      <b-col lg="6"><artist-search /></b-col>
-      <b-col lg="6"><venue-search /></b-col>
-    </b-row>
+    <!-- Search fields form -->
+    <setlist-search-form/>
 
     <!-- Search text row -->
-    <b-row v-if="readyToSearchSetlists">
+    <!-- <b-row v-if="readyToSearchSetlists">
       <b-col>
         <h3>
           <a class="action" :href="selectedArtist.url" target="_blank">
@@ -29,16 +26,7 @@
           </a> {{setlists.length}} time{{ setlists.length > 1 ? "s" : "" }}
         </h3>
       </b-col>
-    </b-row>
-
-    <!-- Search instructions row -->
-    <b-row v-else>
-      <b-col>
-        <h3>
-          Begin by searching for an <u>artist</u> and <u>venue</u>
-        </h3>
-      </b-col>
-    </b-row>
+    </b-row> -->
 
     <!-- Setlists data row -->
     <b-row v-if="setlists">
@@ -51,16 +39,14 @@
 
 <script>
 import { mapState } from 'vuex';
-import VenueSearch from "@/components/VenueSearch";
-import ArtistSearch from "@/components/ArtistSearch";
-import SetlistContainer from "@/components/Setlist/SetlistContainer";
-import { get } from 'axios'
+import { get } from 'axios';
+import SetlistSearchForm from "@/components/search/SetlistSearchForm";
+import SetlistContainer from "@/components/setlist/SetlistContainer";
 
 export default {
   name: "search",
   components: {
-    VenueSearch,
-    ArtistSearch,
+    SetlistSearchForm,
     SetlistContainer,
   },
 
@@ -79,7 +65,7 @@ export default {
     ...mapState(['selectedVenue', 'selectedArtist', 'setlists', 'testdata', 'user']),
     readyToSearchSetlists() {
       return (
-        this.$store.getters.selectedVenue.id !== undefined && this.$store.getters.selectedArtist.mbid !== undefined
+        this.$store.getters.selectedVenue.id !== undefined && this.$store.getters.selectedArtist.id !== undefined
       );
     }
   },
@@ -92,7 +78,7 @@ export default {
     async getSetlists() {
       let setlists = await get("api/setlists/setlist/", {
         params: {
-          artistId: this.selectedArtist.mbid,
+          artistId: this.selectedArtist.id,
           venueId: this.selectedVenue.id
         }
       });
@@ -105,21 +91,7 @@ export default {
   },
 
   watch: {
-    readyToSearchSetlists: function(ready) {
-      if (ready) {
-        this.getSetlists();
-      }
-    },
-    selectedArtist: function() {
-      if (this.selectedVenue.id !== undefined) {
-        this.getSetlists();
-      }
-    },
-    selectedVenue: function() {
-      if (this.selectedArtist.mbid !== undefined) {
-        this.getSetlists();
-      }
-    }
+    
   }
 };
 </script>

@@ -26,7 +26,7 @@ Vue.use(BootstrapVue)
 Vue.use(IconsPlugin)
 
 // Registering globally for usage with VueSlideoutPanel
-import SongSelect from '@/components/SongSelect/SongSelect'
+import SongSelect from '@/components/songSelect/SongSelect'
 Vue.component('song-select', SongSelect);
 
 Vue.use(VueSlideoutPanel);

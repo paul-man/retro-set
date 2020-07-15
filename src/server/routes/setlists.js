@@ -16,7 +16,7 @@ router.get("/artist/:artist", function(req, res) {
     .then(function(results) {
       let artists = results.artist;
       for (let artist of artists) {
-        delete artist.sortName;
+        artist['id'] = artist.mbid;
       }
       res.json(results.artist);
     })
@@ -58,6 +58,12 @@ router.get("/setlist/", function(req, res) {
     venueId: req.query.venueId,
   };
 
+  if (req.query.year) {
+    reqObj['year'] = req.query.year;
+  } else if (req.query.date) {
+    reqObj['date'] = req.query.date;
+  }
+
   setlistfmClient
     .searchSetlists(reqObj)
     .then(function(results) {
@@ -81,13 +87,16 @@ router.get("/setlist/", function(req, res) {
 let flattenSetlists = (setlists) => {
   let newSetlistArr = [];
   for (let setlist of setlists) {
+    setlist.artist['id'] = setlist.artist.mbid;
     let newSetlist = {
+      artist: setlist.artist,
+      venue: setlist.venue,
       songs: [],
       id: setlist.id,
       url: setlist.url,
       eventDate: format(
         parse(setlist.eventDate, "dd-MM-yyyy", new Date()),
-        "MMM do, yyyy"
+        "MMMM do, yyyy"
       ),
     };
 

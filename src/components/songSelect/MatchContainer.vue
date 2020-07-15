@@ -57,10 +57,10 @@
           <b-col>
             <p>
               <template v-if="songSearchError">
-                There was an unexpected error when searching for "{{ song.name }}" by {{ selectedArtist.name }}.{{ errorMsg }}
+                There was an unexpected error when searching for "{{ song.name }}" by {{ set.artist.name }}.{{ errorMsg }}
               </template>
               <template v-else>
-                No matches found for "{{ song.name }}" by {{ selectedArtist.name }}. 
+                No matches found for "{{ song.name }}" by {{ set.artist.name }}. 
               </template>
               Please search for a replacement song or add it later at position {{ songIndex + 1 }}.
             </p>
@@ -99,7 +99,7 @@
 </template>
 
 <script>
-import SpotifySongSearch from "@/components/SongSelect/SpotifySongSearch";
+import SpotifySongSearch from "@/components/songSelect/SpotifySongSearch";
 import { get } from "axios";
 import { mapState } from "vuex";
 
@@ -150,7 +150,7 @@ export default {
       get("api/spotify/song/", {
         params: {
           song: song.name,
-          artist: this.selectedArtist.name,
+          artist: this.set.artist.name,
         },
       }).then( result => {
         this.matchesPayload.matches = [];

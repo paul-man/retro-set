@@ -1,31 +1,32 @@
 <template>
   <b-container id="artist-search">
-    <b-row align-h="center">
-      <b-col sm="4" align-self="center">
-        <h2 class="inline-heading">Artist</h2>
-        <b-icon icon="search" class="search-icon"></b-icon>
-      </b-col>
-    </b-row>
-    <b-row>
-      <b-col>
-        <vue-bootstrap-typeahead
-          :data="artistSearchSuggestions"
-          v-model="artistNameSearch"
-          class="mb-4"
-          size="lg"
-          :serializer="s => s.name"
-          placeholder="..."
-          @hit="setSelectedArtist"
-        >
-          <template slot="suggestion" slot-scope="{ data, htmlText }">
-            <div class="d-flex align-items-center">
-              <span class="ml-4" v-html="htmlText"></span>
-              <span v-if="data.disambiguation" style="padding-left:20px;">({{ data.disambiguation }})</span>
-            </div>
-          </template>
-        </vue-bootstrap-typeahead>
-      </b-col>
-    </b-row>
+    <b-overlay 
+      :show="isLoading"
+      spinner-variant="success"
+      no-center
+      opacity="0.4"
+      rounded="sm">
+      <template v-slot:overlay>
+        <b-spinner variant="success" class="text-field-spinner"></b-spinner>
+      </template>
+      <vue-bootstrap-typeahead
+        id="artist-input"
+        :data="artistSearchSuggestions"
+        v-model="artistNameSearch"
+        class="mb-4"
+        size="lg"
+        :serializer="s => s.name"
+        placeholder="Artist name"
+        @hit="setSelectedArtist"
+      >
+        <template slot="suggestion" slot-scope="{ data, htmlText }">
+          <div class="d-flex align-items-center">
+            <span class="ml-4" v-html="htmlText"></span>
+            <span v-if="data.disambiguation" class="pull-right" style="padding-left:20px;">({{ data.disambiguation }})</span>
+          </div>
+        </template>
+      </vue-bootstrap-typeahead>
+    </b-overlay>
   </b-container>
 </template>
 
@@ -40,7 +41,8 @@ export default {
     return {
       artistSearchSuggestions: [],
       artistNameSearch: "",
-      hasSelectedArtist: false
+      hasSelectedArtist: false,
+      isLoading: false,
     }
   },
 
@@ -50,11 +52,12 @@ export default {
 
   methods: {
     async searchArtist(query) {
-      let suggestions = await get("api/setlists/artist/" + query)
+      let suggestions = await get("api/setlists/artist/" + query);
       if (suggestions.error) {
         this.makeErrorToast("Having issues search for artists, please try again");
       }
       this.artistSearchSuggestions = suggestions.data
+      this.isLoading = false;
     },
     setSelectedArtist(artist) {
       this.hasSelectedArtist = true
@@ -69,6 +72,7 @@ export default {
         this.hasSelectedArtist = false
         return
       }
+      this.isLoading = true;
       this.searchArtist(artist)
     }, 500)
   }
@@ -76,5 +80,13 @@ export default {
 </script>
 
 <style lang="scss">
+#artist-search {
+  padding: 0;
+}
 
+.text-field-spinner {
+  position: absolute;
+  right: 5px;
+  top: 5px;
+}
 </style>
