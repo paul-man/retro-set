@@ -1,9 +1,10 @@
 const express = require("express"),
-  router = express.Router();
-let setlistfmJs = require("setlistfm-js"),
-  parse = require("date-fns/parse"),
-  format = require("date-fns/format");
-const logger = require('../logger');
+      router = express.Router(),
+      setlistfmJs = require("setlistfm-js"),
+      parse = require("date-fns/parse"),
+      format = require("date-fns/format"),
+      logger = require('../logger'),
+      util = require('../util');
 
 // Search Artists based on name
 router.get("/artist/:artist", function(req, res) {
@@ -67,9 +68,12 @@ router.get("/setlist/", function(req, res) {
   setlistfmClient
     .searchSetlists(reqObj)
     .then(function(results) {
-      let setlists = flattenSetlists(results.setlist);
+      let {newSetlistArr, songs} = flattenSetlists(results.setlist);
 
-      res.json(setlists);
+      res.json({
+        setlists: newSetlistArr,
+        songs: songs
+      });
     })
     .catch(function(error) {
       logger.error(error);
@@ -86,6 +90,7 @@ router.get("/setlist/", function(req, res) {
 // Flatten setlist data, return relevant data
 let flattenSetlists = (setlists) => {
   let newSetlistArr = [];
+  let songs = {};
   for (let setlist of setlists) {
     setlist.artist['id'] = setlist.artist.mbid;
     let newSetlist = {
@@ -102,14 +107,17 @@ let flattenSetlists = (setlists) => {
 
     for (let subset of setlist.sets.set) {
       for (let song of subset.song) {
-        newSetlist.songs.push({
+        let newSongID = util.newID();
+        songs[newSongID] = {
           name: song.name,
-        });
+        }
+        newSetlist.songs.push(newSongID);
       }
     }
     newSetlistArr.push(newSetlist);
   }
-  return newSetlistArr;
+  console.log(newSetlistArr.length)
+  return { newSetlistArr, songs };
 };
 
 /* SETLISTFM API SETUP****************************************************** */
