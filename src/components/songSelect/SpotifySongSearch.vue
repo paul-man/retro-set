@@ -46,7 +46,7 @@
               <b-row v-for="(song, index) in songSuggestions" :key="index">
                 <b-col cols="1" class="add-song-btn-col">
                   <div class="add-song-btn-div">
-                    <b-button size="sm" class="mb-2 add-song-btn" title="Add song to matches list" @click="selectSong(song)">
+                    <b-button size="sm" class="mb-2 add-song-btn bouncy-btn" title="Add song to matches list" @click="selectSong(song)">
                       <b-icon icon="plus-circle" variant="primary" aria-hidden="true"></b-icon>
                     </b-button>
                   </div>

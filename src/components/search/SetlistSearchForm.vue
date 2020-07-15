@@ -1,6 +1,6 @@
 <template>
   <b-container
-    class="rounded"
+    class="rounded shadow-lg"
     id="setlist-search-form">
     
     <!-- Search instructions row -->
@@ -32,7 +32,6 @@
 
     <!-- Search by date -->
     <b-row
-      class="mt-1 mb-1"
       align-h="start">
       <b-col
         lg="2"
@@ -41,7 +40,7 @@
           class="date-checkbx"
           v-model="includeDate"
           size="lg">
-          Search by date
+          Include date
         </b-form-checkbox>
       </b-col>
 
@@ -89,15 +88,20 @@
 
 
     <b-row
-      class="mt-4 mb-4"
-      align-h="end">
-      <b-col
-        lg="2">
-        <b-button @click="search">
-          <b-icon
+      class="mb-4">
+      <b-col md="2" offset-md="5">
+        <b-button variant="primary" @click="search" size="lg" class="bouncy-btn-sm pl-5 pr-5">
+          Search
+          <!-- <b-icon
             class="search-btn"
             icon="search" 
-            aria-hidden="true"></b-icon>
+            aria-hidden="true"></b-icon> -->
+        </b-button>
+      </b-col>
+      
+      <b-col v-if="setlists.length > 0" md="2" offset-md="3">
+        <b-button variant="transparent" size="lg" @click="clearResults">
+          <b-icon variant="danger" icon="x-square"></b-icon>
         </b-button>
       </b-col>
     </b-row>
@@ -137,7 +141,7 @@ export default {
   },
 
   computed: {
-    ...mapState(['selectedArtist', 'selectedVenue']),
+    ...mapState(['selectedArtist', 'selectedVenue', 'setlists']),
     searchDate() {
       if (this.date) {
         const date = this.date.split('-');
@@ -201,6 +205,9 @@ export default {
       }
       return value.slice(0, -1);
     },
+    clearResults() {
+      this.$store.commit('setSetlists', []);
+    }
   },
 
   watch: {
@@ -215,6 +222,7 @@ export default {
   border: 1px solid lightgray;
   border-radius: 5px;
   margin-bottom: 2em;
+  background-color: #f1f1f1;
 }
 
 .date-info-container {

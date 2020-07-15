@@ -1,5 +1,5 @@
 <template>
-  <b-container class="single-setlist-container">
+  <b-container class="shadow-lg single-setlist-container">
 
     <!-- Set song/playlist preview collapse button -->
     <b-container class="float-right" style="text-align:right; padding-top:1em;">
@@ -139,6 +139,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.single-setlist-container {
+  background-color: #f1f1f1;
+  padding: 1em;
+}
 .songlist {
   list-style-type: none;
   text-align: left;

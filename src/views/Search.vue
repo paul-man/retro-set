@@ -1,5 +1,5 @@
 <template>
-  <b-container class="shadow-lg rounded" id="search">
+  <b-container class="rounded" id="search">
 
     <!-- Dev test button row -->
     <b-row v-if="isDev()">
@@ -102,8 +102,6 @@ export default {
 #search {
   padding-top: 20px;
   padding-bottom: 20px;
-  background-color: #f1f1f1;
-  border: solid 1px lightgray;
   min-height: 50vh;
 }
 </style>

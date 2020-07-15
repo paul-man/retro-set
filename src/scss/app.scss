@@ -8,15 +8,15 @@ html, body {
 #app {
   background: linear-gradient(
     180deg,
-    #26FFB0 11%,
-    rgba(11, 217, 141, 1) 75%
+    #26FFB0 30%,
+    rgba(11, 217, 141, 1) 90%
   );
 
   font-family: "Roboto", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
+  color: #244F59 !important;
   height: 100%;
 }
 
@@ -122,8 +122,26 @@ a.action {
   background-color: $retro-green !important;
   color: #2156D9 !important;
   border: 0 !important;
-  transition: all .2s ease-in-out !important; 
+}
+
+.bouncy-btn {
+  transition: all .2s ease-in-out !important;
   &:hover {
     transform: scale(1.1) !important;
   }
+}
+
+.bouncy-btn-sm{
+  transition: all .3s ease-in-out !important;
+  &:hover {
+    transform: scale(1.01) !important;
+  }
+}
+
+#artist-input input {
+  border-radius: 7px !important;
+}
+
+#venue-input input {
+  border-radius: 7px !important;
 }
