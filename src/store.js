@@ -10,7 +10,6 @@ const store = new Vuex.Store({
     user: {},
     setlists: {},
     songs: {},
-    matches: {},
     selectedArtist: {},
     selectedVenue: {},
     currentSongName: "",

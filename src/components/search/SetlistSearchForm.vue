@@ -174,12 +174,14 @@ export default {
       }
       
       let setlists = await get("api/setlists/setlist/", searchData);
+      
       if (setlists.error) {
         this.makeErrorToast('Having trouble finding those setlists, please try searching again')
         return
       }
       
-      this.$store.commit("setSetlists", setlists.data);
+      this.$store.commit("setSetlists", setlists.data.setlists);
+      this.$store.commit("addSongs", setlists.data.songs);
     },
     validateYear(value) {
       const len = value.length;

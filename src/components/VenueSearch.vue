@@ -10,6 +10,7 @@
         <b-spinner variant="success" class="text-field-spinner"></b-spinner>
       </template>
       <vue-bootstrap-typeahead
+        id="venue-input"
         :data="venueSearchSuggestions"
         v-model="venueName"
         class="mb-4"

@@ -137,7 +137,8 @@ export default {
       return this.$store.getters.setlists[this.setIndex];
     },
     song() {
-      return this.$store.getters.setlists[this.setIndex].songs[this.songIndex];
+      let songID = this.$store.getters.setlists[this.setIndex].songs[this.songIndex];
+      return this.$store.getters.songs[songID];
     },
   },
 

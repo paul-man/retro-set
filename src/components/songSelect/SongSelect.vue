@@ -78,12 +78,12 @@
         </thead>
         <tbody>
           <tr
-            v-for="(song, songIndex) in set.songs"
-            :key="songIndex"
+            v-for="(songID, songIndex) in set.songs"
+            :key="songID"
             class="row">
             <td class="col-sm-1">{{ songIndex + 1 }}</td>
             <td class="col-sm-3 song-name" style="font-size:16px;">
-              {{ song.name }}
+              {{ songs[songID].name }}
             </td>
             <td class="col-sm-8">
               <b-row>
@@ -141,7 +141,7 @@ export default {
   },
 
   computed: {
-    ...mapState(["selectedArtist", "selectedVenue", "user", "setlists"]),
+    ...mapState(["selectedArtist", "selectedVenue", "user", "setlists", "songs"]),
     defaultPlaylistName() {
       return (
         this.set.artist.name + " - " + this.set.venue.name + " (" + this.set.eventDate + ")"
@@ -157,9 +157,9 @@ export default {
       this.spotifyUrisPayload.spotifyUris = [];
       this.$store.commit('setSetlistSpotifyURIs', this.spotifyUrisPayload);
       let tempSpotifyUris = []
-      for (let song of this.set.songs) {
-        if (song.selectedUri) {
-          tempSpotifyUris.push(song.selectedUri);
+      for (let songID of this.set.songs) {
+        if (this.songs[songID].selectedUri) {
+          tempSpotifyUris.push(this.songs[songID].selectedUri);
         }
       }
       

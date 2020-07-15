@@ -72,6 +72,8 @@ export default {
 
   methods: {
     async testSetlistSearch() {
+      document.querySelector("#artist-input input").value = this.testdata.ARTIST.name;
+      document.querySelector("#venue-input input").value = this.testdata.VENUE.name;
       this.$store.commit("setSelectedArtist", this.testdata.ARTIST);
       this.$store.commit("setSelectedVenue", this.testdata.VENUE);
     },
