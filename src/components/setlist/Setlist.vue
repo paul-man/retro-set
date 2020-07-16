@@ -142,6 +142,7 @@ export default {
 .single-setlist-container {
   background-color: #f1f1f1;
   padding: 1em;
+  border-radius: 8px;
 }
 .songlist {
   list-style-type: none;

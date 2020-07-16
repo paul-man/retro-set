@@ -45,12 +45,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
- /* Add border between mutliple setlists */
- #setlist-container-comp {
-  background-color: #f1f1f1;
-  border-radius: 7px;
-  // padding-top: 2em;
- }
 .setlist-container {
   padding-bottom: 1em;
   padding-top: 1em;
