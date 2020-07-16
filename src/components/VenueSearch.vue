@@ -9,7 +9,7 @@
       <template v-slot:overlay>
         <b-spinner variant="success" class="text-field-spinner"></b-spinner>
       </template>
-      <vue-bootstrap-typeahead
+      <vue-typeahead-bootstrap
         id="venue-input"
         :data="venueSearchSuggestions"
         v-model="venueName"
@@ -24,7 +24,7 @@
             <span class="float-right" style="padding-left:20px;">({{ data.city.name }}, {{ data.city.country.code }})</span>
           </div>
         </template>
-      </vue-bootstrap-typeahead>
+      </vue-typeahead-bootstrap>
     </b-overlay>
   </b-container>
 </template>

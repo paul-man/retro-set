@@ -9,7 +9,7 @@
       <template v-slot:overlay>
         <b-spinner variant="success" class="text-field-spinner"></b-spinner>
       </template>
-      <vue-bootstrap-typeahead
+      <vue-typeahead-bootstrap
         id="artist-input"
         :data="artistSearchSuggestions"
         v-model="artistNameSearch"
@@ -25,7 +25,7 @@
             <span v-if="data.disambiguation" class="pull-right" style="padding-left:20px;">({{ data.disambiguation }})</span>
           </div>
         </template>
-      </vue-bootstrap-typeahead>
+      </vue-typeahead-bootstrap>
     </b-overlay>
   </b-container>
 </template>

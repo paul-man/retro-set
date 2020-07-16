@@ -5,7 +5,7 @@ import store from "./store"
 import "./filters"
 import "./mixins"
 import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
-import VueBootstrapTypeahead from 'vue-bootstrap-typeahead'
+import VueTypeaheadBootstrap from 'vue-typeahead-bootstrap'
 import VueSlideoutPanel from 'vue2-slideout-panel'
 
 // TODO: Conditionally import these if (process.env.NODE_ENV.trim() === 'production')
@@ -30,7 +30,8 @@ import SongSelect from '@/components/songSelect/SongSelect'
 Vue.component('song-select', SongSelect);
 
 Vue.use(VueSlideoutPanel);
-Vue.component('vue-bootstrap-typeahead', VueBootstrapTypeahead);
+
+Vue.component('vue-typeahead-bootstrap', VueTypeaheadBootstrap)
 
 new Vue({
   router,
