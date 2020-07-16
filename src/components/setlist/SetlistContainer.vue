@@ -2,11 +2,6 @@
   <div
     id="setlist-container-comp"
     class="container">
-    <b-row v-if="setlists.length > 0" class="mb-4">
-      <b-col md="2" offset-md="10">
-        <b-button variant="danger" @click="clearResults">Clear results</b-button>
-      </b-col>
-    </b-row>
     <div class="row">
       <div
         class="col-sm-12 col-md-12 col-lg-6 setlist-container"
@@ -43,9 +38,6 @@ export default {
   },
 
   methods: {
-    clearResults() {
-      this.$store.commit('setSetlists', []);
-    }
   },
 
   watch: {},
@@ -54,9 +46,13 @@ export default {
 
 <style lang="scss" scoped>
  /* Add border between mutliple setlists */
+ #setlist-container-comp {
+  background-color: #f1f1f1;
+  border-radius: 7px;
+  // padding-top: 2em;
+ }
 .setlist-container {
-  border: solid 1px rgba(211, 211, 211, 0.459);
-  border-radius: 2px;
-  padding-bottom: 15px;
+  padding-bottom: 1em;
+  padding-top: 1em;
 }
 </style>

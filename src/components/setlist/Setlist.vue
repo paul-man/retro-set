@@ -1,5 +1,5 @@
 <template>
-  <b-container class="single-setlist-container">
+  <b-container class="shadow-lg single-setlist-container">
 
     <!-- Set song/playlist preview collapse button -->
     <b-container class="float-right" style="text-align:right; padding-top:1em;">
@@ -52,8 +52,8 @@
       <!-- Set song list -->
       <template v-else-if="set.songs">
         <b-list-group class="songlist">
-          <b-list-group-item v-for="(song, songIndex) in set.songs" :key="songIndex">
-            {{ song.name }}
+          <b-list-group-item v-for="(songID) in set.songs" :key="songID">
+            {{ songs[songID].name }}
           </b-list-group-item>
         </b-list-group>           
       </template>
@@ -77,7 +77,7 @@ export default {
   },
 
   computed: {
-    ...mapState(["setlists", "selectedArtist", "user"]),
+    ...mapState(["setlists", "selectedArtist", "user", "songs"]),
     set() {
       return this.$store.getters.setlists[this.setIndex];
     }
@@ -139,6 +139,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.single-setlist-container {
+  background-color: #f1f1f1;
+  padding: 1em;
+}
 .songlist {
   list-style-type: none;
   text-align: left;

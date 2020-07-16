@@ -46,16 +46,14 @@
               <b-row v-for="(song, index) in songSuggestions" :key="index">
                 <b-col cols="1" class="add-song-btn-col">
                   <div class="add-song-btn-div">
-                    <b-button size="sm" class="mb-2 add-song-btn" title="Add song to matches list" @click="selectSong(song)">
+                    <b-button size="sm" class="mb-2 add-song-btn bouncy-btn" title="Add song to matches list" @click="selectSong(song)">
                       <b-icon icon="plus-circle" variant="primary" aria-hidden="true"></b-icon>
                     </b-button>
                   </div>
                 </b-col>
                 <b-col cols="2" class="album-art-col">
-                  <div class="responsive-img-div">
-                    <img
-                      :src="getAlbumImg(song.albumImageUrl)"
-                      class="responsive-img"/>
+                  <div>
+                    <img class="center-img" :src="getAlbumImg(song.albumImageUrl)"/>
                   </div>
                 </b-col>
                 <b-col cols="9" class="song-search-data">
@@ -96,7 +94,7 @@ export default {
   },
 
   computed: {
-    ...mapState(["selectedArtist", "currentSongName", "setlists"]),
+    ...mapState(["selectedArtist", "currentSongName", "setlists", "songs"]),
     incompleteSearchTerms() {
       return this.songNameSearch === '' ||  this.artistNameSearch === '';
     },
@@ -107,7 +105,8 @@ export default {
       return this.$store.getters.setlists[this.setIndex];
     },
     song() {
-      return this.$store.getters.setlists[this.setIndex].songs[this.songIndex];
+      let songID = this.$store.getters.setlists[this.setIndex].songs[this.songIndex];
+      return this.$store.getters.songs[songID];
     },
   },
   
@@ -142,6 +141,7 @@ export default {
       this.songSuggestions = spotifyResp.data;
     },
     selectSong(song) {
+      // if (this.isDuplicateSong(song.id)) {
       if (this.currentMatches.indexOf(song.id) !== -1) {
         this.makeWarningToast('This song is already in the song matches!');
         return;
@@ -154,9 +154,9 @@ export default {
 
       this.songPayload.song = song;
       this.$store.commit('addSongMatch', this.songPayload);
-      this.$parent.$parent.$parent.$parent.$forceUpdate();
+      // this.$parent.$parent.$parent.$parent.$forceUpdate();
       this.$bvModal.hide(`spotify-search-modal-${this.songIndex}`);
-    }
+    },
   },
 
   watch: {

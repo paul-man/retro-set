@@ -1,10 +1,10 @@
 /* eslint-disable no-console */
 const express = require("express"),
-  router = express.Router(),
-  scopes = ["user-read-email", "playlist-modify-private", "playlist-modify-public"];
-let SpotifyWebApi = require("spotify-web-api-node"),
-  mongoUtil = require('../mongoUtil');
-const logger = require('../logger');
+      router = express.Router(),
+      SpotifyWebApi = require("spotify-web-api-node"),
+      mongoUtil = require('../mongoUtil'),
+      logger = require('../logger'),
+      scopes = ["user-read-email", "playlist-modify-private", "playlist-modify-public"];
 
 // Spotify login endpoint
 router.get("/login/", function(req, res) {

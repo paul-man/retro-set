@@ -1,15 +1,17 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import createPersistedState from "vuex-persistedstate";
+import { stateMerge } from "vue-object-merge";
 
 Vue.use(Vuex);
 
 const store = new Vuex.Store({
   state: {
     user: {},
+    setlists: {},
+    songs: {},
     selectedArtist: {},
     selectedVenue: {},
-    setlists: [],
     currentSongName: "",
     currentSong: {},
     respCodes: {
@@ -77,6 +79,9 @@ const store = new Vuex.Store({
     currentSong: (state) => {
       return state.currentSong;
     },
+    songs: (state) => {
+      return state.songs;
+    },
   },
   mutations: {
     setSelectedArtist(state, payload) {
@@ -98,11 +103,13 @@ const store = new Vuex.Store({
       Vue.set(state, "currentSong", payload);
     },
     setSongMatches(state, payload) {
-      Vue.set(state.setlists[payload.setIndex].songs[payload.songIndex], 'matches', payload.matches);
+      let songID = state.setlists[payload.setIndex].songs[payload.songIndex];
+      Vue.set(state.songs[songID], 'matches', payload.matches);
     },
     addSongMatch(state, payload) {
-      const matchesLength = state.setlists[payload.setIndex].songs[payload.songIndex].matches.length;
-      Vue.set(state.setlists[payload.setIndex].songs[payload.songIndex].matches, matchesLength, payload.song);
+      let songID = state.setlists[payload.setIndex].songs[payload.songIndex];
+      const matchesLength = state.songs[songID].matches.length;
+      Vue.set(state.songs[songID].matches, matchesLength, payload.song);
     },
     setSetlistSpotifyURIs(state, payload) {
       Vue.set(state.setlists[payload.setIndex], 'spotifyUris', payload.spotifyUris);
@@ -112,7 +119,10 @@ const store = new Vuex.Store({
     },
     setSpotifyPreview(state, payload) {
       Vue.set(state.setlists[payload.setIndex], 'spotifyPreview', payload.spotifyPreview);
-    }
+    },
+    addSongs(state, payload) {
+      stateMerge(state, payload, 'songs');
+    },
   },
   actions: {},
   plugins: [createPersistedState({

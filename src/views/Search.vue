@@ -1,5 +1,5 @@
 <template>
-  <b-container class="shadow-lg rounded" id="search">
+  <b-container class="rounded" id="search">
 
     <!-- Dev test button row -->
     <b-row v-if="isDev()">
@@ -72,6 +72,8 @@ export default {
 
   methods: {
     async testSetlistSearch() {
+      document.querySelector("#artist-input input").value = this.testdata.ARTIST.name;
+      document.querySelector("#venue-input input").value = this.testdata.VENUE.name;
       this.$store.commit("setSelectedArtist", this.testdata.ARTIST);
       this.$store.commit("setSelectedVenue", this.testdata.VENUE);
     },
@@ -100,8 +102,6 @@ export default {
 #search {
   padding-top: 20px;
   padding-bottom: 20px;
-  background-color: #f1f1f1;
-  border: solid 1px lightgray;
   min-height: 50vh;
 }
 </style>
