@@ -1,6 +1,5 @@
 <template>
   <b-container
-    class="rounded shadow-lg"
     id="setlist-search-form">
     
     <!-- Search instructions row -->
@@ -220,8 +219,7 @@ export default {
 #setlist-search-form {
   padding:15px;
   border: 1px solid lightgray;
-  border-radius: 5px;
-  margin-bottom: 2em;
+  // border-radius: 5px;
   background-color: #f1f1f1;
 }
 

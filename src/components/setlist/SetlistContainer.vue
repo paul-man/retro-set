@@ -4,7 +4,6 @@
     class="container">
     <div class="row">
       <div
-        class="col-sm-12 col-md-12 col-lg-6 setlist-container"
         v-for="(set, index) in setlists" :key="index">
         <setlist
           :setIndex="index"/>
@@ -45,8 +44,4 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.setlist-container {
-  padding-bottom: 1em;
-  padding-top: 1em;
-}
 </style>
