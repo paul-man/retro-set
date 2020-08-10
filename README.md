@@ -19,6 +19,8 @@ _____
 ## Develop locally
 
 #### Prerequisites:
+- Local mongodb service
+    - [Windows setup](https://docs.mongodb.com/manual/tutorial/install-mongodb-on-windows/#install-mongodb-community-edition)
 - setlistfm API key [[create an account](https://www.setlist.fm/signup), [apply for api key](https://www.setlist.fm/settings/api)]
 - Spotify API key [[quickstart guide](https://developer.spotify.com/documentation/web-api/quick-start/)]
 - Create `.env` file and add keys/secrets:
