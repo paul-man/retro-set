@@ -29,9 +29,9 @@
     </b-row> -->
 
     <!-- Setlists data row -->
-    <b-row v-if="setlists">
+    <b-row v-if="setlists.length > 0">
       <b-col>
-        <setlist-container />
+        <setlist-results />
       </b-col>
     </b-row>
   </b-container>
@@ -41,13 +41,13 @@
 import { mapState } from 'vuex';
 import { get } from 'axios';
 import SetlistSearchForm from "@/components/search/SetlistSearchForm";
-import SetlistContainer from "@/components/setlist/SetlistContainer";
+import SetlistResults from "@/components/setlist/SetlistResults";
 
 export default {
   name: "search",
   components: {
     SetlistSearchForm,
-    SetlistContainer,
+    SetlistResults,
   },
 
   mounted() {
