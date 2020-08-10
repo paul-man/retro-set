@@ -4,7 +4,8 @@ const express = require("express"),
       parse = require("date-fns/parse"),
       format = require("date-fns/format"),
       logger = require('../logger'),
-      util = require('../util');
+      util = require('../util'),
+      spotifyUtil = require('../spotifyUtil');
 
 // Search Artists based on name
 router.get("/artist/:artist", function(req, res) {
@@ -67,8 +68,8 @@ router.get("/setlist/", function(req, res) {
 
   setlistfmClient
     .searchSetlists(reqObj)
-    .then(function(results) {
-      let {newSetlistArr, songs} = flattenSetlists(results.setlist);
+    .then(async function(results) {
+      let {newSetlistArr, songs} = await flattenSetlists(results.setlist);
 
       res.json({
         setlists: newSetlistArr,
@@ -88,11 +89,18 @@ router.get("/setlist/", function(req, res) {
 /* HELPERS ***************************************************************** */
 
 // Flatten setlist data, return relevant data
-let flattenSetlists = (setlists) => {
+let flattenSetlists = async (setlists) => {
   let newSetlistArr = [];
   let songs = {};
   for (let setlist of setlists) {
     setlist.artist['id'] = setlist.artist.mbid;
+    try {
+      setlist.artist['imgUrl'] = await spotifyUtil.searchArtist(setlist.artist.name);
+    } catch {
+      setlist.artist['imgUrl'] = "";
+    }
+
+    console.log(setlist.artist['imgUrl'])
     let newSetlist = {
       artist: setlist.artist,
       venue: setlist.venue,
