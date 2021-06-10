@@ -1,4 +1,4 @@
-import Vue from 'vue'
+import Vue, { createApp } from 'vue';
 import App from './App.vue'
 import router from './router'
 import store from "./store"
@@ -33,8 +33,4 @@ Vue.use(VueSlideoutPanel);
 
 Vue.component('vue-typeahead-bootstrap', VueTypeaheadBootstrap)
 
-new Vue({
-  router,
-  store,
-  render: h => h(App)
-}).$mount('#app')
+createApp(App).use(router).use(store).mount('#app')

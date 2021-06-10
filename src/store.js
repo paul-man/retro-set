@@ -3,9 +3,7 @@ import Vuex from "vuex";
 import createPersistedState from "vuex-persistedstate";
 import { stateMerge } from "vue-object-merge";
 
-Vue.use(Vuex);
-
-const store = new Vuex.Store({
+const store = Vuex.createStore({
   state: {
     user: {},
     setlists: {},
