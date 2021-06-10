@@ -20,3 +20,7 @@
 - [x] Stop unexpected search for artist/venue after user has chosen from dropdown
 - [ ] Fix issue where page refresh triggers another Spotify login
 - [x] Fix display of setlists pre Spotify search
+
+## Big Moves:
+- [ ] Use Vite
+- [ ] Migrate to Vue 3 + Typescript
