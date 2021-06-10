@@ -1,10 +1,7 @@
 <template>
   <div id="spotify-login">
     <div class="container">
-      <img
-        src="@/assets/icon.png"
-        class="img-lg retroset-icon"
-      />
+      <img src="@/assets/icon.png" class="img-lg retroset-icon" />
     </div>
     <div class="container">
       <h1>RETROSET</h1>
@@ -23,7 +20,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { get } from "axios";
 
 export default {
@@ -41,7 +38,7 @@ export default {
     async loginSpotify() {
       let res = await get("api/spotify/login/");
       if (res.error) {
-        this.makeErrorToast('Unable to login to Spotify')
+        this.makeErrorToast("Unable to login to Spotify");
       }
       window.location = res.data;
     },
@@ -79,7 +76,7 @@ button span {
   background-color: #16b5d9;
   vertical-align: middle;
   display: table-cell;
-  transition: all .3s ease-in;
+  transition: all 0.3s ease-in;
 }
 #spotify-login-btn:hover {
   transform: scale(0.97);

@@ -1,7 +1,6 @@
 <template>
   <div id="spotify-song-search">
     <b-container>
-
       <!-- Song name search -->
       <b-row id="song-input-row">
         <b-col cols="2">
@@ -11,7 +10,8 @@
           <b-form-input
             v-model="songNameSearch"
             id="song-input"
-            type="text"></b-form-input>
+            type="text"
+          ></b-form-input>
         </b-col>
       </b-row>
 
@@ -24,7 +24,8 @@
           <b-form-input
             v-model="artistNameSearch"
             id="artist-input"
-            type="text"></b-form-input>
+            type="text"
+          ></b-form-input>
         </b-col>
       </b-row>
 
@@ -46,14 +47,26 @@
               <b-row v-for="(song, index) in songSuggestions" :key="index">
                 <b-col cols="1" class="add-song-btn-col">
                   <div class="add-song-btn-div">
-                    <b-button size="sm" class="mb-2 add-song-btn bouncy-btn" title="Add song to matches list" @click="selectSong(song)">
-                      <b-icon icon="plus-circle" variant="primary" aria-hidden="true"></b-icon>
+                    <b-button
+                      size="sm"
+                      class="mb-2 add-song-btn bouncy-btn"
+                      title="Add song to matches list"
+                      @click="selectSong(song)"
+                    >
+                      <b-icon
+                        icon="plus-circle"
+                        variant="primary"
+                        aria-hidden="true"
+                      ></b-icon>
                     </b-button>
                   </div>
                 </b-col>
                 <b-col cols="2" class="album-art-col">
                   <div>
-                    <img class="center-img" :src="getAlbumImg(song.albumImageUrl)"/>
+                    <img
+                      class="center-img"
+                      :src="getAlbumImg(song.albumImageUrl)"
+                    />
                   </div>
                 </b-col>
                 <b-col cols="9" class="song-search-data">
@@ -70,7 +83,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { mapState } from "vuex";
 import { get } from "axios";
 import { debounce } from "underscore";
@@ -96,24 +109,25 @@ export default {
   computed: {
     ...mapState(["selectedArtist", "currentSongName", "setlists", "songs"]),
     incompleteSearchTerms() {
-      return this.songNameSearch === '' ||  this.artistNameSearch === '';
+      return this.songNameSearch === "" || this.artistNameSearch === "";
     },
     currentMatches() {
-      return this.song.matches.map( match => match.id );
+      return this.song.matches.map((match) => match.id);
     },
     set() {
       return this.$store.getters.setlists[this.setIndex];
     },
     song() {
-      let songID = this.$store.getters.setlists[this.setIndex].songs[this.songIndex];
+      let songID =
+        this.$store.getters.setlists[this.setIndex].songs[this.songIndex];
       return this.$store.getters.songs[songID];
     },
   },
-  
+
   mounted() {
     this.artistNameSearch = this.set.artist.name;
     this.songNameSearch = this.currentSongName;
-    
+
     // TODO: There's gotta be a better way!
     this.songPayload = {
       setIndex: this.setIndex,
@@ -124,7 +138,7 @@ export default {
       setIndex: this.setIndex,
       songIndex: this.songIndex,
       matches: [],
-    }
+    };
   },
 
   methods: {
@@ -143,27 +157,27 @@ export default {
     selectSong(song) {
       // if (this.isDuplicateSong(song.id)) {
       if (this.currentMatches.indexOf(song.id) !== -1) {
-        this.makeWarningToast('This song is already in the song matches!');
+        this.makeWarningToast("This song is already in the song matches!");
         return;
       }
 
-      if (typeof this.song.matches === 'undefined') {
+      if (typeof this.song.matches === "undefined") {
         this.matchesPayload.matches = [];
-        this.$store.commit('setSongMatches', this.matchesPayload);
+        this.$store.commit("setSongMatches", this.matchesPayload);
       }
 
       this.songPayload.song = song;
-      this.$store.commit('addSongMatch', this.songPayload);
+      this.$store.commit("addSongMatch", this.songPayload);
       // this.$parent.$parent.$parent.$parent.$forceUpdate();
       this.$bvModal.hide(`spotify-search-modal-${this.songIndex}`);
     },
   },
 
   watch: {
-    songNameSearch: debounce(function() {
+    songNameSearch: debounce(function () {
       this.searchSong();
     }, 750),
-    artistNameSearch: debounce(function() {
+    artistNameSearch: debounce(function () {
       this.searchSong();
     }, 750),
   },
@@ -195,7 +209,7 @@ export default {
 .search-results-text {
   text-align: center;
   top: 45%;
-  position:absolute;
+  position: absolute;
 }
 
 .add-song-btn-div {
@@ -217,6 +231,6 @@ export default {
 }
 
 .add-song-btn-col {
-  padding:0;
+  padding: 0;
 }
 </style>

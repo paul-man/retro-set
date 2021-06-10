@@ -1,33 +1,29 @@
 <template>
   <div id="app">
-    <navbar v-if="$route.name === 'search'"/>
-    <div class="app-wrap">
-      <router-view />
-    </div>
-    <footer> <small>Copyright &copy; {{currentYear}}, RetroSet. All Rights Reserved</small> </footer>
+    <img alt="Vue logo" src="./assets/logo.png">
+    <HelloWorld msg="Welcome to Your Vue.js + TypeScript App"/>
   </div>
 </template>
 
-<script>
-import Navbar from '@/components/Navbar.vue'
-export default {
-  name: "App",
-  components: {
-    Navbar
-  },
-  computed: {
-    currentYear() {
-      return new Date().getFullYear();
-    }
-  },
+<script lang="ts">
+import { Options, Vue } from 'vue-class-component';
+import HelloWorld from './components/HelloWorld.vue';
 
-  methods: {
-  }
-};
+@Options({
+  components: {
+    HelloWorld,
+  },
+})
+export default class App extends Vue {}
 </script>
 
 <style lang="scss">
-@import "@/scss/settings.scss";
-@import "@/scss/base.scss";
-@import "@/scss/app.scss";
+#app {
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  color: #2c3e50;
+  margin-top: 60px;
+}
 </style>

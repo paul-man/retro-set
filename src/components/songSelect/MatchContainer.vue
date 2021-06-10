@@ -1,20 +1,14 @@
 <template>
-  <b-container
-    :id="'matches-wrapper-' + songIndex"
-    class="matches-wrapper">
-    <b-overlay
-      :show="isLoading"
-      spinner-variant="success"
-      rounded="sm">
-
+  <b-container :id="'matches-wrapper-' + songIndex" class="matches-wrapper">
+    <b-overlay :show="isLoading" spinner-variant="success" rounded="sm">
       <!-- Matches container -->
       <template v-if="!isLoading && song.matches.length > 0">
-        <b-container
-          :class="containerClassname">
+        <b-container :class="containerClassname">
           <b-row
             class="match-div"
             v-for="(match, matchIndex) in song.matches"
-            :key="match.id">
+            :key="match.id"
+          >
             {{ setDefaultMatch(song, match.uri, matchIndex) }}
 
             <!-- Radio col -->
@@ -23,29 +17,20 @@
                 variant="primary"
                 v-model="song.selectedUri"
                 :value="match.uri"
-                :name="'match-' + songIndex"/>
+                :name="'match-' + songIndex"
+              />
             </b-col>
 
             <!-- Album art col -->
             <b-col cols="3" class="album-art-col">
-              <img
-                :src="getAlbumImg(match.albumImageUrl)"
-                class="img-md">
+              <img :src="getAlbumImg(match.albumImageUrl)" class="img-md" />
             </b-col>
 
             <!-- Song data col -->
-            <b-col
-              cols="8"
-              class="float-right match-description">
-              <p>
-                <span class="bold">Title:</span> {{ match.songTitle}}
-              </p>
-              <p>
-                <span class="bold">Artist:</span> {{ match.artistName}}
-              </p>
-              <p>
-                <span class="bold">Album:</span> {{ match.albumTitle }}
-              </p>
+            <b-col cols="8" class="float-right match-description">
+              <p><span class="bold">Title:</span> {{ match.songTitle }}</p>
+              <p><span class="bold">Artist:</span> {{ match.artistName }}</p>
+              <p><span class="bold">Album:</span> {{ match.albumTitle }}</p>
             </b-col>
           </b-row>
         </b-container>
@@ -57,21 +42,25 @@
           <b-col>
             <p>
               <template v-if="songSearchError">
-                There was an unexpected error when searching for "{{ song.name }}" by {{ set.artist.name }}.{{ errorMsg }}
+                There was an unexpected error when searching for "{{
+                  song.name
+                }}" by {{ set.artist.name }}.{{ errorMsg }}
               </template>
               <template v-else>
-                No matches found for "{{ song.name }}" by {{ set.artist.name }}. 
+                No matches found for "{{ song.name }}" by {{ set.artist.name }}.
               </template>
-              Please search for a replacement song or add it later at position {{ songIndex + 1 }}.
+              Please search for a replacement song or add it later at position
+              {{ songIndex + 1 }}.
             </p>
             <p>
               Check out the
-              <a :href="set.url" target="_blank">setlist</a> for more information
+              <a :href="set.url" target="_blank">setlist</a> for more
+              information
             </p>
           </b-col>
         </b-row>
       </template>
-      
+
       <!-- Add Song button/modal row -->
       <b-row class="add-song-action-row">
         <b-col class="add-song-btn-col">
@@ -79,7 +68,8 @@
             size="sm"
             class="mb-2 add-song-btn"
             title="Search Spotify for song"
-            @click="openSongSearchModal()">
+            @click="openSongSearchModal()"
+          >
             <b-icon icon="music-note" aria-hidden="true"></b-icon>+
           </b-button>
           <b-modal
@@ -87,10 +77,9 @@
             hide-footer
             :id="'spotify-search-modal-' + songIndex"
             title="Search a song"
-            size="lg">
-            <spotify-song-search
-              :songIndex="songIndex"
-              :setIndex="setIndex"/>
+            size="lg"
+          >
+            <spotify-song-search :songIndex="songIndex" :setIndex="setIndex" />
           </b-modal>
         </b-col>
       </b-row>
@@ -98,7 +87,7 @@
   </b-container>
 </template>
 
-<script>
+<script lang="ts">
 import SpotifySongSearch from "@/components/songSelect/SpotifySongSearch";
 import { get } from "axios";
 import { mapState } from "vuex";
@@ -115,7 +104,7 @@ export default {
   data() {
     return {
       isLoading: true,
-      errorMsg: '',
+      errorMsg: "",
       songSearchError: false,
       matchesPayload: {
         setIndex: this.setIndex,
@@ -129,15 +118,16 @@ export default {
     ...mapState(["selectedArtist"]),
     containerClassname() {
       if (this.song.matches && this.song.matches.length > 1) {
-        return 'shadow rounded multiple';
+        return "shadow rounded multiple";
       }
-      return '';
+      return "";
     },
     set() {
       return this.$store.getters.setlists[this.setIndex];
     },
     song() {
-      let songID = this.$store.getters.setlists[this.setIndex].songs[this.songIndex];
+      let songID =
+        this.$store.getters.setlists[this.setIndex].songs[this.songIndex];
       return this.$store.getters.songs[songID];
     },
   },
@@ -153,23 +143,25 @@ export default {
           song: song.name,
           artist: this.set.artist.name,
         },
-      }).then( result => {
-        this.matchesPayload.matches = [];
-        this.$store.commit('setSongMatches', this.matchesPayload);
-        if (!result.data.error) {
-          this.matchesPayload.matches = result.data;
-          this.$store.commit('setSongMatches', this.matchesPayload);
-        } else {
-          throw new Error(result.data.errorMsg);
-        }
-        this.isLoading = false;
-      }).catch( error => {
-        this.isLoading = false;
-        this.songSearchError = true;
-        if (error) {
-          this.error = `<br>${error}`
-        }
-      });
+      })
+        .then((result) => {
+          this.matchesPayload.matches = [];
+          this.$store.commit("setSongMatches", this.matchesPayload);
+          if (!result.data.error) {
+            this.matchesPayload.matches = result.data;
+            this.$store.commit("setSongMatches", this.matchesPayload);
+          } else {
+            throw new Error(result.data.errorMsg);
+          }
+          this.isLoading = false;
+        })
+        .catch((error) => {
+          this.isLoading = false;
+          this.songSearchError = true;
+          if (error) {
+            this.error = `<br>${error}`;
+          }
+        });
     },
     setDefaultMatch(song, uri, index) {
       if (index === 0) {
@@ -192,7 +184,7 @@ export default {
   white-space: nowrap;
   display: inline-block;
   p {
-  float: none;
+    float: none;
     margin-bottom: 0;
   }
 }

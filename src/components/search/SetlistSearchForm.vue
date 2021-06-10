@@ -1,95 +1,77 @@
 <template>
-  <b-container
-    id="setlist-search-form">
-    
+  <b-container id="setlist-search-form">
     <!-- Search instructions row -->
     <b-row>
       <b-col>
-        <h4>
-          Begin by searching for an <u>artist</u> or <u>venue</u>
-        </h4>
+        <h4>Begin by searching for an <u>artist</u> or <u>venue</u></h4>
       </b-col>
     </b-row>
 
     <!-- Row (Artist + Venue) -->
     <b-row align-h="center">
-
       <!-- Artist -->
-      <b-col 
-        md="12"
-        lg="6">
+      <b-col md="12" lg="6">
         <artist-search />
       </b-col>
 
       <!-- Venue -->
-      <b-col 
-        md="12"
-        lg="6">
+      <b-col md="12" lg="6">
         <venue-search />
       </b-col>
-    </b-row>    
+    </b-row>
 
     <!-- Search by date -->
-    <b-row
-      align-h="start">
-      <b-col
-        lg="2"
-        md="3">
-        <b-form-checkbox
-          class="date-checkbx"
-          v-model="includeDate"
-          size="lg">
+    <b-row align-h="start">
+      <b-col lg="2" md="3">
+        <b-form-checkbox class="date-checkbx" v-model="includeDate" size="lg">
           Include date
         </b-form-checkbox>
       </b-col>
 
-      <template v-if="includeDate"
-        id="date-info-collapse">
-          <b-col
-            lg="1"
-            md="12">
-            <toggle-button
-              v-model="searchByDate"
-              :width="70"
-              :height="30"
-              :font-size="14"
-              :labels="{checked: 'Date', unchecked: 'Year'}"/>
-          </b-col>
+      <template v-if="includeDate" id="date-info-collapse">
+        <b-col lg="1" md="12">
+          <toggle-button
+            v-model="searchByDate"
+            :width="70"
+            :height="30"
+            :font-size="14"
+            :labels="{ checked: 'Date', unchecked: 'Year' }"
+          />
+        </b-col>
 
-          <b-col
-            v-if="!searchByDate"
-            lg="3"
-            md="12">
-            <b-form-input
-              class="year-input"
-              min="1900"
-              :max="currentYear"
-              v-model="year"
-              placeholder="Concert year"
-              :formatter="validateYear"
-              :disabled="searchByDate"></b-form-input>
-          </b-col>
-          
-          <!-- Date Picker -->
-          <b-col
-            v-if="searchByDate"
-            lg="3"
-            md="12">
-            <b-form-datepicker
-              v-model="date"
-              id="concert-datepicker"
-              placeholder="Concert date" class="mb-2"
-              :disabled="!searchByDate"></b-form-datepicker>
-          </b-col>
+        <b-col v-if="!searchByDate" lg="3" md="12">
+          <b-form-input
+            class="year-input"
+            min="1900"
+            :max="currentYear"
+            v-model="year"
+            placeholder="Concert year"
+            :formatter="validateYear"
+            :disabled="searchByDate"
+          ></b-form-input>
+        </b-col>
+
+        <!-- Date Picker -->
+        <b-col v-if="searchByDate" lg="3" md="12">
+          <b-form-datepicker
+            v-model="date"
+            id="concert-datepicker"
+            placeholder="Concert date"
+            class="mb-2"
+            :disabled="!searchByDate"
+          ></b-form-datepicker>
+        </b-col>
       </template>
     </b-row>
 
-
-
-    <b-row
-      class="mb-4">
+    <b-row class="mb-4">
       <b-col md="2" offset-md="5">
-        <b-button variant="primary" @click="search" size="lg" class="bouncy-btn-sm pl-5 pr-5">
+        <b-button
+          variant="primary"
+          @click="search"
+          size="lg"
+          class="bouncy-btn-sm pl-5 pr-5"
+        >
           Search
           <!-- <b-icon
             class="search-btn"
@@ -97,7 +79,7 @@
             aria-hidden="true"></b-icon> -->
         </b-button>
       </b-col>
-      
+
       <b-col v-if="setlists.length > 0" md="2" offset-md="3">
         <b-button variant="transparent" size="lg" @click="clearResults">
           <b-icon variant="danger" icon="x-square"></b-icon>
@@ -110,16 +92,15 @@
     <!-- <b-row>
       <b-col></b-col>
     </b-row> -->
-
   </b-container>
 </template>
 
-<script>
-import { get } from 'axios';
-import { mapState } from 'vuex'
+<script lang="ts">
+import { get } from "axios";
+import { mapState } from "vuex";
 import VenueSearch from "@/components/VenueSearch";
 import ArtistSearch from "@/components/ArtistSearch";
-import { ToggleButton } from 'vue-js-toggle-button';
+import { ToggleButton } from "vue-js-toggle-button";
 
 export default {
   name: "SetlistSearchForm",
@@ -133,20 +114,20 @@ export default {
   data() {
     return {
       searchByDate: false,
-      year: '',
-      date: '',
-      includeDate: false
-    }
+      year: "",
+      date: "",
+      includeDate: false,
+    };
   },
 
   computed: {
-    ...mapState(['selectedArtist', 'selectedVenue', 'setlists']),
+    ...mapState(["selectedArtist", "selectedVenue", "setlists"]),
     searchDate() {
       if (this.date) {
-        const date = this.date.split('-');
+        const date = this.date.split("-");
         return `${date[2]}-${date[1]}-${date[0]}`;
       }
-      return '';
+      return "";
     },
     currentYear() {
       return new Date().getFullYear();
@@ -155,46 +136,50 @@ export default {
 
   methods: {
     async search() {
-      if (typeof this.selectedArtist.id === 'undefined' && typeof this.selectedVenue.id === 'undefined') {
-        this.makeWarningToast('Please select an artist and/or venue');
+      if (
+        typeof this.selectedArtist.id === "undefined" &&
+        typeof this.selectedVenue.id === "undefined"
+      ) {
+        this.makeWarningToast("Please select an artist and/or venue");
         return;
       }
       let searchData = {
-        params: {
-        }
+        params: {},
       };
 
       if (this.selectedArtist.id) {
-        searchData.params['artistId'] = this.selectedArtist.id;
+        searchData.params["artistId"] = this.selectedArtist.id;
       }
       if (this.selectedVenue.id) {
-        searchData.params['venueId'] = this.selectedVenue.id;
+        searchData.params["venueId"] = this.selectedVenue.id;
       }
       if (this.searchByDate && this.searchDate.length > 0) {
-        searchData.params['date'] = this.searchDate
-      } else if (this.year > 0){
-        searchData.params['year'] = this.year;
+        searchData.params["date"] = this.searchDate;
+      } else if (this.year > 0) {
+        searchData.params["year"] = this.year;
       }
-      
+
       let setlists = await get("api/setlists/setlist/", searchData);
-      
+
       if (setlists.error) {
-        this.makeErrorToast('Having trouble finding those setlists, please try searching again')
-        return
+        this.makeErrorToast(
+          "Having trouble finding those setlists, please try searching again"
+        );
+        return;
       }
-      
+
       this.$store.commit("setSetlists", setlists.data.setlists);
       this.$store.commit("addSongs", setlists.data.songs);
     },
     validateYear(value) {
       const len = value.length;
       if (len === 0) {
-        return '';
+        return "";
       }
-      
+
       if (len === 2) {
         if (value !== "19" && value !== "20") {
-          return value.slice(0, -1); 
+          return value.slice(0, -1);
         }
       }
 
@@ -205,19 +190,17 @@ export default {
       return value.slice(0, -1);
     },
     clearResults() {
-      this.$store.commit('setSetlists', []);
-    }
+      this.$store.commit("setSetlists", []);
+    },
   },
 
-  watch: {
-    
-  }
-}
+  watch: {},
+};
 </script>
 
 <style lang="scss">
 #setlist-search-form {
-  padding:15px;
+  padding: 15px;
   border: 1px solid lightgray;
   // border-radius: 5px;
   background-color: #f1f1f1;
@@ -231,7 +214,8 @@ export default {
   padding-top: 0.5em;
 }
 
-.b-form-datepicker, .dropdown-menu {
+.b-form-datepicker,
+.dropdown-menu {
   margin-bottom: 0px !important;
 }
 
@@ -240,7 +224,7 @@ export default {
 }
 
 .form-title {
-  float:left;
+  float: left;
 }
 
 .search-btn {

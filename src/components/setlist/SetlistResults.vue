@@ -1,37 +1,32 @@
 <template>
-  <b-container
-    id="results-div">
-    <b-row
-      align-h="start">
-      <b-col 
-        v-if="selectedArtist"
-        cols="3">
-        Artist: <a :href="selectedArtist.url">{{selectedArtist.name}}</a>
+  <b-container id="results-div">
+    <b-row align-h="start">
+      <b-col v-if="selectedArtist" cols="3">
+        Artist: <a :href="selectedArtist.url">{{ selectedArtist.name }}</a>
       </b-col>
-      <b-col 
-        v-if="selectedVenue"
-        cols="3">
-        Venue: <a :href="selectedVenue.url">{{selectedVenue.name}}</a>
+      <b-col v-if="selectedVenue" cols="3">
+        Venue: <a :href="selectedVenue.url">{{ selectedVenue.name }}</a>
       </b-col>
     </b-row>
     <b-row>
       <b-col
         lg="12"
         class="setlist-wrapper"
-        v-for="(set, index) in setlists" :key="index">
-        <setlist
-          :setIndex="index"/>
+        v-for="(set, index) in setlists"
+        :key="index"
+      >
+        <setlist :setIndex="index" />
       </b-col>
     </b-row>
-    
+
     <!-- Slideout panel for playlist creation -->
-    <slideout-panel/>
+    <slideout-panel />
   </b-container>
 </template>
 
-<script>
+<script lang="ts">
 import { mapState } from "vuex";
-import Setlist from "@/components/setlist/Setlist"
+import Setlist from "@/components/setlist/Setlist";
 
 export default {
   name: "SetlistResults",
@@ -50,8 +45,7 @@ export default {
     ...mapState(["setlists", "selectedArtist", "selectedVenue"]),
   },
 
-  methods: {
-  },
+  methods: {},
 
   watch: {},
 };
@@ -59,7 +53,7 @@ export default {
 
 <style lang="scss" scoped>
 #results-div {
-  background-color: #FFF;
+  background-color: #fff;
 }
 
 .setlist-wrapper:last-child {

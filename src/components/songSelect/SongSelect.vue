@@ -1,14 +1,11 @@
 <template>
   <div id="song-select">
     <b-container class="rounded" id="playlist-header">
-      <p
-        class="d-inline-block d-none d-md-block d-sm-block spotify-user-id">
-        New playlist for 
-        <a
-          :href="'https://open.spotify.com/user/' + user.id"
-          target="_blank">
-            {{ user.id }}
-          </a>
+      <p class="d-inline-block d-none d-md-block d-sm-block spotify-user-id">
+        New playlist for
+        <a :href="'https://open.spotify.com/user/' + user.id" target="_blank">
+          {{ user.id }}
+        </a>
       </p>
     </b-container>
     <div id="playlist-data-wrapper">
@@ -18,7 +15,8 @@
           label-cols-lg="2"
           label="Playlist Name"
           label-for="playlist-name"
-          maxLength="100">
+          maxLength="100"
+        >
           <b-form-input
             v-model="set.playlistName"
             :placeholder="defaultPlaylistName"
@@ -30,18 +28,21 @@
           label-cols-lg="2"
           label="Playlist Description"
           label-for="playlist-description"
-          maxLength="300">
+          maxLength="300"
+        >
           <b-form-textarea
             id="playlist-description"
             v-model="set.playlistDescription"
             placeholder="Add a description for your playlist"
             rows="3"
-            max-rows="6"/>
+            max-rows="6"
+          />
         </b-form-group>
         <b-form-group
           label-cols-sm="4"
           label-cols-lg="2"
-          label="Playlist Visibility">
+          label="Playlist Visibility"
+        >
           <b-form-radio
             v-model="set.playlistVisibility"
             name="playlist-visibility"
@@ -58,17 +59,16 @@
         </b-form-group>
       </b-container>
       <b-container id="search-btn-desc">
-        Use 
-        <b-button
-          size="sm"
-          class="mb-2 add-song-btn">
+        Use
+        <b-button size="sm" class="mb-2 add-song-btn">
           <b-icon icon="music-note" aria-hidden="true"></b-icon>+
-        </b-button> 
+        </b-button>
         to search and add more song matches
       </b-container>
       <table
         class="table table-striped table-bordered table-sm"
-        id="matches-table">
+        id="matches-table"
+      >
         <thead class="thead-dark">
           <tr class="row">
             <th class="col-sm-1">#</th>
@@ -80,9 +80,10 @@
           <tr
             v-for="(songID, songIndex) in set.songs"
             :key="songID"
-            class="row">
+            class="row"
+          >
             <td class="col-sm-1">{{ songIndex + 1 }}</td>
-            <td class="col-sm-3 song-name" style="font-size:16px;">
+            <td class="col-sm-3 song-name" style="font-size: 16px">
               {{ songs[songID].name }}
             </td>
             <td class="col-sm-8">
@@ -90,7 +91,8 @@
                 <b-col class="match-col" sm="12">
                   <match-container
                     :setIndex="setIndex"
-                    :songIndex="songIndex"/>
+                    :songIndex="songIndex"
+                  />
                 </b-col>
               </b-row>
             </td>
@@ -104,14 +106,15 @@
         variant="primary"
         @click="refreshSetlists"
         id="create-playlist-btn"
-        size="sm">
+        size="sm"
+      >
         Create Playlist <i class="fa fa-spotify"></i>
       </b-button>
     </div>
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import MatchContainer from "@/components/songSelect/MatchContainer";
 import { mapState } from "vuex";
 
@@ -137,34 +140,45 @@ export default {
     this.spotifyUrisPayload = {
       setIndex: this.setIndex,
       spotifyUris: [],
-    }
+    };
   },
 
   computed: {
-    ...mapState(["selectedArtist", "selectedVenue", "user", "setlists", "songs"]),
+    ...mapState([
+      "selectedArtist",
+      "selectedVenue",
+      "user",
+      "setlists",
+      "songs",
+    ]),
     defaultPlaylistName() {
       return (
-        this.set.artist.name + " - " + this.set.venue.name + " (" + this.set.eventDate + ")"
+        this.set.artist.name +
+        " - " +
+        this.set.venue.name +
+        " (" +
+        this.set.eventDate +
+        ")"
       );
     },
     set() {
-      return this.$store.getters.setlists[this.setIndex]
-    }
+      return this.$store.getters.setlists[this.setIndex];
+    },
   },
 
   methods: {
     refreshSetlists() {
       this.spotifyUrisPayload.spotifyUris = [];
-      this.$store.commit('setSetlistSpotifyURIs', this.spotifyUrisPayload);
-      let tempSpotifyUris = []
+      this.$store.commit("setSetlistSpotifyURIs", this.spotifyUrisPayload);
+      let tempSpotifyUris = [];
       for (let songID of this.set.songs) {
         if (this.songs[songID].selectedUri) {
           tempSpotifyUris.push(this.songs[songID].selectedUri);
         }
       }
-      
+
       this.spotifyUrisPayload.spotifyUris = tempSpotifyUris;
-      this.$store.commit('setSetlistSpotifyURIs', this.spotifyUrisPayload);
+      this.$store.commit("setSetlistSpotifyURIs", this.spotifyUrisPayload);
       if (this.set.playlistName === "") {
         this.set.playlistName = this.defaultPlaylistName;
       }

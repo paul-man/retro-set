@@ -1,15 +1,23 @@
 <template>
   <b-navbar toggleable="sm" type="light" variant="light" sticky>
     <b-navbar-brand>
-      <img
-        src="@/assets/icon.png"
-        class="img-sm retroset-icon"/>
+      <img src="@/assets/icon.png" class="img-sm retroset-icon" />
       RetroSet
     </b-navbar-brand>
     <b-navbar-toggle target="nav-collapse">
       <template v-slot:default="{ expanded }">
-        <b-icon v-if="expanded" variant="primary" icon="dash-square" font-scale="1.5"></b-icon>
-        <b-icon v-else variant="primary" icon="plus-square" font-scale="1.5"></b-icon>
+        <b-icon
+          v-if="expanded"
+          variant="primary"
+          icon="dash-square"
+          font-scale="1.5"
+        ></b-icon>
+        <b-icon
+          v-else
+          variant="primary"
+          icon="plus-square"
+          font-scale="1.5"
+        ></b-icon>
       </template>
     </b-navbar-toggle>
     <b-collapse id="nav-collapse" is-nav>
@@ -19,23 +27,24 @@
             <img
               :src="getUserImg(user.imgUrl)"
               class="d-inline-block align-top spotify-user-img"
-              alt="Spotify user image"/>
+              alt="Spotify user image"
+            />
             <p class="nav-user-id" :title="user.id">{{ user.id }}</p>
           </template>
           <b-dropdown-item
             :href="'https://open.spotify.com/user/' + user.id"
-            target="_blank">
+            target="_blank"
+          >
             Spotify Profile
           </b-dropdown-item>
           <b-dropdown-item @click="logout" title="Switch spotify account">
             Not you?
           </b-dropdown-item>
           <b-dropdown-divider></b-dropdown-divider>
-          <b-dropdown-item
-            href="https://buymeacoff.ee/paulman"
-            target="_blank">
-            Buy me a coffee <p class="emoji">&#x1F389;</p>
-          </b-dropdown-item>          
+          <b-dropdown-item href="https://buymeacoff.ee/paulman" target="_blank">
+            Buy me a coffee
+            <p class="emoji">&#x1F389;</p>
+          </b-dropdown-item>
         </b-nav-item-dropdown>
       </b-navbar-nav>
     </b-collapse>
@@ -50,22 +59,23 @@ export default {
   data() {
     return {};
   },
-  mounted() {
-  },
+  mounted() {},
   components: {},
 
   computed: {
-    ...mapState(["user"])
+    ...mapState(["user"]),
   },
 
   methods: {
     async logout() {
       this.$store.commit("setUser", {});
-      get("api/spotify/login/", { params: { newUser: true } }).then(result => {
-        window.location = result.data;
-      }).catch(error => {
-        this.makeErrorToast(error);
-      });
+      get("api/spotify/login/", { params: { newUser: true } })
+        .then((result) => {
+          window.location = result.data;
+        })
+        .catch((error) => {
+          this.makeErrorToast(error);
+        });
     },
   },
 };
@@ -107,7 +117,7 @@ nav {
   font-size: 2em;
 }
 
-.emoji{
+.emoji {
   display: inline-block;
 }
 </style>

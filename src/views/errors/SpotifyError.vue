@@ -1,24 +1,20 @@
 <template>
   <div class="spotify-error">
     <b-container>
-      <img
-        src="@/assets/icon.png"
-        class="img-lg retroset-icon"
-      />
+      <img src="@/assets/icon.png" class="img-lg retroset-icon" />
     </b-container>
     <b-container class="error-msg-container">
       <h1>Whoops! Looks like something went wrong!</h1>
-      <h2 class="error-msg">{{statusMessage}}</h2>
+      <h2 class="error-msg">{{ statusMessage }}</h2>
     </b-container>
   </div>
 </template>
 
-<script>
-import { mapState } from 'vuex';
+<script lang="ts">
+import { mapState } from "vuex";
 export default {
   name: "spotify-error",
-  components: {
-  },
+  components: {},
 
   mounted() {
     this.status = this.$route.query.status;
@@ -30,20 +26,18 @@ export default {
 
   data() {
     return {
-      status: '',
-      statusMessage: ''
+      status: "",
+      statusMessage: "",
     };
   },
 
   computed: {
-    ...mapState(['respCodes'])
+    ...mapState(["respCodes"]),
   },
 
-  methods: {
-  },
+  methods: {},
 
-  watch: {
-  }
+  watch: {},
 };
 </script>
 
@@ -54,6 +48,6 @@ export default {
 
 .error-msg {
   text-decoration: underline;
-  padding: 1em
+  padding: 1em;
 }
 </style>

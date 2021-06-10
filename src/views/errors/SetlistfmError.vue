@@ -4,28 +4,22 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 export default {
   name: "setlistfm-error",
-  components: {
-  },
+  components: {},
 
-  mounted() {
-  },
+  mounted() {},
 
   data() {
-    return {
-    };
+    return {};
   },
 
-  computed: {
-  },
+  computed: {},
 
-  methods: {
-  },
+  methods: {},
 
-  watch: {
-  }
+  watch: {},
 };
 </script>
 

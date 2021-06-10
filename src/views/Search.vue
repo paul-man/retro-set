@@ -1,11 +1,14 @@
 <template>
   <b-container class="rounded" id="search">
-
     <!-- Dev test button row -->
     <b-row v-if="isDev()">
       <b-col>
         <div class="float-right">
-          <b-button variant="secondary" @click="testSetlistSearch" id="test-btn">
+          <b-button
+            variant="secondary"
+            @click="testSetlistSearch"
+            id="test-btn"
+          >
             <b-icon icon="lightning-fill"></b-icon>
           </b-button>
         </div>
@@ -13,7 +16,7 @@
     </b-row>
 
     <!-- Search fields form -->
-    <setlist-search-form/>
+    <setlist-search-form />
 
     <!-- Search text row -->
     <!-- <b-row v-if="readyToSearchSetlists">
@@ -37,9 +40,9 @@
   </b-container>
 </template>
 
-<script>
-import { mapState } from 'vuex';
-import { get } from 'axios';
+<script lang="ts">
+import { mapState } from "vuex";
+import { get } from "axios";
 import SetlistSearchForm from "@/components/search/SetlistSearchForm";
 import SetlistResults from "@/components/setlist/SetlistResults";
 
@@ -57,23 +60,31 @@ export default {
   },
 
   data() {
-    return {
-    };
+    return {};
   },
 
   computed: {
-    ...mapState(['selectedVenue', 'selectedArtist', 'setlists', 'testdata', 'user']),
+    ...mapState([
+      "selectedVenue",
+      "selectedArtist",
+      "setlists",
+      "testdata",
+      "user",
+    ]),
     readyToSearchSetlists() {
       return (
-        this.$store.getters.selectedVenue.id !== undefined && this.$store.getters.selectedArtist.id !== undefined
+        this.$store.getters.selectedVenue.id !== undefined &&
+        this.$store.getters.selectedArtist.id !== undefined
       );
-    }
+    },
   },
 
   methods: {
     async testSetlistSearch() {
-      document.querySelector("#artist-input input").value = this.testdata.ARTIST.name;
-      document.querySelector("#venue-input input").value = this.testdata.VENUE.name;
+      document.querySelector("#artist-input input").value =
+        this.testdata.ARTIST.name;
+      document.querySelector("#venue-input input").value =
+        this.testdata.VENUE.name;
       this.$store.commit("setSelectedArtist", this.testdata.ARTIST);
       this.$store.commit("setSelectedVenue", this.testdata.VENUE);
     },
@@ -81,20 +92,20 @@ export default {
       let setlists = await get("api/setlists/setlist/", {
         params: {
           artistId: this.selectedArtist.id,
-          venueId: this.selectedVenue.id
-        }
+          venueId: this.selectedVenue.id,
+        },
       });
       if (setlists.error) {
-        this.makeErrorToast('Having trouble finding those setlists, please try searching again')
-        return
+        this.makeErrorToast(
+          "Having trouble finding those setlists, please try searching again"
+        );
+        return;
       }
       this.$store.commit("setSetlists", setlists.data);
-    }
+    },
   },
 
-  watch: {
-    
-  }
+  watch: {},
 };
 </script>
 
