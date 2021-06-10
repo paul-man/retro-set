@@ -33,4 +33,4 @@ Vue.use(VueSlideoutPanel);
 
 Vue.component('vue-typeahead-bootstrap', VueTypeaheadBootstrap)
 
-createApp(App).use(router).use(router).use(store).mount('#app')
+createApp(App).use(store).use(router).use(router).use(store).mount('#app')
