@@ -1,10 +1,11 @@
 /* eslint-disable no-console */
-const express = require("express"),
-      router = express.Router(),
-      mongoUtil = require('../mongoUtil'),
-      spotifyUtil = require('../spotifyUtil'),
-      logger = require('../logger'),
-      scopes = ["user-read-email", "playlist-modify-private", "playlist-modify-public"];
+import express from 'express';
+import mongoUtil from '../mongoUtil';
+import spotifyUtil from '../spotifyUtil';
+import logger from '../logger';
+
+let router = express.Router();
+const scopes = ["user-read-email", "playlist-modify-private", "playlist-modify-public"];
 
 const spotifyApi = spotifyUtil.spotifyApi();
 

@@ -1,4 +1,4 @@
-let { MongoClient } = require("mongodb");
+import { MongoClient } from 'mongodb';
 const mongoURI = process.env.MONGODB_URI;
 const db_name = process.env.DATABASE_NAME || 'users';
 let _db, spotifyCollection;
