@@ -36,7 +36,7 @@
     "winston-sentry-log": "^1.0.19"
   },
   "devDependencies": {
-    "@vue/cli-service": "^4.4.6",
+    "@vue/cli-service": "^5.0.8",
     "babel-eslint": "^10.0.1",
     "eslint": "^5.8.0",
     "eslint-plugin-vue": "^5.0.0",
